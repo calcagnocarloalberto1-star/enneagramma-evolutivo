@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, ThumbsUp, AlertTriangle, Lightbulb, Check, Star } from "lucide-react";
+import { Heart, ThumbsUp, AlertTriangle, Lightbulb, Check, Star, FileText, Download } from "lucide-react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import {
   getJourney,
   getCurrentPhase,
@@ -62,6 +64,218 @@ const levelColors: Record<string, string> = {
   bassa: "bg-orange-500",
   difficile: "bg-red-500",
 };
+
+function generateCoupleSummary(
+  compat: any,
+  type1: string,
+  type2: string,
+  wing1: string,
+  wing2: string,
+  age1?: string,
+  age2?: string,
+  percorso1?: string,
+  percorso2?: string,
+): string {
+  const t1 = parseInt(type1);
+  const t2 = parseInt(type2);
+  const name1 = `Tipo ${type1} - ${typeNames[t1]}`;
+  const name2 = `Tipo ${type2} - ${typeNames[t2]}`;
+  const level = compat.livello || "";
+  const pct = compat.percentuale || 0;
+  const strengths = (compat.puntiForza || []) as string[];
+  const challenges = (compat.sfide || []) as string[];
+
+  let text = `La coppia formata da ${name1} e ${name2} presenta un livello di compatibilita ${level} (${pct}%). `;
+  text += compat.descrizione ? compat.descrizione + " " : "";
+
+  if (strengths.length > 0) {
+    text += `\n\nTra i principali punti di forza emergono: ${strengths.join(", ")}. `;
+    text += "Questi elementi rappresentano le fondamenta su cui la coppia puo costruire una relazione solida e appagante. ";
+  }
+
+  if (challenges.length > 0) {
+    text += `Le sfide da affrontare includono: ${challenges.join(", ")}. `;
+    text += "Riconoscere queste aree di potenziale attrito e il primo passo per trasformarle in opportunita di crescita reciproca. ";
+  }
+
+  const w1Desc = wing1 && wing1 !== "nessuna" ? wingDescriptions[`${type1}w${wing1}`] : null;
+  const w2Desc = wing2 && wing2 !== "nessuna" ? wingDescriptions[`${type2}w${wing2}`] : null;
+  if (w1Desc || w2Desc) {
+    text += "\n\nLe ali giocano un ruolo importante nella dinamica di coppia. ";
+    if (w1Desc) text += `Il Partner 1 (${name1} con Ala ${wing1}), essendo ${w1Desc}, arricchisce la relazione con sfumature uniche. `;
+    if (w2Desc) text += `Il Partner 2 (${name2} con Ala ${wing2}), essendo ${w2Desc}, contribuisce con qualita aggiuntive alla dinamica. `;
+  }
+
+  if (age1 && age2) {
+    text += `\n\nConsiderando le eta dei partner (${age1} e ${age2} anni), la fase di vita attuale influenza significativamente il modo in cui ciascuno vive ed esprime il proprio enneatipo. `;
+    text += "Le fasi di crescita personale possono creare momenti di grande sintonia o di temporanea distanza, rendendo la consapevolezza reciproca ancora piu importante.";
+  }
+
+  if (compat.consigli) {
+    text += `\n\nConsiglio pratico: ${compat.consigli}`;
+  }
+
+  return text;
+}
+
+function generateCouplePdf(
+  compat: any,
+  type1: string,
+  type2: string,
+  wing1: string,
+  wing2: string,
+  age1: string,
+  age2: string,
+  percorso1: string,
+  percorso2: string,
+  summaryText: string,
+) {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const margin = 20;
+  const contentWidth = pageWidth - margin * 2;
+  let y = 20;
+
+  const checkPage = (needed: number) => {
+    if (y + needed > doc.internal.pageSize.getHeight() - 25) {
+      doc.addPage();
+      y = 20;
+    }
+  };
+
+  const addSectionTitle = (title: string) => {
+    checkPage(20);
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text(title, margin, y);
+    y += 8;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+  };
+
+  const addWrappedText = (text: string) => {
+    const lines = doc.splitTextToSize(text, contentWidth);
+    checkPage(lines.length * 5 + 5);
+    doc.text(lines, margin, y);
+    y += lines.length * 5 + 4;
+  };
+
+  // Title
+  doc.setFontSize(18);
+  doc.setFont("helvetica", "bold");
+  const title = "Analisi di Compatibilita di Coppia";
+  doc.text(title, pageWidth / 2, y, { align: "center" });
+  y += 7;
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "normal");
+  doc.text("Enneagramma Evolutivo", pageWidth / 2, y, { align: "center" });
+  y += 10;
+
+  // Date
+  doc.setFontSize(9);
+  doc.text(`Data analisi: ${new Date().toLocaleDateString("it-IT")}`, margin, y);
+  y += 10;
+
+  // Partner info
+  const t1 = parseInt(type1);
+  const t2 = parseInt(type2);
+  addSectionTitle("Informazioni Partner");
+
+  const w1Label = wing1 && wing1 !== "nessuna" ? ` con Ala ${wing1}` : "";
+  const w2Label = wing2 && wing2 !== "nessuna" ? ` con Ala ${wing2}` : "";
+  addWrappedText(`Partner 1: Tipo ${type1} - ${typeNames[t1]}${w1Label}${age1 ? `, ${age1} anni` : ""}${percorso1 ? `, Percorso ${percorso1}` : ""}`);
+  addWrappedText(`Partner 2: Tipo ${type2} - ${typeNames[t2]}${w2Label}${age2 ? `, ${age2} anni` : ""}${percorso2 ? `, Percorso ${percorso2}` : ""}`);
+  y += 4;
+
+  // Compatibility level
+  addSectionTitle(`Livello di Compatibilita: ${(compat.livello || "").toUpperCase()} - ${compat.percentuale || 0}%`);
+  if (compat.descrizione) {
+    addWrappedText(compat.descrizione);
+  }
+  y += 2;
+
+  // Strengths
+  if (compat.puntiForza?.length) {
+    addSectionTitle("Punti di Forza");
+    compat.puntiForza.forEach((p: string) => {
+      addWrappedText(`  - ${p}`);
+    });
+    y += 2;
+  }
+
+  // Challenges
+  if (compat.sfide?.length) {
+    addSectionTitle("Sfide");
+    compat.sfide.forEach((s: string) => {
+      addWrappedText(`  - ${s}`);
+    });
+    y += 2;
+  }
+
+  // Advice
+  if (compat.consigli) {
+    addSectionTitle("Consigli");
+    addWrappedText(compat.consigli);
+    y += 2;
+  }
+
+  // Wing influence
+  const w1Desc = wing1 && wing1 !== "nessuna" ? wingDescriptions[`${type1}w${wing1}`] : null;
+  const w2Desc = wing2 && wing2 !== "nessuna" ? wingDescriptions[`${type2}w${wing2}`] : null;
+  if (w1Desc || w2Desc) {
+    addSectionTitle("Influenza delle Ali");
+    if (w1Desc) addWrappedText(`Partner 1 (Tipo ${type1} con Ala ${wing1}): essendo ${w1Desc}, questa sfumatura influenza la dinamica di coppia.`);
+    if (w2Desc) addWrappedText(`Partner 2 (Tipo ${type2} con Ala ${wing2}): essendo ${w2Desc}, questo colora la relazione con qualita aggiuntive.`);
+    y += 2;
+  }
+
+  // Age-based analysis
+  if (age1 && age2) {
+    const j1 = getJourney(t1, parseInt(percorso1 || "1"));
+    const j2 = getJourney(t2, parseInt(percorso2 || "1"));
+    if (j1 && j2) {
+      const p1 = getCurrentPhase(j1, parseInt(age1));
+      const p2 = getCurrentPhase(j2, parseInt(age2));
+      if (p1 && p2) {
+        const shared = findSharedAttributes(p1, p2);
+        const diffs = findDifferentAttributes(p1, p2);
+        const compatScore = Math.round((shared.length / 13) * 100);
+
+        addSectionTitle(`Analisi per Fase di Vita - Affinita: ${compatScore}%`);
+        addWrappedText(`Partner 1 (${age1} anni): fase enneatipo ${p1.enneatipo} - Dignita: ${p1.dignita}, Virtu: ${p1.virtu}, Vizio: ${p1.vizio}`);
+        addWrappedText(`Partner 2 (${age2} anni): fase enneatipo ${p2.enneatipo} - Dignita: ${p2.dignita}, Virtu: ${p2.virtu}, Vizio: ${p2.vizio}`);
+
+        if (shared.length > 0) {
+          addWrappedText(`Attributi condivisi (${shared.length}): ${shared.join(", ")}`);
+        }
+        if (diffs.length > 0) {
+          addWrappedText(`Differenze (${diffs.length}): ${diffs.map(d => `${d.attributo}: ${d.persona1} vs ${d.persona2}`).join("; ")}`);
+        }
+        y += 2;
+      }
+    }
+  }
+
+  // Summary comment
+  addSectionTitle("Commento Riepilogativo");
+  addWrappedText(summaryText);
+
+  // Footer on each page
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "italic");
+    doc.text(
+      "Generato da Enneagramma Evolutivo - enneagrammaevolutivo.com",
+      pageWidth / 2,
+      doc.internal.pageSize.getHeight() - 10,
+      { align: "center" },
+    );
+  }
+
+  doc.save(`compatibilita-coppia-tipo${type1}-tipo${type2}.pdf`);
+}
 
 function PhaseAttributeGrid({ phase, label }: { phase: JourneyPhase; label: string }) {
   return (
@@ -381,6 +595,21 @@ export default function CoupleCompatibility() {
       {/* Results */}
       {compat && !isLoading && (
         <div className="space-y-6">
+          {/* Quick PDF download button */}
+          <div className="flex justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2"
+              onClick={() => {
+                const summaryText = generateCoupleSummary(compat, type1, type2, wing1, wing2, age1, age2, percorso1, percorso2);
+                generateCouplePdf(compat, type1, type2, wing1, wing2, age1, age2, percorso1, percorso2, summaryText);
+              }}
+            >
+              <Download className="w-3.5 h-3.5" />
+              Scarica PDF
+            </Button>
+          </div>
           {/* Tabs: base compatibility + age-based */}
           {hasAges && type1 && type2 ? (
             <Tabs defaultValue="eta" className="w-full">
@@ -398,11 +627,11 @@ export default function CoupleCompatibility() {
               </TabsContent>
 
               <TabsContent value="base" className="mt-4 space-y-6">
-                <BaseCompatibilitySection compat={compat} type1={type1} type2={type2} wing1={wing1} wing2={wing2} percentage={percentage} />
+                <BaseCompatibilitySection compat={compat} type1={type1} type2={type2} wing1={wing1} wing2={wing2} percentage={percentage} age1={age1} age2={age2} percorso1={percorso1} percorso2={percorso2} />
               </TabsContent>
             </Tabs>
           ) : (
-            <BaseCompatibilitySection compat={compat} type1={type1} type2={type2} wing1={wing1} wing2={wing2} percentage={percentage} />
+            <BaseCompatibilitySection compat={compat} type1={type1} type2={type2} wing1={wing1} wing2={wing2} percentage={percentage} age1={age1} age2={age2} percorso1={percorso1} percorso2={percorso2} />
           )}
         </div>
       )}
@@ -418,8 +647,9 @@ export default function CoupleCompatibility() {
   );
 }
 
-function BaseCompatibilitySection({ compat, type1, type2, wing1, wing2, percentage }: {
+function BaseCompatibilitySection({ compat, type1, type2, wing1, wing2, percentage, age1, age2, percorso1, percorso2 }: {
   compat: any; type1: string; type2: string; wing1: string; wing2: string; percentage: number;
+  age1?: string; age2?: string; percorso1?: string; percorso2?: string;
 }) {
   const wing1Label = wing1 && wing1 !== "nessuna" ? `Ala ${wing1}` : null;
   const wing2Label = wing2 && wing2 !== "nessuna" ? `Ala ${wing2}` : null;
@@ -540,6 +770,41 @@ function BaseCompatibilitySection({ compat, type1, type2, wing1, wing2, percenta
           </p>
         </CardContent>
       </Card>
+
+      {/* Summary Comment */}
+      {(() => {
+        const summaryText = generateCoupleSummary(compat, type1, type2, wing1, wing2, age1, age2, percorso1, percorso2);
+        return (
+          <>
+            <Card className="border-primary/30 bg-primary/5">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-serif flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-primary" /> Commento Riepilogativo
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {summaryText.split("\n\n").map((paragraph, i) => (
+                  <p key={i} className="text-sm leading-relaxed text-muted-foreground mb-3 last:mb-0">
+                    {paragraph}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* PDF Download */}
+            <div className="flex justify-center">
+              <Button
+                size="lg"
+                className="gap-2"
+                onClick={() => generateCouplePdf(compat, type1, type2, wing1, wing2, age1 || "", age2 || "", percorso1 || "1", percorso2 || "1", summaryText)}
+              >
+                <Download className="w-4 h-4" />
+                Scarica Analisi PDF
+              </Button>
+            </div>
+          </>
+        );
+      })()}
     </>
   );
 }

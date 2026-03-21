@@ -4,7 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Users, Plus, Trash2, Heart, AlertTriangle, Check } from "lucide-react";
+import { Users, Plus, Trash2, Heart, AlertTriangle, Check, FileText, Download } from "lucide-react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import {
   getJourney,
   getCurrentPhase,
@@ -152,6 +154,181 @@ function PairComparison({ m1, m2, p1, p2 }: { m1: FamilyMember; m2: FamilyMember
       </CardContent>
     </Card>
   );
+}
+
+function generateFamilySummary(
+  memberPhases: Array<{ member: FamilyMember; phase: JourneyPhase }>,
+  pairs: Array<{ m1: FamilyMember; m2: FamilyMember; p1: JourneyPhase; p2: JourneyPhase }>,
+): string {
+  if (memberPhases.length === 0) return "";
+
+  const memberList = memberPhases
+    .map(({ member }) => `${member.nome} (Tipo ${member.enneatipo} - ${typeNames[parseInt(member.enneatipo)]}${member.ala && member.ala !== "nessuna" ? `, Ala ${member.ala}` : ""})`)
+    .join(", ");
+
+  let text = `Questa famiglia e composta da ${memberPhases.length} membri: ${memberList}. `;
+
+  if (pairs.length > 0) {
+    // Find strongest and weakest pair
+    const scored = pairs.map(p => {
+      const shared = findSharedAttributes(p.p1, p.p2);
+      return { ...p, score: Math.round((shared.length / 13) * 100) };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    const best = scored[0];
+    const worst = scored[scored.length - 1];
+
+    text += `Dall'analisi dei ${pairs.length} confronti a coppie emerge un quadro ricco e sfaccettato delle dinamiche familiari.`;
+
+    text += `\n\nLa relazione con la maggiore affinita e quella tra ${best.m1.nome} e ${best.m2.nome} (${best.score}% di attributi condivisi), `;
+    text += "il che suggerisce una naturale comprensione reciproca e una base solida per il supporto emotivo. ";
+
+    if (worst !== best) {
+      text += `La coppia che presenta le maggiori differenze e quella tra ${worst.m1.nome} e ${worst.m2.nome} (${worst.score}% di affinita), `;
+      text += "un'area che richiede maggiore consapevolezza e impegno per favorire la comprensione reciproca.";
+    }
+
+    const avgScore = Math.round(scored.reduce((sum, p) => sum + p.score, 0) / scored.length);
+    text += `\n\nComplessivamente, la famiglia presenta un livello medio di affinita del ${avgScore}%. `;
+  }
+
+  // Age-based note
+  const agesNote = memberPhases
+    .map(({ member, phase }) => `${member.nome} (${member.eta} anni, fase enneatipo ${phase.enneatipo})`)
+    .join(", ");
+  text += `Le fasi di vita attuali sono: ${agesNote}. `;
+  text += "Queste fasi influenzano il modo in cui ciascun membro vive ed esprime il proprio enneatipo, creando dinamiche che evolvono nel tempo. ";
+
+  // Wing note
+  const withWings = memberPhases.filter(({ member }) => member.ala && member.ala !== "nessuna");
+  if (withWings.length > 0) {
+    text += "\n\nLe ali aggiungono sfumature importanti alle personalita familiari: ";
+    text += withWings
+      .map(({ member }) => `${member.nome} con Ala ${member.ala} (${wingDescriptions[`${member.enneatipo}w${member.ala}`] || ""})`)
+      .join(", ");
+    text += ". Queste influenze rendono le dinamiche familiari piu complesse e interessanti.";
+  }
+
+  return text;
+}
+
+function generateFamilyPdf(
+  memberPhases: Array<{ member: FamilyMember; phase: JourneyPhase }>,
+  pairs: Array<{ m1: FamilyMember; m2: FamilyMember; p1: JourneyPhase; p2: JourneyPhase }>,
+  summaryText: string,
+) {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const margin = 20;
+  const contentWidth = pageWidth - margin * 2;
+  let y = 20;
+
+  const checkPage = (needed: number) => {
+    if (y + needed > doc.internal.pageSize.getHeight() - 25) {
+      doc.addPage();
+      y = 20;
+    }
+  };
+
+  const addSectionTitle = (title: string) => {
+    checkPage(20);
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text(title, margin, y);
+    y += 8;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+  };
+
+  const addWrappedText = (text: string) => {
+    const lines = doc.splitTextToSize(text, contentWidth);
+    checkPage(lines.length * 5 + 5);
+    doc.text(lines, margin, y);
+    y += lines.length * 5 + 4;
+  };
+
+  // Title
+  doc.setFontSize(18);
+  doc.setFont("helvetica", "bold");
+  doc.text("Analisi di Compatibilita Familiare", pageWidth / 2, y, { align: "center" });
+  y += 7;
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "normal");
+  doc.text("Enneagramma Evolutivo", pageWidth / 2, y, { align: "center" });
+  y += 10;
+
+  // Date
+  doc.setFontSize(9);
+  doc.text(`Data analisi: ${new Date().toLocaleDateString("it-IT")}`, margin, y);
+  y += 10;
+
+  // Family members list
+  addSectionTitle("Membri della Famiglia");
+  memberPhases.forEach(({ member, phase }) => {
+    const wingInfo = member.ala && member.ala !== "nessuna"
+      ? `, Ala ${member.ala} (${wingDescriptions[`${member.enneatipo}w${member.ala}`] || ""})`
+      : "";
+    addWrappedText(`${member.nome}: Tipo ${member.enneatipo} - ${typeNames[parseInt(member.enneatipo)]}${wingInfo}, ${member.eta} anni, Percorso ${member.percorso}, Fase enneatipo ${phase.enneatipo}`);
+  });
+  y += 4;
+
+  // Pair comparisons
+  if (pairs.length > 0) {
+    addSectionTitle("Confronto a Coppie");
+    pairs.forEach(pair => {
+      const shared = findSharedAttributes(pair.p1, pair.p2);
+      const diffs = findDifferentAttributes(pair.p1, pair.p2);
+      const score = Math.round((shared.length / 13) * 100);
+
+      checkPage(30);
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${pair.m1.nome} - ${pair.m2.nome}: ${score}% affinita`, margin, y);
+      y += 6;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+
+      if (shared.length > 0) {
+        addWrappedText(`Attributi condivisi (${shared.length}): ${shared.join(", ")}`);
+      }
+      if (diffs.length > 0) {
+        addWrappedText(`Differenze (${diffs.length}): ${diffs.map(d => `${d.attributo}: ${pair.m1.nome}=${d.persona1} vs ${pair.m2.nome}=${d.persona2}`).join("; ")}`);
+      }
+
+      // Wing influence note
+      const w1 = pair.m1.ala && pair.m1.ala !== "nessuna" ? wingDescriptions[`${pair.m1.enneatipo}w${pair.m1.ala}`] : null;
+      const w2 = pair.m2.ala && pair.m2.ala !== "nessuna" ? wingDescriptions[`${pair.m2.enneatipo}w${pair.m2.ala}`] : null;
+      if (w1 || w2) {
+        let wingNote = "Ali: ";
+        if (w1) wingNote += `${pair.m1.nome} (${pair.m1.enneatipo}w${pair.m1.ala}: ${w1})`;
+        if (w1 && w2) wingNote += " - ";
+        if (w2) wingNote += `${pair.m2.nome} (${pair.m2.enneatipo}w${pair.m2.ala}: ${w2})`;
+        addWrappedText(wingNote);
+      }
+
+      y += 3;
+    });
+  }
+
+  // Summary comment
+  addSectionTitle("Commento Riepilogativo");
+  addWrappedText(summaryText);
+
+  // Footer on each page
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "italic");
+    doc.text(
+      "Generato da Enneagramma Evolutivo - enneagrammaevolutivo.com",
+      pageWidth / 2,
+      doc.internal.pageSize.getHeight() - 10,
+      { align: "center" },
+    );
+  }
+
+  doc.save("compatibilita-familiare.pdf");
 }
 
 export default function FamilyCompatibility() {
@@ -329,6 +506,24 @@ export default function FamilyCompatibility() {
         </div>
       )}
 
+      {/* Quick PDF download at top of results */}
+      {memberPhases.length >= 2 && pairs.length > 0 && (
+        <div className="flex justify-end mt-6">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => {
+              const summaryText = generateFamilySummary(memberPhases, pairs);
+              generateFamilyPdf(memberPhases, pairs, summaryText);
+            }}
+          >
+            <Download className="w-3.5 h-3.5" />
+            Scarica PDF
+          </Button>
+        </div>
+      )}
+
       {/* Pair Comparisons */}
       {pairs.length > 0 && (
         <div className="space-y-6 mt-8">
@@ -340,6 +535,40 @@ export default function FamilyCompatibility() {
           </div>
         </div>
       )}
+
+      {/* Summary Comment + PDF Download */}
+      {memberPhases.length >= 2 && pairs.length > 0 && (() => {
+        const summaryText = generateFamilySummary(memberPhases, pairs);
+        return (
+          <div className="space-y-6 mt-8">
+            <Card className="border-primary/30 bg-primary/5">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-serif flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-primary" /> Commento Riepilogativo
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {summaryText.split("\n\n").map((paragraph, i) => (
+                  <p key={i} className="text-sm leading-relaxed text-muted-foreground mb-3 last:mb-0">
+                    {paragraph}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
+
+            <div className="flex justify-center">
+              <Button
+                size="lg"
+                className="gap-2"
+                onClick={() => generateFamilyPdf(memberPhases, pairs, summaryText)}
+              >
+                <Download className="w-4 h-4" />
+                Scarica Analisi PDF
+              </Button>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Empty state */}
       {memberPhases.length === 0 && (
