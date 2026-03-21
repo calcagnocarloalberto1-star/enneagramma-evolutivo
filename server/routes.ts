@@ -22,6 +22,7 @@ const percorsiEnneatipi = loadJSON("percorsi-enneatipi.json");
 const educationalContent = loadJSON("educational-content.json");
 const attributiDescrizioni = loadJSON("attributi-descrizioni.json");
 const percorsiEvolutiviCompleti = loadJSON("percorsi-evolutivi-completi.json");
+const glossario = loadJSON("glossario.json");
 
 // Get the user's current life phase and evolutionary path details
 function getPercorsoPersonalizzato(enneatipo: number, eta: number) {
@@ -218,6 +219,7 @@ export async function registerRoutes(
         educativo: eduInfo || null,
         percorso,
         percorsoPersonalizzato,
+        glossario,
         etaInfo,
         needsGenogram,
       });
@@ -273,6 +275,7 @@ export async function registerRoutes(
         punteggiFrutti: JSON.parse(result.punteggiFrutti),
         attrs,
         percorsoPersonalizzato,
+        glossario,
         educativo: eduInfo,
         descrizioni: attributiDescrizioni,
       });
@@ -373,6 +376,11 @@ export async function registerRoutes(
   // GET all compatibility data
   app.get("/api/compatibility-data", (_req, res) => {
     res.json(compatibilitaCoppia);
+  });
+
+  // GET glossario
+  app.get("/api/glossario", (_req, res) => {
+    res.json(glossario);
   });
 
   return httpServer;

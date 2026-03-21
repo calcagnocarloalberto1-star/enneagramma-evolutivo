@@ -18,6 +18,7 @@ import FAQ from "@/pages/FAQ";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import CookiePolicy from "@/pages/CookiePolicy";
+import Glossario from "@/pages/Glossario";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -40,6 +41,7 @@ function AppRouter() {
           <Route path="/privacy" component={Privacy} />
           <Route path="/terms" component={Terms} />
           <Route path="/cookie-policy" component={CookiePolicy} />
+          <Route path="/glossario" component={Glossario} />
           <Route component={NotFound} />
         </Switch>
       </main>

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
-import { ArrowRight, Star, Gem, Music, Brain, Shield, Sparkles, Heart, FileText, Download, Loader2 } from "lucide-react";
+import { ArrowRight, Star, Gem, Music, Brain, Shield, Sparkles, Heart, FileText, Download, Loader2, BookOpen } from "lucide-react";
 
 const fruitNames: Record<number, string> = {
   1: "Mela", 2: "Pera", 3: "Ciliegia", 4: "Nespola",
@@ -194,6 +194,14 @@ export default function TestResults() {
       {/* Attributes Grid — with explanations */}
       {attrs && (
         <div className="space-y-4 mb-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-serif font-bold">I Tuoi Attributi</h2>
+            <Link href="/glossario">
+              <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-primary">
+                <BookOpen className="w-3 h-3 mr-1" /> Glossario completo
+              </Button>
+            </Link>
+          </div>
           {/* Spiritual Attributes */}
           <Card>
             <CardContent className="p-5">

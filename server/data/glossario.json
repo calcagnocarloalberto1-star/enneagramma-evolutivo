@@ -1,0 +1,109 @@
+{
+  "categorie": {
+    "dignita": {
+      "titolo": "Dignità",
+      "spiegazione": "Le Dignità sono le perfezioni divine secondo Raimondo Lullo (XIII secolo). Nella sua opera 'Ars Magna', Lullo identificò gli attributi fondamentali di Dio che si riflettono in ogni essere umano. La tua Dignità è la qualità divina che sei chiamato a esprimere nella vita — la tua missione spirituale più profonda. Non è qualcosa che devi conquistare: è già in te, devi solo riconoscerla e lasciarla emergere.",
+      "valori": {
+        "Grandezza": "Sei chiamato ad esprimere l'ampiezza dello spirito. Non grandezza nel senso di ego o potere, ma la capacità di abbracciare la complessità della vita con coraggio. Per te significa: non avere paura di pensare in grande, di affrontare le grandi questioni, di assumerti responsabilità che altri evitano.",
+        "Eternità": "Sei chiamato a connetterti con ciò che dura oltre il tempo. Significa che il tuo contributo al mondo ha una qualità di permanenza — le relazioni che costruisci, l'amore che doni, lasciano un segno che va oltre il momento. Per te significa: il tuo dono più grande è la capacità di creare legami che durano.",
+        "Sapienza": "Sei chiamato alla conoscenza profonda che va oltre l'intelletto. Non si tratta di accumulare informazioni, ma di comprendere il senso delle cose. Per te significa: la tua intelligenza più grande non è quella dei libri, ma quella che vede il valore autentico dietro le apparenze.",
+        "Gloria": "Sei chiamato a manifestare lo splendore della vita. Gloria non è vanità: è la capacità di rendere visibile la bellezza e la potenza dell'esistenza. Per te significa: sei nato per brillare, per proteggere, per rendere il mondo un posto più intenso e vivo.",
+        "Volontà": "Sei chiamato a dirigere la vita con scopo. La Volontà divina non è caparbietà umana — è la capacità di allineare le proprie azioni con un disegno più grande. Per te significa: hai una forza interiore che, quando la usi al servizio del bene, diventa inarrestabile.",
+        "Verità": "Sei chiamato a cercare e vivere ciò che è reale. La Verità non è dogma: è il coraggio di guardare le cose come sono, senza filtri. Per te significa: la tua gioia più grande viene quando vivi in modo autentico, senza maschere.",
+        "Potenza": "Sei chiamato ad usare la forza per proteggere e trasformare. La Potenza divina non è dominio: è energia creativa che costruisce. Per te significa: la tua energia vitale è un dono — quando la usi con saggezza, trasformi tutto ciò che tocchi.",
+        "Bontà": "Sei chiamato a riconoscere il bene in ogni cosa. La Bontà non è ingenuità: è la capacità di vedere la luce anche nell'oscurità. Per te significa: il tuo cuore vede ciò che gli altri non vedono.",
+        "Perfezione": "Sei chiamato a riconoscere la completezza di ciò che è. La Perfezione divina non è l'assenza di difetti — è l'armonia del tutto. Per te significa: puoi trovare pace quando smetti di cercare di migliorare ogni cosa e inizi ad accogliere ciò che è."
+      }
+    },
+    "virtu": {
+      "titolo": "Virtù",
+      "spiegazione": "Le Virtù nell'Enneagramma Evolutivo sono le qualità dell'anima che bilanciano le tendenze automatiche del tuo enneatipo. Non sono regole morali imposte dall'esterno, ma medicine naturali che il tuo tipo ha bisogno di coltivare per stare bene. Praticare la tua Virtù non è un dovere — è un atto di guarigione.",
+      "valori": {
+        "Prudenza": "La tua medicina è la capacità di fermarti prima di agire. Non significa essere timidi, ma saper scegliere il momento giusto. In pratica: prima di correggere qualcuno, conta fino a tre. Prima di giudicare una situazione, chiediti 'ho tutte le informazioni?'.",
+        "Perseveranza": "La tua medicina è la costanza nel cammino. Non significa ostinazione, ma la capacità di continuare anche quando non vedi risultati immediati. In pratica: non mollare le relazioni importanti quando diventano difficili. La fedeltà al processo è il tuo superpotere.",
+        "Fede": "La tua medicina è la fiducia in qualcosa che non puoi controllare. Non significa credere ciecamente, ma lasciar andare il bisogno di avere tutto sotto controllo. In pratica: permettiti di non sapere come andrà a finire. Il mistero non è un nemico.",
+        "Fortezza": "La tua medicina è il coraggio di restare presente quando le emozioni sono intense. Non significa reprimere i sentimenti, ma attraversarli senza esserne travolto. In pratica: quando senti tristezza o inadeguatezza, resta lì. Non scappare, non drammatizzare. Respira.",
+        "Giustizia": "La tua medicina è l'equilibrio tra dare e ricevere. Non significa calcolare tutto, ma riconoscere che anche tu hai bisogno degli altri. In pratica: la prossima volta che qualcuno ti offre aiuto, accettalo senza sentirti in debito.",
+        "Carità": "La tua medicina è l'amore che non chiede garanzie. Non significa essere ingenui, ma scegliere di fidarsi nonostante la paura. In pratica: la prossima volta che ti viene istintivo sospettare, chiediti 'e se avesse buone intenzioni?'.",
+        "Temperanza": "La tua medicina è il gusto della profondità anziché della quantità. Non significa rinunciare al piacere, ma assaporare fino in fondo ogni esperienza. In pratica: invece di pianificare tre cose, fanne una sola e vivila completamente.",
+        "Pietà": "La tua medicina è la tenerezza che nasce dalla forza. Non significa debolezza, ma la capacità di essere gentile perché sei abbastanza forte da potertelo permettere. In pratica: la prossima volta che qualcuno mostra vulnerabilità, proteggilo invece di testarlo.",
+        "Speranza": "La tua medicina è la fiducia che il tuo contributo conta. Non significa ottimismo cieco, ma la convinzione che vale la pena impegnarsi. In pratica: quando ti viene voglia di lasciar perdere e adattarti, ricorda che il mondo ha bisogno della tua voce.",
+        "Umiltà": "La tua medicina è il riconoscimento del tuo valore senza bisogno di dimostrarlo. Non significa sminuirti, ma stare nel tuo posto con dignità. In pratica: la prossima volta che qualcuno ti chiede cosa vuoi, rispondi davvero. La tua opinione conta.",
+        "Pazienza": "La tua medicina è accettare che il mondo ha i suoi tempi. Non significa rassegnazione, ma la fiducia che le cose maturano quando sono pronte. In pratica: la prossima volta che qualcosa non va come vorresti, chiediti 'è davvero urgente?'."
+      }
+    },
+    "vizio": {
+      "titolo": "Vizio (Passione)",
+      "spiegazione": "I Vizi nell'Enneagramma non sono peccati morali — sono pattern emotivi automatici che si attivano quando perdi la connessione con te stesso. Evagrio Pontico, monaco del IV secolo, li chiamava 'logismoi' (pensieri ossessivi). Sono la tua trappola principale: il modo in cui il tuo tipo si 'addormenta' e smette di essere presente. Riconoscere il tuo Vizio non è un giudizio — è il primo passo per liberartene."
+    },
+    "gerarchia_angelica": {
+      "titolo": "Gerarchia Angelica",
+      "spiegazione": "Le Gerarchie Angeliche derivano dalla classificazione di Dionigi l'Areopagita (V-VI secolo) e sono state integrate nell'Enneagramma da Athanasio Kircher nel XVIII secolo. Ogni gerarchia rappresenta un modo specifico in cui l'energia divina si manifesta nel mondo. La tua Gerarchia Angelica indica la qualità di energia spirituale che ti è più affine — il tipo di 'protezione' o 'ispirazione' cosmica che ti accompagna."
+    },
+    "musa": {
+      "titolo": "Musa",
+      "spiegazione": "Le nove Muse della mitologia greca, figlie di Zeus e Mnemosyne (la Memoria), rappresentano le diverse forme di ispirazione creativa. Kircher nel XVIII secolo le collegò alle Gerarchie Angeliche, dimostrando che tradizione cristiana e pagana convivevano. La tua Musa indica il canale creativo attraverso cui la tua anima si esprime meglio — la forma d'arte o di conoscenza che ti nutre più profondamente."
+    },
+    "meccanismo_difesa": {
+      "titolo": "Meccanismo di Difesa",
+      "spiegazione": "I meccanismi di difesa sono strategie psicologiche inconsce che usiamo per proteggerci dal dolore emotivo. Sigmund Freud e sua figlia Anna li hanno descritti per primi. Nell'Enneagramma, ogni tipo ha un meccanismo predominante che si attiva automaticamente sotto stress. Conoscere il tuo meccanismo non serve a eliminarlo (è impossibile), ma a riconoscerlo quando si attiva — e scegliere consapevolmente come rispondere."
+    },
+    "topica": {
+      "titolo": "Topica (Freud)",
+      "spiegazione": "La 'topica' è il modello freudiano della mente, divisa in tre istanze: Es (pulsioni e desideri istintivi), Io (la parte razionale che media tra desideri e realtà) e Super-Io (la coscienza morale, le regole interiorizzate). Ogni enneatipo ha un'istanza dominante che guida il suo comportamento. Sapere quale domina in te ti aiuta a capire da dove vengono le tue reazioni automatiche.",
+      "valori": {
+        "Super-Io": "In te domina il Super-Io — la voce interiore che giudica, impone regole e detta standard. Questo significa che tendi a filtrare ogni esperienza attraverso la lente del 'dovrei/non dovrei'. Il lato positivo è un forte senso etico; il rischio è una critica interiore che non si ferma mai.",
+        "Io": "In te domina l'Io — la parte che media tra desideri e realtà. Questo significa che sei naturalmente adattabile e capace di leggere le situazioni. Il lato positivo è la flessibilità; il rischio è perdere il contatto con i tuoi bisogni autentici a forza di adattarti.",
+        "Es": "In te domina l'Es — la sede dell'energia vitale, dei desideri e delle pulsioni. Questo significa che hai un accesso diretto alla tua vitalità e ai tuoi istinti. Il lato positivo è l'autenticità e la forza; il rischio è agire impulsivamente senza riflettere."
+      }
+    },
+    "chakra": {
+      "titolo": "Chakra",
+      "spiegazione": "I Chakra sono centri energetici del corpo secondo la tradizione vedica indiana. Ogni chakra governa una specifica area della vita — dalla sopravvivenza alla spiritualità. Il tuo chakra associato indica dove si concentra la tua energia vitale e quale area della vita è più attiva (e potenzialmente più vulnerabile) per te.",
+      "valori": {
+        "1° Chakra (base)": "Muladhara — alla base della colonna vertebrale. Governa: sicurezza, sopravvivenza, radicamento. Per te significa: la tua sfida principale riguarda il sentirti al sicuro nel mondo. Quando questo chakra è in equilibrio, ti senti stabile e presente. Quando è squilibrato, provi ansia esistenziale.",
+        "2° Chakra (sacrale)": "Svadhisthana — sotto l'ombelico. Governa: emozioni, creatività, piacere, sessualità. Per te significa: la tua energia vitale passa attraverso il piacere e la creatività. Quando è in equilibrio, fluisci con la vita. Quando è squilibrato, o ti neghi il piacere o ne cerchi troppo.",
+        "3° Chakra (ombelico)": "Manipura — plesso solare. Governa: potere personale, volontà, autostima, azione. Per te significa: la tua forza interiore si concentra nella capacità di agire e di affermarti nel mondo. Quando è in equilibrio, sei determinato e sicuro. Quando è squilibrato, diventi rigido o controllante.",
+        "4° Chakra (cuore)": "Anahata — centro del petto. Governa: amore, compassione, relazioni, perdono. Per te significa: il cuore è il centro della tua esperienza. Quando è in equilibrio, ami profondamente e perdoni facilmente. Quando è squilibrato, puoi diventare possessivo o chiuderti emotivamente.",
+        "5° Chakra (gola)": "Vishuddha — gola. Governa: comunicazione, espressione di sé, verità, creatività verbale. Per te significa: la tua evoluzione passa attraverso la capacità di dire la tua verità. Quando è in equilibrio, comunichi con autenticità. Quando è squilibrato, o parli troppo o reprimi la voce.",
+        "6° Chakra (terzo occhio)": "Ajna — tra le sopracciglia. Governa: intuizione, visione interiore, saggezza, percezione. Per te significa: hai una naturale capacità intuitiva. Quando è in equilibrio, vedi oltre le apparenze. Quando è squilibrato, puoi confondere intuizione e proiezione.",
+        "7° Chakra (corona)": "Sahasrara — sommità del capo. Governa: connessione spirituale, coscienza universale, trascendenza. Per te significa: hai una naturale tendenza verso l'unità e la spiritualità. Quando è in equilibrio, ti senti connesso al tutto. Quando è squilibrato, puoi perderti nella dissociazione."
+      }
+    },
+    "pianeta": {
+      "titolo": "Pianeta",
+      "spiegazione": "L'associazione tra pianeti e personalità è antichissima — risale all'astrologia babilonese e greca. Nell'Enneagramma vedico, ogni tipo è associato a un pianeta che ne influenza l'energia. Non si tratta di previsioni astrologiche, ma di un linguaggio simbolico per descrivere le qualità energetiche fondamentali della tua personalità."
+    },
+    "melodia": {
+      "titolo": "Melodia",
+      "spiegazione": "La corrispondenza tra note musicali e percorso di vita viene da G.I. Gurdjieff, che introdusse l'Enneagramma in Occidente nel XX secolo. Per Gurdjieff, ogni nota musicale corrisponde a un tratto del percorso della vita — come una nota che risuona per un certo tempo e poi si affievolisce, lasciando spazio alla successiva. La tua nota è la frequenza fondamentale su cui vibra la tua esistenza."
+    },
+    "correlazione_cerebrale": {
+      "titolo": "Correlazione Cerebrale",
+      "spiegazione": "Le neuroscienze moderne hanno identificato correlazioni tra strutture cerebrali e pattern di personalità. Queste associazioni non significano che il tuo cervello 'determina' chi sei, ma che certe aree sono più attive nel tuo tipo di personalità. Conoscere la tua correlazione cerebrale ti aiuta a capire la base biologica delle tue tendenze.",
+      "valori": {
+        "Amigdala": "L'amigdala è il 'centro d'allarme' del cervello — gestisce paura, rabbia e risposte emotive rapide. Per te significa: il tuo cervello è particolarmente sensibile a ciò che percepisce come 'sbagliato' o 'ingiusto'. Reagisci rapidamente alle minacce morali. Questo spiega perché noti immediatamente gli errori e senti l'urgenza di correggerli.",
+        "Talamo": "Il talamo è il 'centralino' del cervello — riceve e smista tutte le informazioni sensoriali. Per te significa: il tuo cervello è naturalmente sintonizzato sugli altri. Ricevi e elabori costantemente segnali emotivi dalle persone intorno a te. Questo spiega la tua empatia naturale, ma anche il rischio di sovraccarico emotivo.",
+        "Testa del nucleo caudato": "Il nucleo caudato (parte anteriore) è coinvolto nel sistema della ricompensa e nella motivazione. Per te significa: il tuo cervello è cablato per cercare obiettivi e raggiungerli. Il senso di soddisfazione che provi quando completi un progetto ha una base neurologica reale.",
+        "Nucleo subtalamico": "Il nucleo subtalamico è coinvolto nell'inibizione degli impulsi e nella regolazione emotiva. Per te significa: il tuo cervello oscilla tra intensità emotiva e controllo. Questo spiega la tua ricchezza interiore ma anche la difficoltà a trovare un equilibrio emotivo stabile.",
+        "Putamen": "Il putamen è coinvolto nell'apprendimento e nella memoria procedurale. Per te significa: il tuo cervello è fatto per accumulare conoscenza e competenza. La soddisfazione che provi quando capisci qualcosa in profondità ha una base neurologica.",
+        "Coda del nucleo caudato": "La coda del nucleo caudato è coinvolta nell'apprendimento associativo e nella vigilanza. Per te significa: il tuo cervello è naturalmente in stato di allerta — valuta costantemente la sicurezza dell'ambiente. Questo spiega la tua capacità di anticipare i problemi, ma anche la tendenza all'ansia.",
+        "Globo pallido": "Il globo pallido è coinvolto nel controllo motorio e nella selezione delle azioni. Per te significa: il tuo cervello è fatto per muoversi rapidamente tra opzioni diverse. Questo spiega la tua versatilità e la tendenza a saltare da un'esperienza all'altra.",
+        "Pars Reticularis e Substantia Nigra": "Queste strutture producono dopamina e regolano il movimento e la motivazione. Per te significa: il tuo cervello ha un motore potente — alta energia, alta intensità, forte spinta all'azione. Questo spiega la tua forza vitale ma anche la tendenza agli eccessi.",
+        "Ipotalamo": "L'ipotalamo regola l'omeostasi — temperatura, fame, sete, ciclo sonno-veglia. Per te significa: il tuo cervello cerca naturalmente l'equilibrio e l'armonia. Questo spiega la tua capacità di creare pace ma anche la tendenza a 'narcotizzarti' per evitare il conflitto."
+      }
+    },
+    "idea_sacra": {
+      "titolo": "Idea Sacra",
+      "spiegazione": "Le Idee Sacre sono le verità fondamentali che ogni enneatipo ha 'dimenticato' nascendo. Sono la visione della realtà che avevi prima che l'ego costruisse le sue difese. Ritrovare la tua Idea Sacra è il cuore del percorso evolutivo — è il momento in cui il velo cade e vedi le cose come sono davvero. Non è un concetto intellettuale: è un'esperienza diretta che trasforma."
+    },
+    "facolta": {
+      "titolo": "Facoltà",
+      "spiegazione": "Le Facoltà derivano dalla tradizione medievale che collegava i sensi umani alle capacità dell'anima. Nell'Enneagramma Evolutivo, la tua Facoltà indica il canale percettivo attraverso cui comprendi il mondo in modo più naturale — il 'senso' (non solo fisico) che ti è più sviluppato."
+    },
+    "adattamento": {
+      "titolo": "Adattamento Caratteriale",
+      "spiegazione": "L'adattamento caratteriale indica il pattern psicologico che emerge quando una persona resta 'bloccata' nel proprio enneatipo senza evolvere. NON è una diagnosi psichiatrica — è una descrizione della versione estrema e rigida del tuo tipo. La maggior parte delle persone non raggiunge mai l'estremo patologico. Serve a capire la direzione in cui potresti andare se smettessi completamente di crescere."
+    }
+  }
+}
