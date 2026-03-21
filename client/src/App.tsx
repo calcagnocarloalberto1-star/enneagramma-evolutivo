@@ -23,6 +23,8 @@ import Terms from "@/pages/Terms";
 import CookiePolicy from "@/pages/CookiePolicy";
 import Glossario from "@/pages/Glossario";
 import Admin from "@/pages/Admin";
+import CivilMediation from "@/pages/CivilMediation";
+import FamilyMediation from "@/pages/FamilyMediation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -38,6 +40,8 @@ function AppRouter() {
           <Route path="/compatibilita/coppia" component={CoupleCompatibility} />
           <Route path="/compatibilita/famiglia" component={FamilyCompatibility} />
           <Route path="/compatibilita/lavoro" component={WorkCompatibility} />
+          <Route path="/mediazione/civile" component={CivilMediation} />
+          <Route path="/mediazione/familiare" component={FamilyMediation} />
           <Route path="/percorsi" component={PercorsiVita} />
           <Route path="/enneatipi" component={EnneatipiList} />
           <Route path="/enneatipi/:id" component={EnneatipoDetail} />

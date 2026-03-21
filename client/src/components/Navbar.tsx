@@ -11,6 +11,8 @@ const navLinks = [
   { href: "/compatibilita/coppia", label: "Coppia" },
   { href: "/compatibilita/famiglia", label: "Famiglia" },
   { href: "/compatibilita/lavoro", label: "Lavoro" },
+  { href: "/mediazione/civile", label: "Med. Civile" },
+  { href: "/mediazione/familiare", label: "Med. Familiare" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "Chi Siamo" },
 ];

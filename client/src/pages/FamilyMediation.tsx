@@ -1,0 +1,749 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Heart, Users, Target, Shield, BookOpen, AlertTriangle, Download, Info, Baby, MessageCircle, Brain } from "lucide-react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import {
+  typeNames,
+  AT_DISCLAIMER,
+} from "@/data/percorsi-eta";
+import {
+  getWings,
+  wingDescriptions,
+  sottotipi,
+  ruoliFamiliari,
+  tipiMediazioneFamiliareList,
+  buildPartyProfile,
+  buildConflictDynamics,
+  buildMediatorStrategy,
+  generateFamilySimulations,
+  buildFamilyDynamics,
+  buildChildImpact,
+  buildEmotionalManagement,
+  buildCommunicationRebuilding,
+  type PartyProfile,
+  type MediatorStrategy,
+  type SimulationScenario,
+  type ConflictDynamics,
+} from "@/data/mediation-utils";
+
+const levelColors: Record<string, string> = {
+  eccellente: "bg-green-500",
+  ottima: "bg-emerald-500",
+  buona: "bg-blue-500",
+  media: "bg-amber-500",
+  bassa: "bg-orange-500",
+  difficile: "bg-red-500",
+};
+
+export default function FamilyMediation() {
+  const [nome1, setNome1] = useState("");
+  const [nome2, setNome2] = useState("");
+  const [ruolo1, setRuolo1] = useState("");
+  const [ruolo2, setRuolo2] = useState("");
+  const [type1, setType1] = useState("");
+  const [type2, setType2] = useState("");
+  const [wing1, setWing1] = useState("nessuna");
+  const [wing2, setWing2] = useState("nessuna");
+  const [sottotipo1, setSottotipo1] = useState("");
+  const [sottotipo2, setSottotipo2] = useState("");
+  const [eta1, setEta1] = useState("");
+  const [eta2, setEta2] = useState("");
+  const [tipoMediazione, setTipoMediazione] = useState("");
+  const [figliCoinvolti, setFigliCoinvolti] = useState(false);
+  const [numFigli, setNumFigli] = useState("");
+  const [etaFigli, setEtaFigli] = useState("");
+  const [livelloConflitto, setLivelloConflitto] = useState("medio");
+  const [showAnalysis, setShowAnalysis] = useState(false);
+
+  const t1 = parseInt(type1);
+  const t2 = parseInt(type2);
+  const wings1 = type1 ? getWings(t1) : [];
+  const wings2 = type2 ? getWings(t2) : [];
+
+  const { data: compatData } = useQuery({
+    queryKey: ["/api/compatibility", type1, type2],
+    queryFn: async () => {
+      const res = await fetch(`/api/compatibility/${type1}/${type2}`);
+      if (!res.ok) return null;
+      return res.json();
+    },
+    enabled: !!type1 && !!type2 && showAnalysis,
+  });
+
+  const canAnalyze = !!type1 && !!type2;
+
+  const profile1: PartyProfile | null = showAnalysis && type1
+    ? buildPartyProfile(nome1 || "Membro 1", t1, wing1, sottotipo1)
+    : null;
+  const profile2: PartyProfile | null = showAnalysis && type2
+    ? buildPartyProfile(nome2 || "Membro 2", t2, wing2, sottotipo2)
+    : null;
+
+  const dynamics: ConflictDynamics | null = showAnalysis && type1 && type2
+    ? buildConflictDynamics(t1, t2)
+    : null;
+
+  const strategy: MediatorStrategy | null = showAnalysis && profile1 && profile2
+    ? buildMediatorStrategy(profile1, profile2, livelloConflitto)
+    : null;
+
+  const simulations: SimulationScenario[] = showAnalysis && type1 && type2
+    ? generateFamilySimulations(t1, t2, tipoMediazione, figliCoinvolti, numFigli, etaFigli)
+    : [];
+
+  // Family-specific sections
+  const familyDynamicsText = showAnalysis && profile1 && profile2
+    ? buildFamilyDynamics(profile1, profile2)
+    : "";
+  const childImpactText = showAnalysis && figliCoinvolti && type1 && type2
+    ? buildChildImpact(t1, t2, numFigli, etaFigli)
+    : "";
+  const emotionalMgmtText = showAnalysis && profile1 && profile2
+    ? buildEmotionalManagement(profile1, profile2)
+    : "";
+  const commRebuildText = showAnalysis && profile1 && profile2
+    ? buildCommunicationRebuilding(profile1, profile2)
+    : "";
+
+  function handleAnalyze() {
+    if (canAnalyze) setShowAnalysis(true);
+  }
+
+  function handleReset() {
+    setShowAnalysis(false);
+  }
+
+  function generatePdf() {
+    if (!profile1 || !profile2 || !strategy || !dynamics) return;
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const contentWidth = pageWidth - margin * 2;
+    let y = 20;
+
+    const checkPage = (needed: number) => {
+      if (y + needed > doc.internal.pageSize.getHeight() - 25) {
+        doc.addPage();
+        y = 20;
+      }
+    };
+
+    const addTitle = (title: string) => {
+      checkPage(20);
+      doc.setFontSize(13);
+      doc.setFont("helvetica", "bold");
+      doc.text(title, margin, y);
+      y += 8;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+    };
+
+    const addText = (text: string) => {
+      const lines = doc.splitTextToSize(text, contentWidth);
+      checkPage(lines.length * 5 + 5);
+      doc.text(lines, margin, y);
+      y += lines.length * 5 + 4;
+    };
+
+    // Header
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("Al Tavolo della Mediazione Familiare", pageWidth / 2, y, { align: "center" });
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Enneagramma Evolutivo - Analisi Transazionale", pageWidth / 2, y, { align: "center" });
+    y += 7;
+    doc.text(`Data: ${new Date().toLocaleDateString("it-IT")}`, margin, y);
+    y += 10;
+
+    // Parties
+    addTitle("Profilo dei Membri");
+    addText(`Membro 1: ${profile1.nome}${ruolo1 ? ` (${ruolo1})` : ""} - Tipo ${type1} ${profile1.nomeEnneatipo}${wing1 !== "nessuna" ? ` (Ala ${wing1})` : ""}${eta1 ? `, ${eta1} anni` : ""}`);
+    if (profile1.at) addText(`Adattamento AT: ${profile1.at.nome} (${profile1.at.tipo})`);
+    addText(`Porta aperta: ${profile1.at?.portaAperta || "N/D"} | Driver: ${profile1.at?.spinta || "N/D"}`);
+    y += 2;
+
+    addText(`Membro 2: ${profile2.nome}${ruolo2 ? ` (${ruolo2})` : ""} - Tipo ${type2} ${profile2.nomeEnneatipo}${wing2 !== "nessuna" ? ` (Ala ${wing2})` : ""}${eta2 ? `, ${eta2} anni` : ""}`);
+    if (profile2.at) addText(`Adattamento AT: ${profile2.at.nome} (${profile2.at.tipo})`);
+    addText(`Porta aperta: ${profile2.at?.portaAperta || "N/D"} | Driver: ${profile2.at?.spinta || "N/D"}`);
+    y += 4;
+
+    if (figliCoinvolti && numFigli) {
+      addText(`Figli coinvolti: ${numFigli}${etaFigli ? ` (eta: ${etaFigli} anni)` : ""}`);
+      y += 2;
+    }
+
+    // Compatibility
+    if (compatData) {
+      addTitle(`Compatibilita: ${(compatData.livello || "").toUpperCase()} - ${compatData.percentuale || 0}%`);
+      if (compatData.descrizione) addText(compatData.descrizione);
+      y += 4;
+    }
+
+    // Dynamics
+    if (dynamics?.atInterazione) {
+      addTitle("Dinamiche del Conflitto");
+      addText(`Tipo interazione AT: ${dynamics.atInterazione.tipo}`);
+      addText(dynamics.atInterazione.descrizione);
+      if (dynamics.puntiClash) addText(dynamics.puntiClash);
+      y += 4;
+    }
+
+    // Family-specific
+    if (familyDynamicsText) {
+      addTitle("Dinamiche Familiari e Attaccamento");
+      addText(familyDynamicsText);
+    }
+
+    if (childImpactText) {
+      addTitle("Impatto sui Figli");
+      addText(childImpactText);
+    }
+
+    if (emotionalMgmtText) {
+      addTitle("Gestione dell'Emotivita");
+      addText(emotionalMgmtText);
+    }
+
+    if (commRebuildText) {
+      addTitle("Ricostruzione della Comunicazione");
+      addText(commRebuildText);
+    }
+
+    // Strategy
+    addTitle("Strategia del Mediatore");
+    addTitle("1. Approccio Iniziale");
+    addText(strategy.approccioIniziale);
+    addTitle("2. Gestione della Sessione");
+    addText(strategy.gestioneSessione);
+    addTitle("3. Leve Motivazionali");
+    addText(strategy.leveMotivazionali);
+    addTitle("4. Terreno Comune");
+    addText(strategy.terrenoComune);
+    addTitle("5. Trappole da Evitare");
+    addText(strategy.trappoleDaEvitare);
+    addTitle("6. Tecniche Specifiche");
+    addText(strategy.tecnicheSpecifiche);
+
+    // Simulations
+    addTitle("Tracce di Simulazione");
+    for (const sim of simulations) {
+      addTitle(sim.titolo);
+      addText(`Contesto: ${sim.contesto}`);
+      addText(`Parti: ${sim.parti}`);
+      addText(`Punto critico: ${sim.puntoCritico}`);
+      addText(`Obiettivo formativo: ${sim.obiettivoFormativo}`);
+      addText(`Suggerimenti: ${sim.suggerimentiMediatore}`);
+      y += 4;
+    }
+
+    // Disclaimer
+    checkPage(20);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "italic");
+    const discLines = doc.splitTextToSize(AT_DISCLAIMER, contentWidth);
+    doc.text(discLines, margin, y);
+
+    doc.save(`mediazione-familiare-${type1}-${type2}.pdf`);
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
+      {/* Hero */}
+      <section className="relative py-16 bg-gradient-to-r from-primary/95 to-primary overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-32 h-32 border border-white/30 rounded-full" />
+          <div className="absolute bottom-10 right-10 w-24 h-24 border border-white/20 rounded-full" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#c9a227]/20 mb-4">
+            <Heart className="w-8 h-8 text-[#c9a227]" />
+          </div>
+          <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">
+            Al Tavolo della Mediazione Familiare
+          </h1>
+          <p className="text-lg text-white/80 max-w-2xl mx-auto">
+            Analisi delle dinamiche familiari e strategie del mediatore basate sull'Enneagramma Evolutivo e l'Analisi Transazionale
+          </p>
+        </div>
+      </section>
+
+      <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+        {/* Input Form */}
+        <Card className="border-[#c9a227]/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-primary">
+              <Users className="w-5 h-5 text-[#c9a227]" />
+              Configurazione dei Membri
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Member 1 */}
+              <div className="space-y-4 p-4 rounded-lg bg-primary/5 border border-primary/10">
+                <h3 className="font-semibold text-primary">Membro 1</h3>
+                <div>
+                  <Label>Nome (opzionale)</Label>
+                  <Input placeholder="es. Anna" value={nome1} onChange={(e) => { setNome1(e.target.value); setShowAnalysis(false); }} />
+                </div>
+                <div>
+                  <Label>Ruolo familiare (opzionale)</Label>
+                  <Select value={ruolo1} onValueChange={(v) => { setRuolo1(v); setShowAnalysis(false); }}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona ruolo" /></SelectTrigger>
+                    <SelectContent>
+                      {ruoliFamiliari.map((r) => (
+                        <SelectItem key={r} value={r}>{r}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Enneatipo *</Label>
+                  <Select value={type1} onValueChange={(v) => { setType1(v); setWing1("nessuna"); setShowAnalysis(false); }}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona enneatipo" /></SelectTrigger>
+                    <SelectContent>
+                      {[1,2,3,4,5,6,7,8,9].map((n) => (
+                        <SelectItem key={n} value={String(n)}>Tipo {n} — {typeNames[n]}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {type1 && wings1.length > 0 && (
+                  <div>
+                    <Label>Ala (opzionale)</Label>
+                    <Select value={wing1} onValueChange={(v) => { setWing1(v); setShowAnalysis(false); }}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="nessuna">Nessuna</SelectItem>
+                        {wings1.map((w) => (
+                          <SelectItem key={w} value={String(w)}>
+                            Ala {w} — {wingDescriptions[`${type1}w${w}`] || ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div>
+                  <Label>Sottotipo (opzionale)</Label>
+                  <Select value={sottotipo1} onValueChange={(v) => { setSottotipo1(v); setShowAnalysis(false); }}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona sottotipo" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="nessuno">Nessuno</SelectItem>
+                      {sottotipi.map((s) => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Età (opzionale)</Label>
+                  <Input type="number" placeholder="es. 45" value={eta1} onChange={(e) => { setEta1(e.target.value); setShowAnalysis(false); }} min="0" max="120" />
+                </div>
+              </div>
+
+              {/* Member 2 */}
+              <div className="space-y-4 p-4 rounded-lg bg-accent/5 border border-accent/10">
+                <h3 className="font-semibold text-primary">Membro 2</h3>
+                <div>
+                  <Label>Nome (opzionale)</Label>
+                  <Input placeholder="es. Luca" value={nome2} onChange={(e) => { setNome2(e.target.value); setShowAnalysis(false); }} />
+                </div>
+                <div>
+                  <Label>Ruolo familiare (opzionale)</Label>
+                  <Select value={ruolo2} onValueChange={(v) => { setRuolo2(v); setShowAnalysis(false); }}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona ruolo" /></SelectTrigger>
+                    <SelectContent>
+                      {ruoliFamiliari.map((r) => (
+                        <SelectItem key={r} value={r}>{r}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Enneatipo *</Label>
+                  <Select value={type2} onValueChange={(v) => { setType2(v); setWing2("nessuna"); setShowAnalysis(false); }}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona enneatipo" /></SelectTrigger>
+                    <SelectContent>
+                      {[1,2,3,4,5,6,7,8,9].map((n) => (
+                        <SelectItem key={n} value={String(n)}>Tipo {n} — {typeNames[n]}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {type2 && wings2.length > 0 && (
+                  <div>
+                    <Label>Ala (opzionale)</Label>
+                    <Select value={wing2} onValueChange={(v) => { setWing2(v); setShowAnalysis(false); }}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="nessuna">Nessuna</SelectItem>
+                        {wings2.map((w) => (
+                          <SelectItem key={w} value={String(w)}>
+                            Ala {w} — {wingDescriptions[`${type2}w${w}`] || ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div>
+                  <Label>Sottotipo (opzionale)</Label>
+                  <Select value={sottotipo2} onValueChange={(v) => { setSottotipo2(v); setShowAnalysis(false); }}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona sottotipo" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="nessuno">Nessuno</SelectItem>
+                      {sottotipi.map((s) => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Età (opzionale)</Label>
+                  <Input type="number" placeholder="es. 42" value={eta2} onChange={(e) => { setEta2(e.target.value); setShowAnalysis(false); }} min="0" max="120" />
+                </div>
+              </div>
+            </div>
+
+            {/* Mediation type & children */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <Label>Tipo di mediazione familiare</Label>
+                <Select value={tipoMediazione} onValueChange={(v) => { setTipoMediazione(v); setShowAnalysis(false); }}>
+                  <SelectTrigger><SelectValue placeholder="Seleziona tipo" /></SelectTrigger>
+                  <SelectContent>
+                    {tipiMediazioneFamiliareList.map((t) => (
+                      <SelectItem key={t} value={t}>{t}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Livello di conflittualità</Label>
+                <RadioGroup value={livelloConflitto} onValueChange={(v) => { setLivelloConflitto(v); setShowAnalysis(false); }} className="flex gap-4 mt-2">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="basso" id="f-basso" />
+                    <Label htmlFor="f-basso" className="cursor-pointer">Basso</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="medio" id="f-medio" />
+                    <Label htmlFor="f-medio" className="cursor-pointer">Medio</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="alto" id="f-alto" />
+                    <Label htmlFor="f-alto" className="cursor-pointer">Alto</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            </div>
+
+            {/* Children section */}
+            <div className="p-4 rounded-lg bg-muted/50 border space-y-4">
+              <div className="flex items-center gap-3">
+                <Switch
+                  checked={figliCoinvolti}
+                  onCheckedChange={(v) => { setFigliCoinvolti(v); setShowAnalysis(false); }}
+                  id="figli"
+                />
+                <Label htmlFor="figli" className="cursor-pointer flex items-center gap-2">
+                  <Baby className="w-4 h-4" />
+                  Figli coinvolti
+                </Label>
+              </div>
+              {figliCoinvolti && (
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label>Numero figli</Label>
+                    <Input type="number" placeholder="es. 2" value={numFigli} onChange={(e) => { setNumFigli(e.target.value); setShowAnalysis(false); }} min="1" max="10" />
+                  </div>
+                  <div>
+                    <Label>Età figli</Label>
+                    <Input placeholder="es. 8, 12" value={etaFigli} onChange={(e) => { setEtaFigli(e.target.value); setShowAnalysis(false); }} />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                onClick={handleAnalyze}
+                disabled={!canAnalyze}
+                className="bg-[#c9a227] hover:bg-[#d4a843] text-[#1a1a2e] font-semibold"
+              >
+                <Heart className="w-4 h-4 mr-2" />
+                Genera Analisi
+              </Button>
+              {showAnalysis && (
+                <Button variant="outline" onClick={handleReset}>
+                  Nuova Analisi
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Analysis Output */}
+        {showAnalysis && profile1 && profile2 && (
+          <>
+            {/* AT Disclaimer */}
+            <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 text-sm">
+              <Info className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+              <p className="text-amber-800 dark:text-amber-200">{AT_DISCLAIMER}</p>
+            </div>
+
+            {/* PDF button */}
+            <div className="flex justify-end">
+              <Button onClick={generatePdf} variant="outline" className="gap-2">
+                <Download className="w-4 h-4" />
+                Scarica PDF
+              </Button>
+            </div>
+
+            {/* A) Party Profiles */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-[#c9a227]" />
+                  A) Profilo dei Membri al Tavolo
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {[{ p: profile1, ruolo: ruolo1, eta: eta1 }, { p: profile2, ruolo: ruolo2, eta: eta2 }].map(({ p, ruolo, eta }, idx) => (
+                    <div key={idx} className="space-y-3 p-4 rounded-lg bg-muted/50 border">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-semibold text-lg">{p.nome}</h3>
+                        <Badge variant="secondary">Tipo {p.enneatipo}</Badge>
+                        {ruolo && <Badge variant="outline">{ruolo}</Badge>}
+                      </div>
+                      <p className="font-medium text-primary">{p.nomeEnneatipo}</p>
+                      {eta && <p className="text-sm text-muted-foreground">Età: {eta} anni</p>}
+                      {p.alaDescrizione && (
+                        <p className="text-sm text-muted-foreground">Ala {p.ala}: {p.alaDescrizione}</p>
+                      )}
+                      {p.sottotipo && p.sottotipo !== "nessuno" && (
+                        <p className="text-sm">Sottotipo: <span className="font-medium">{p.sottotipo}</span></p>
+                      )}
+                      {p.at && (
+                        <div className="pt-2 border-t space-y-2">
+                          <p className="text-sm"><strong>Adattamento AT:</strong> {p.at.nome} ({p.at.tipo})</p>
+                          <p className="text-sm"><strong>Porta aperta:</strong> {p.at.portaAperta}</p>
+                          <p className="text-sm"><strong>Driver/Spinta:</strong> {p.at.spinta}</p>
+                          <p className="text-sm"><strong>Reazione alla minaccia:</strong> {p.reazioneMinaccia}</p>
+                          <p className="text-sm"><strong>Stile sociale:</strong> {p.at.stileSociale}</p>
+                          <p className="text-sm"><strong>Come approcciare:</strong> {p.approccio}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* B) Conflict Dynamics */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-[#c9a227]" />
+                  B) Dinamiche del Conflitto
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {compatData && (
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                    <div className={`w-3 h-3 rounded-full ${levelColors[compatData.livello] || "bg-gray-400"}`} />
+                    <span className="font-medium">Compatibilità: {compatData.livello} ({compatData.percentuale}%)</span>
+                  </div>
+                )}
+                {compatData?.descrizione && <p className="text-sm">{compatData.descrizione}</p>}
+                {dynamics?.atInterazione && (
+                  <div className="p-4 rounded-lg bg-muted/30 border space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Badge variant={dynamics.atInterazione.tipo === "problematica" ? "destructive" : dynamics.atInterazione.tipo === "attrazione" ? "default" : "secondary"}>
+                        {dynamics.atInterazione.tipo === "amicizia" ? "Amicizia" : dynamics.atInterazione.tipo === "attrazione" ? "Attrazione" : "Problematica"}
+                      </Badge>
+                      <span className="text-sm font-medium">Interazione AT</span>
+                    </div>
+                    <p className="text-sm">{dynamics.atInterazione.descrizione}</p>
+                    <p className="text-sm text-muted-foreground italic">{dynamics.atInterazione.consiglio}</p>
+                  </div>
+                )}
+                {dynamics?.puntiClash && (
+                  <div className="space-y-1">
+                    <h4 className="font-medium text-sm">Punti di scontro potenziali:</h4>
+                    <p className="text-sm text-muted-foreground">{dynamics.puntiClash}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Family-specific sections */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-[#c9a227]" />
+                  Sezioni Specifiche Mediazione Familiare
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Accordion type="multiple" defaultValue={["familyDyn", "childImpact", "emotional", "commRebuild"]}>
+                  <AccordionItem value="familyDyn">
+                    <AccordionTrigger className="text-sm font-semibold">
+                      <span className="flex items-center gap-2"><Brain className="w-4 h-4" /> Dinamiche Familiari e Attaccamento</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="whitespace-pre-line text-sm text-muted-foreground">{familyDynamicsText}</div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {figliCoinvolti && childImpactText && (
+                    <AccordionItem value="childImpact">
+                      <AccordionTrigger className="text-sm font-semibold">
+                        <span className="flex items-center gap-2"><Baby className="w-4 h-4" /> Impatto sui Figli</span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="whitespace-pre-line text-sm text-muted-foreground">{childImpactText}</div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
+
+                  <AccordionItem value="emotional">
+                    <AccordionTrigger className="text-sm font-semibold">
+                      <span className="flex items-center gap-2"><Shield className="w-4 h-4" /> Gestione dell'Emotività</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="whitespace-pre-line text-sm text-muted-foreground">{emotionalMgmtText}</div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="commRebuild">
+                    <AccordionTrigger className="text-sm font-semibold">
+                      <span className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Ricostruzione della Comunicazione</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="whitespace-pre-line text-sm text-muted-foreground">{commRebuildText}</div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </CardContent>
+            </Card>
+
+            {/* C) Mediator Strategy */}
+            {strategy && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="w-5 h-5 text-[#c9a227]" />
+                    C) Strategia del Mediatore
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="multiple" defaultValue={["approccio", "sessione", "leve", "terreno", "trappole", "tecniche"]}>
+                    <AccordionItem value="approccio">
+                      <AccordionTrigger className="text-sm font-semibold">1. Approccio Iniziale</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="whitespace-pre-line text-sm text-muted-foreground">{strategy.approccioIniziale}</div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="sessione">
+                      <AccordionTrigger className="text-sm font-semibold">2. Gestione della Sessione Congiunta</AccordionTrigger>
+                      <AccordionContent>
+                        <p className="text-sm text-muted-foreground">{strategy.gestioneSessione}</p>
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="leve">
+                      <AccordionTrigger className="text-sm font-semibold">3. Leve Motivazionali</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="whitespace-pre-line text-sm text-muted-foreground">{strategy.leveMotivazionali}</div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="terreno">
+                      <AccordionTrigger className="text-sm font-semibold">4. Terreno Comune</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="whitespace-pre-line text-sm text-muted-foreground">{strategy.terrenoComune}</div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="trappole">
+                      <AccordionTrigger className="text-sm font-semibold">5. Trappole da Evitare</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="whitespace-pre-line text-sm text-muted-foreground">{strategy.trappoleDaEvitare}</div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="tecniche">
+                      <AccordionTrigger className="text-sm font-semibold">6. Tecniche Specifiche Consigliate</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="whitespace-pre-line text-sm text-muted-foreground">{strategy.tecnicheSpecifiche}</div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* D) Simulations */}
+            {simulations.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-[#c9a227]" />
+                    D) Tracce di Simulazione per la Mediazione Familiare
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {simulations.map((sim, idx) => (
+                    <div key={idx} className="p-4 rounded-lg border bg-muted/20 space-y-3 print:break-inside-avoid">
+                      <h4 className="font-semibold text-primary flex items-center gap-2">
+                        <Badge variant="outline">{idx + 1}</Badge>
+                        {sim.titolo}
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <span className="font-medium">Contesto:</span>
+                          <p className="text-muted-foreground mt-1">{sim.contesto}</p>
+                        </div>
+                        <div>
+                          <span className="font-medium">Parti:</span>
+                          <p className="text-muted-foreground mt-1 whitespace-pre-line">{sim.parti}</p>
+                        </div>
+                        <div>
+                          <span className="font-medium">Punto critico:</span>
+                          <p className="text-muted-foreground mt-1">{sim.puntoCritico}</p>
+                        </div>
+                        <div className="p-3 rounded bg-[#c9a227]/5 border border-[#c9a227]/20">
+                          <span className="font-medium text-[#c9a227]">Obiettivo formativo:</span>
+                          <p className="text-muted-foreground mt-1">{sim.obiettivoFormativo}</p>
+                        </div>
+                        <div className="p-3 rounded bg-primary/5 border border-primary/10">
+                          <span className="font-medium text-primary">Suggerimenti per il mediatore:</span>
+                          <p className="text-muted-foreground mt-1">{sim.suggerimentiMediatore}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
