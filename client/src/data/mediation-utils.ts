@@ -186,6 +186,93 @@ function getTecnicheSpecifiche(at1: ATAdaptation, at2: ATAdaptation): string {
   return text;
 }
 
+// ── Fallback functions when AT data is not available ──
+
+const centriEnneagramma: Record<number, string> = {
+  1: "istintivo", 2: "emotivo", 3: "emotivo", 4: "emotivo",
+  5: "mentale", 6: "mentale", 7: "mentale",
+  8: "istintivo", 9: "istintivo",
+};
+
+function getGestioneSessioneFallback(p1: PartyProfile, p2: PartyProfile, livello: string): string {
+  const c1 = centriEnneagramma[p1.enneatipo] || "emotivo";
+  const c2 = centriEnneagramma[p2.enneatipo] || "emotivo";
+  let text = "GESTIONE DELLA SESSIONE CONGIUNTA NELLA MEDIAZIONE FAMILIARE\n\n";
+  text += "La sessione congiunta nella mediazione familiare è un momento delicato che richiede una preparazione attenta e una conduzione consapevole.\n\n";
+
+  text += "PRINCIPI GENERALI:\n";
+  text += "• Impermanenza: ogni porta resta aperta al cambiamento. Le posizioni espresse oggi sono provvisorie.\n";
+  text += "• Compassione: il mediatore non giudica, ma comprende. Solo conoscendo la propria oscurità possiamo essere presenti nel buio degli altri.\n";
+  text += "• Interdipendenza: l'esperienza di ciascuno dipende da come percepisce che l'altro lo percepisce.\n\n";
+
+  text += `PROFILO DELLE PARTI AL TAVOLO:\n`;
+  text += `${p1.nome} (${p1.nomeEnneatipo}, centro ${c1}): ${leveMotivazionali[p1.enneatipo]}\n`;
+  text += `${p2.nome} (${p2.nomeEnneatipo}, centro ${c2}): ${leveMotivazionali[p2.enneatipo]}\n\n`;
+
+  if (c1 === c2) {
+    text += `Entrambe le parti operano dal centro ${c1}: condividono un modo simile di elaborare l'esperienza. Usare questo terreno comune come ponte.\n\n`;
+  } else {
+    text += `Le parti operano da centri diversi (${c1} vs ${c2}): il mediatore deve tradurre il linguaggio di una parte nella modalità dell'altra.\n\n`;
+  }
+
+  text += "STRUTTURA DELLA SESSIONE CONSIGLIATA:\n";
+  text += "1. Discorso iniziale: stabilire le regole (toni rispettosi, turni di parola, possibilità di caucus).\n";
+  text += "2. Ascolto delle parti: permettere a ciascuno di esprimere il proprio vissuto senza interruzioni.\n";
+  text += "3. Riformulazione: il mediatore riformula le posizioni usando un linguaggio neutro e orientato ai bisogni.\n";
+  text += "4. Individuazione dei punti comuni: evidenziare dove le esigenze convergono.\n";
+  text += "5. Esplorazione delle opzioni: brainstorming guidato per possibili soluzioni.\n";
+  text += "6. Verifica della realtà: controllare che le opzioni siano praticabili e sostenibili.\n\n";
+
+  if (livello === "alto") {
+    text += "ATTENZIONE — Conflittualità ALTA: prevedere caucus separati fin dall'inizio. Alternare sessioni congiunte brevi (max 20 min) con incontri individuali più lunghi. Monitorare costantemente i segnali di escalation.";
+  } else if (livello === "medio") {
+    text += "Conflittualità MEDIA: iniziare con sessione congiunta ma avere pronto un piano B (caucus). Se la tensione sale, interrompere con cortesia e passare a colloqui individuali.";
+  } else {
+    text += "Conflittualità BASSA: la sessione congiunta è generalmente produttiva. Usare il caucus solo se emergono blocchi specifici o se una parte ha bisogno di un momento di riflessione privata.";
+  }
+
+  return text;
+}
+
+function getTerrenoComuneFallback(p1: PartyProfile, p2: PartyProfile): string {
+  const c1 = centriEnneagramma[p1.enneatipo] || "emotivo";
+  const c2 = centriEnneagramma[p2.enneatipo] || "emotivo";
+  let text = "";
+
+  if (c1 === c2) {
+    text += `Entrambe le parti appartengono al centro ${c1}: condividono una modalità simile di elaborare l'esperienza. `;
+  }
+
+  text += `Per la Parte 1 (${p1.nomeEnneatipo}): ${leveMotivazionali[p1.enneatipo]} `;
+  text += `Per la Parte 2 (${p2.nomeEnneatipo}): ${leveMotivazionali[p2.enneatipo]} `;
+  text += `\n\nIl mediatore dovrebbe cercare di costruire un accordo che soddisfi entrambe queste motivazioni profonde, riformulando le posizioni dell'uno nel linguaggio dell'altro.`;
+
+  return text;
+}
+
+function getTecnicheSpecificheFallback(p1: PartyProfile, p2: PartyProfile): string {
+  const c1 = centriEnneagramma[p1.enneatipo] || "emotivo";
+  const c2 = centriEnneagramma[p2.enneatipo] || "emotivo";
+  let text = "Tecniche consigliate in base al profilo enneagrammatico:\n\n";
+
+  if (c1 === "emotivo" || c2 === "emotivo") {
+    text += "• Ascolto attivo e riformulazione empatica: almeno una parte opera dal centro emotivo. Validare i sentimenti prima di passare al contenuto.\n";
+  }
+  if (c1 === "mentale" || c2 === "mentale") {
+    text += "• Domande esplorative e analisi razionale: almeno una parte opera dal centro mentale. Usare dati e logica per costruire fiducia.\n";
+  }
+  if (c1 === "istintivo" || c2 === "istintivo") {
+    text += "• Approccio direttivo e orientato all'azione: almeno una parte opera dal centro istintivo. Proporre step concreti ed evitare discussioni troppo astratte.\n";
+  }
+
+  text += "\n• Riformulazione positiva: trasformare le recriminazioni in bisogni (da \"non fai mai...\" a \"ho bisogno di...\").";
+  text += "\n• Normalizzazione: aiutare le parti a comprendere che le reazioni sono tipiche della situazione.";
+  text += "\n• Reality testing: verificare con domande concrete la fattibilità delle proposte.";
+  text += "\n• Mutualizzazione: evidenziare gli elementi comuni nelle posizioni delle parti.";
+
+  return text;
+}
+
 // ── Public: build full party profile ──
 
 export interface PartyProfile {
@@ -302,19 +389,19 @@ export function buildMediatorStrategy(
 
   const gestioneSessione = at1 && at2
     ? getGestioneSessione(at1, at2, livelloConflitto)
-    : "Dati AT insufficienti per un'analisi dettagliata della sessione.";
+    : getGestioneSessioneFallback(profile1, profile2, livelloConflitto);
 
   const leveText = `Parte 1 (${profile1.nome} — ${profile1.nomeEnneatipo}):\n${profile1.levaMotivazionale}\n\nParte 2 (${profile2.nome} — ${profile2.nomeEnneatipo}):\n${profile2.levaMotivazionale}`;
 
   const terrenoComune = at1 && at2
     ? getTerrenoComune(profile1.enneatipo, profile2.enneatipo, at1, at2)
-    : "Dati AT insufficienti.";
+    : getTerrenoComuneFallback(profile1, profile2);
 
   const trappoleDaEvitare = `Con ${profile1.nome} (${profile1.nomeEnneatipo}):\n${profile1.trappola}\n\nCon ${profile2.nome} (${profile2.nomeEnneatipo}):\n${profile2.trappola}`;
 
   const tecnicheSpecifiche = at1 && at2
     ? getTecnicheSpecifiche(at1, at2)
-    : "Dati AT insufficienti.";
+    : getTecnicheSpecificheFallback(profile1, profile2);
 
   return {
     approccioIniziale,
