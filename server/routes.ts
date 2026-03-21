@@ -21,6 +21,68 @@ const sistemaEta = loadJSON("sistema-eta-completo.json");
 const percorsiEnneatipi = loadJSON("percorsi-enneatipi.json");
 const educationalContent = loadJSON("educational-content.json");
 const attributiDescrizioni = loadJSON("attributi-descrizioni.json");
+const percorsiEvolutiviCompleti = loadJSON("percorsi-evolutivi-completi.json");
+
+// Get the user's current life phase and evolutionary path details
+function getPercorsoPersonalizzato(enneatipo: number, eta: number) {
+  const tipoData = percorsiEvolutiviCompleti.percorsiCompleti[String(enneatipo)];
+  if (!tipoData) return null;
+  
+  const isCicloBreve = tipoData.cicloBrève === true;
+  const integrazione = tipoData.integrazione;
+  const disintegrazione = tipoData.disintegrazione;
+  const puntiAttr = percorsiEvolutiviCompleti.puntiAttributi;
+  
+  // Determine current phase based on age
+  let faseCorrente = "";
+  if (isCicloBreve) {
+    if (eta <= 30) faseCorrente = "0-30";
+    else if (eta <= 60) faseCorrente = "30-60";
+    else faseCorrente = "60+";
+  } else {
+    if (eta <= 3) faseCorrente = "0-3";
+    else if (eta <= 12) faseCorrente = "3-12";
+    else if (eta <= 19) faseCorrente = "12-19";
+    else if (eta <= 30) faseCorrente = "19-30";
+    else if (eta <= 60) faseCorrente = "30-60";
+    else faseCorrente = "60+";
+  }
+  
+  // Get current phase details for both paths
+  const faseIntegrazione = integrazione.fasi[faseCorrente] || null;
+  const faseDisintegrazione = disintegrazione.fasi[faseCorrente] || null;
+  
+  // Get attributes for the current integration point
+  const puntoIntegrazione = faseIntegrazione?.punto;
+  const puntoDisintegrazione = faseDisintegrazione?.punto;
+  const attrIntegrazione = puntiAttr[String(puntoIntegrazione)] || null;
+  const attrDisintegrazione = puntiAttr[String(puntoDisintegrazione)] || null;
+  
+  return {
+    nome: tipoData.nome,
+    ali: tipoData.ali,
+    cicloBreve: isCicloBreve,
+    faseCorrente,
+    eta,
+    integrazione: {
+      sequenza: integrazione.sequenza,
+      fasi: integrazione.fasi,
+      incroci: integrazione.incroci,
+      faseAttuale: faseIntegrazione,
+      attributiPunto: attrIntegrazione,
+      dignita: integrazione.dignita,
+      virtu: integrazione.virtu
+    },
+    disintegrazione: {
+      sequenza: disintegrazione.sequenza,
+      fasi: disintegrazione.fasi,
+      incroci: disintegrazione.incroci,
+      faseAttuale: faseDisintegrazione,
+      attributiPunto: attrDisintegrazione,
+      vizi: disintegrazione.vizi
+    }
+  };
+}
 
 // Fruit to enneatipo mapping
 const fruitToEnneatipo: Record<string, number> = {
@@ -137,6 +199,7 @@ export async function registerRoutes(
       const percorso = percorsi.percorsi[String(enneatipo)];
       const etaInfo = percorsi.etaEnneatipi;
       const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === enneatipo || String(e.numero) === String(enneatipo));
+      const percorsoPersonalizzato = getPercorsoPersonalizzato(enneatipo, parseInt(eta));
 
       res.json({
         ...result,
@@ -145,6 +208,7 @@ export async function registerRoutes(
         descrizioni: attributiDescrizioni,
         educativo: eduInfo || null,
         percorso,
+        percorsoPersonalizzato,
         etaInfo,
         needsGenogram,
       });
@@ -165,6 +229,7 @@ export async function registerRoutes(
     const percorso = percorsi.percorsi[String(result.enneatipo)];
     const etaInfo = percorsi.etaEnneatipi;
     const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === result.enneatipo || String(e.numero) === String(result.enneatipo));
+    const percorsoPersonalizzato = getPercorsoPersonalizzato(result.enneatipo, result.eta);
     
     res.json({
       ...result,
@@ -173,6 +238,7 @@ export async function registerRoutes(
       descrizioni: attributiDescrizioni,
       educativo: eduInfo || null,
       percorso,
+      percorsoPersonalizzato,
       etaInfo,
     });
   });

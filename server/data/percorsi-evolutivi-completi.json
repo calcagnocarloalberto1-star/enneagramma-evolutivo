@@ -1,0 +1,361 @@
+{
+  "percorsiCompleti": {
+    "1": {
+      "nome": "Il Perfezionista",
+      "ali": [9, 2],
+      "integrazione": {
+        "sequenza": [1, 7, 5, 8, 2, 4],
+        "fasi": {
+          "0-3": { "punto": 1, "nome": "L'innocenza perfetta", "desc": "Perfezionismo innato, senso del giusto/sbagliato" },
+          "3-12": { "punto": 7, "nome": "L'esplorazione gioiosa", "desc": "Spontaneità, gioco, curiosità" },
+          "12-19": { "punto": 5, "nome": "L'osservatore critico", "desc": "Introspezione, analisi, ricerca di conoscenza" },
+          "19-30": { "punto": 8, "nome": "Il guerriero giusto", "desc": "Assertività, forza, azione nel mondo" },
+          "30-60": { "punto": 2, "nome": "Il servitore compassionevole", "desc": "Cura degli altri, generosità, relazioni" },
+          "60+": { "punto": 4, "nome": "Il saggio autentico", "desc": "Autenticità emotiva, profondità, saggezza" }
+        },
+        "incroci": {
+          "1→7": "Rigidità → Spontaneità gioiosa",
+          "7→5": "Dispersione → Profondità contemplativa",
+          "5→8": "Ritiro → Azione potente",
+          "8→2": "Forza → Tenerezza",
+          "2→4": "Altruismo → Autenticità",
+          "4→1": "Emozione → Integrità rinnovata"
+        },
+        "dignita": ["Grandezza", "Verità", "Volontà", "Gloria", "Eternità", "Sapienza"],
+        "virtu": ["Prudenza", "Pazienza", "Speranza", "Pietà", "Perseveranza", "Fede"]
+      },
+      "disintegrazione": {
+        "sequenza": [1, 4, 2, 8, 5, 7],
+        "fasi": {
+          "0-3": { "punto": 1, "nome": "Perfezionismo sotto pressione", "desc": "Critica costante, rigidità estrema" },
+          "3-12": { "punto": 4, "nome": "Il bambino risentito", "desc": "Risentimento, malinconia, dramma emotivo" },
+          "12-19": { "punto": 2, "nome": "L'adolescente manipolativo", "desc": "Manipolativo nell'aiutare, bisognoso" },
+          "19-30": { "punto": 8, "nome": "L'aggressore punitivo", "desc": "Aggressivo, dominante, punitivo" },
+          "30-60": { "punto": 5, "nome": "L'isolato critico", "desc": "Ritiro in isolamento critico e paranoico" },
+          "60+": { "punto": 7, "nome": "La fuga difensiva", "desc": "Dispersione difensiva, fuga dalla realtà" }
+        },
+        "incroci": {
+          "1→4": "Controllo → Dramma emotivo",
+          "4→2": "Vittimismo → Manipolazione affettiva",
+          "2→8": "Bisogno → Aggressività",
+          "8→5": "Dominio → Ritiro paranoico",
+          "5→7": "Isolamento → Fuga maniaca",
+          "7→1": "Caos → Rigidità punitiva"
+        },
+        "vizi": ["Gola", "Accidia", "Lussuria", "Incostanza", "Invidia", "Menzogna"]
+      }
+    },
+    "2": {
+      "nome": "L'Altruista",
+      "ali": [1, 3],
+      "integrazione": {
+        "sequenza": [2, 4, 1, 7, 5, 8],
+        "fasi": {
+          "0-3": { "punto": 2, "nome": "L'amore bisognoso", "desc": "Dipendenza affettiva, dare per ricevere" },
+          "3-12": { "punto": 4, "nome": "L'unicità ferita", "desc": "Individualità emergente, emozioni" },
+          "12-19": { "punto": 1, "nome": "L'idealista responsabile", "desc": "Perfezionismo adolescenziale, principi" },
+          "19-30": { "punto": 7, "nome": "L'avventuriero libero", "desc": "Libertà dalle aspettative altrui" },
+          "30-60": { "punto": 5, "nome": "Il contemplativo saggio", "desc": "Distacco salutare, saggezza" },
+          "60+": { "punto": 8, "nome": "Il patriarca/matriarca potente", "desc": "Autodeterminazione, forza autentica" }
+        },
+        "incroci": {
+          "2→4": "Dare compulsivo → Autenticità personale",
+          "4→1": "Emozione → Disciplina interiore",
+          "1→7": "Dovere → Piacere genuino",
+          "7→5": "Esperienza → Comprensione profonda",
+          "5→8": "Conoscenza → Potere d'azione",
+          "8→2": "Forza → Amore maturo"
+        }
+      },
+      "disintegrazione": {
+        "sequenza": [2, 8, 5, 7, 1, 4],
+        "fasi": {
+          "0-3": { "punto": 2, "nome": "L'orgoglio nascosto", "desc": "Manipolazione affettiva, orgoglio" },
+          "3-12": { "punto": 8, "nome": "Il controllore possessivo", "desc": "Controllante, possessivo, aggressivo" },
+          "12-19": { "punto": 5, "nome": "L'isolato risentito", "desc": "Chiusura in isolamento risentito" },
+          "19-30": { "punto": 7, "nome": "L'evaso frenetico", "desc": "Evasione frenetica, dipendenze" },
+          "30-60": { "punto": 1, "nome": "Il critico risentito", "desc": "Critico, risentito, giudicante" },
+          "60+": { "punto": 4, "nome": "La vittima profonda", "desc": "Depressione, vittimismo profondo" }
+        },
+        "incroci": {
+          "2→8": "Bisogno → Controllo aggressivo",
+          "8→5": "Dominio → Ritiro sospettoso",
+          "5→7": "Isolamento → Fuga compulsiva",
+          "7→1": "Dispersione → Autocritica severa",
+          "1→4": "Rigidità → Risentimento profondo",
+          "4→2": "Vittimismo → Ricerca di salvatori"
+        }
+      }
+    },
+    "3": {
+      "nome": "Il Realizzatore",
+      "ali": [2, 4],
+      "cicloBrève": true,
+      "integrazione": {
+        "sequenza": [3, 6, 9],
+        "fasi": {
+          "0-30": { "punto": 3, "nome": "Il costruttore", "desc": "Successo, immagine, realizzazione, costruzione dell'identità sociale" },
+          "30-60": { "punto": 6, "nome": "Il leale autentico", "desc": "Lealtà autentica, cooperazione, fiducia" },
+          "60+": { "punto": 9, "nome": "Il pacificatore saggio", "desc": "Pace interiore, valore oltre il successo" }
+        },
+        "incroci": {
+          "3→6": "L'ambizione si trasforma in lealtà verso comunità/famiglia",
+          "6→9": "L'ansia si dissolve in serenità",
+          "9→3": "La quiete si riattiva nell'azione consapevole"
+        }
+      },
+      "disintegrazione": {
+        "sequenza": [3, 9, 6],
+        "fasi": {
+          "0-30": { "punto": 3, "nome": "L'ossessionato dal successo", "desc": "Ossessione per il successo, workaholic" },
+          "30-60": { "punto": 9, "nome": "L'apatico paralizzato", "desc": "Apatia, paralisi, perdita di motivazione" },
+          "60+": { "punto": 6, "nome": "L'ansioso paranoico", "desc": "Ansia paranoica, paura del fallimento" }
+        },
+        "incroci": {
+          "3→9": "Iperattività → Inerzia depressiva",
+          "9→6": "Negazione → Ansia acuta",
+          "6→3": "Paura → Compensazione nell'apparenza"
+        }
+      }
+    },
+    "4": {
+      "nome": "L'Individualista",
+      "ali": [3, 5],
+      "integrazione": {
+        "sequenza": [4, 1, 7, 5, 8, 2],
+        "fasi": {
+          "0-3": { "punto": 4, "nome": "La sensibilità primordiale", "desc": "Intensità emotiva, unicità" },
+          "3-12": { "punto": 1, "nome": "L'artista disciplinato", "desc": "Canalizzazione delle emozioni in struttura" },
+          "12-19": { "punto": 7, "nome": "Il bohémien ribelle", "desc": "Sperimentazione, apertura al mondo" },
+          "19-30": { "punto": 5, "nome": "L'intellettuale profondo", "desc": "Analisi delle emozioni, comprensione" },
+          "30-60": { "punto": 8, "nome": "Il creatore potente", "desc": "Affermazione artistica, forza creativa" },
+          "60+": { "punto": 2, "nome": "Il mentore generoso", "desc": "Trasmissione della bellezza, dono di sé" }
+        },
+        "incroci": {
+          "4→1": "Caos emotivo → Disciplina creativa",
+          "1→7": "Rigore → Gioia esplorativa",
+          "7→5": "Dispersione → Profondità",
+          "5→8": "Contemplazione → Azione potente",
+          "8→2": "Forza → Generosità",
+          "2→4": "Dono → Ritorno all'autenticità"
+        }
+      },
+      "disintegrazione": {
+        "sequenza": [4, 2, 8, 5, 7, 1],
+        "fasi": {
+          "0-3": { "punto": 4, "nome": "Il bambino drammatico", "desc": "Intensità emotiva eccessiva, vittimismo" },
+          "3-12": { "punto": 2, "nome": "Il manipolatore emotivo", "desc": "Manipolazione emotiva, bisogno di attenzione" },
+          "12-19": { "punto": 8, "nome": "Il ribelle furioso", "desc": "Rabbia esplosiva, vendetta emotiva" },
+          "19-30": { "punto": 5, "nome": "Il tormentato isolato", "desc": "Ritiro in isolamento tormentato" },
+          "30-60": { "punto": 7, "nome": "Il fuggiasco maniaco", "desc": "Fuga maniaca dalle emozioni dolorose" },
+          "60+": { "punto": 1, "nome": "Il perfezionista nevrotico", "desc": "Autocritica spietata, perfezionismo distruttivo" }
+        },
+        "incroci": {
+          "4→2": "Vittimismo → Manipolazione affettiva",
+          "2→8": "Bisogno → Aggressività esplosiva",
+          "8→5": "Dominio → Paranoia isolante",
+          "5→7": "Isolamento → Fuga compulsiva",
+          "7→1": "Dispersione → Giudizio spietato",
+          "1→4": "Rigidità → Ritorno al dramma"
+        }
+      }
+    },
+    "5": {
+      "nome": "L'Investigatore",
+      "ali": [4, 6],
+      "integrazione": {
+        "sequenza": [5, 8, 2, 4, 1, 7],
+        "fasi": {
+          "0-3": { "punto": 5, "nome": "L'osservatore silenzioso", "desc": "Ritiro, conservazione energia, osservazione" },
+          "3-12": { "punto": 8, "nome": "Il bambino potente", "desc": "Assertività fisica sorprendente" },
+          "12-19": { "punto": 2, "nome": "L'adolescente empatico", "desc": "Apertura emotiva verso gli altri" },
+          "19-30": { "punto": 4, "nome": "L'artista tormentato", "desc": "Espressione creativa profonda" },
+          "30-60": { "punto": 1, "nome": "Il maestro integro", "desc": "Disciplina matura, insegnamento" },
+          "60+": { "punto": 7, "nome": "Il saggio gioioso", "desc": "Libertà totale, saggezza leggera" }
+        },
+        "incroci": {
+          "5→8": "Ritiro → Azione nel mondo",
+          "8→2": "Forza → Empatia",
+          "2→4": "Connessione → Autenticità",
+          "4→1": "Emozione → Principi",
+          "1→7": "Disciplina → Gioia",
+          "7→5": "Esperienza → Saggezza integrata"
+        }
+      },
+      "disintegrazione": {
+        "sequenza": [5, 7, 1, 4, 2, 8],
+        "fasi": {
+          "0-3": { "punto": 5, "nome": "Il paranoico ritirato", "desc": "Ritiro paranoico, avarizia energetica" },
+          "3-12": { "punto": 7, "nome": "Il disperso compulsivo", "desc": "Dispersione mentale, accumulo compulsivo" },
+          "12-19": { "punto": 1, "nome": "Il perfezionista rigido", "desc": "Perfezionismo rigido, critica spietata" },
+          "19-30": { "punto": 4, "nome": "Il depresso inadeguato", "desc": "Depressione, senso di inadeguatezza" },
+          "30-60": { "punto": 2, "nome": "Il dipendente nascosto", "desc": "Dipendenza nascosta, bisogno mascherato" },
+          "60+": { "punto": 8, "nome": "L'esplosivo improvviso", "desc": "Aggressività improvvisa, esplosioni di rabbia" }
+        },
+        "incroci": {
+          "5→7": "Isolamento → Dispersione frenetica",
+          "7→1": "Fuga → Rigidità punitiva",
+          "1→4": "Critica → Autocommiserazione",
+          "4→2": "Vittimismo → Dipendenza",
+          "2→8": "Bisogno → Dominio aggressivo",
+          "8→5": "Violenza → Ritiro definitivo"
+        }
+      }
+    },
+    "6": {
+      "nome": "Il Leale",
+      "ali": [5, 7],
+      "cicloBrève": true,
+      "integrazione": {
+        "sequenza": [6, 9, 3],
+        "fasi": {
+          "0-30": { "punto": 6, "nome": "Il vigilante leale", "desc": "Sicurezza, lealtà, vigilanza, costruzione di alleanze" },
+          "30-60": { "punto": 9, "nome": "Il pacificatore fiducioso", "desc": "Pace interiore, fiducia, serenità" },
+          "60+": { "punto": 3, "nome": "Il realizzatore saggio", "desc": "Realizzazione personale, efficacia, autostima matura" }
+        },
+        "incroci": {
+          "6→9": "La paura giovanile si calma, la mente inquieta trova pace",
+          "9→3": "La pace si trasforma in azione saggia",
+          "3→6": "Il successo maturo riconosce il valore della comunità"
+        }
+      },
+      "disintegrazione": {
+        "sequenza": [6, 3, 9],
+        "fasi": {
+          "0-30": { "punto": 6, "nome": "L'ipervigilante ansioso", "desc": "Ansia crescente, sospetto, ipervigilanza" },
+          "30-60": { "punto": 3, "nome": "Il workaholic difensivo", "desc": "Workaholic ansioso, apparenza difensiva" },
+          "60+": { "punto": 9, "nome": "Il paralizzato passivo", "desc": "Negazione passiva, paralisi decisionale" }
+        },
+        "incroci": {
+          "6→3": "Paura → Compensazione nel successo",
+          "3→9": "Iperattività → Apatia difensiva",
+          "9→6": "Negazione → Ansia esplosiva"
+        }
+      }
+    },
+    "7": {
+      "nome": "L'Entusiasta",
+      "ali": [6, 8],
+      "integrazione": {
+        "sequenza": [7, 5, 8, 2, 4, 1],
+        "fasi": {
+          "0-3": { "punto": 7, "nome": "La gioia pura", "desc": "Curiosità infinita, esplorazione gioiosa" },
+          "3-12": { "punto": 5, "nome": "Il piccolo filosofo", "desc": "Profondità sorprendente, concentrazione" },
+          "12-19": { "punto": 8, "nome": "Il leader ribelle", "desc": "Forza adolescenziale, assertività" },
+          "19-30": { "punto": 2, "nome": "L'attivista compassionevole", "desc": "Servizio agli altri, generosità" },
+          "30-60": { "punto": 4, "nome": "L'artista maturo", "desc": "Profondità emotiva integrata" },
+          "60+": { "punto": 1, "nome": "Il maestro completo", "desc": "Integrità totale, disciplina gioiosa" }
+        },
+        "incroci": {
+          "7→5": "Dispersione → Concentrazione profonda",
+          "5→8": "Contemplazione → Azione decisa",
+          "8→2": "Forza → Compassione",
+          "2→4": "Servizio → Autenticità",
+          "4→1": "Emozione → Integrità",
+          "1→7": "Disciplina → Gioia rinnovata"
+        }
+      },
+      "disintegrazione": {
+        "sequenza": [7, 1, 4, 2, 8, 5],
+        "fasi": {
+          "0-3": { "punto": 7, "nome": "Il fuggiasco difensivo", "desc": "Fuga dal dolore, dispersione difensiva" },
+          "3-12": { "punto": 1, "nome": "Il perfezionista ansioso", "desc": "Perfezionismo ansioso, critica compulsiva" },
+          "12-19": { "punto": 4, "nome": "Il depresso improvviso", "desc": "Depressione improvvisa, malinconia" },
+          "19-30": { "punto": 2, "nome": "Il dipendente mascherato", "desc": "Dipendenza affettiva mascherata" },
+          "30-60": { "punto": 8, "nome": "L'aggressivo impulsivo", "desc": "Aggressività impulsiva, eccessi" },
+          "60+": { "punto": 5, "nome": "L'isolato paranoico", "desc": "Isolamento, ritiro paranoico" }
+        },
+        "incroci": {
+          "7→1": "Fuga → Rigidità punitiva",
+          "1→4": "Critica → Dramma emotivo",
+          "4→2": "Vittimismo → Dipendenza",
+          "2→8": "Bisogno → Aggressività",
+          "8→5": "Dominio → Ritiro",
+          "5→7": "Isolamento → Ritorno alla fuga"
+        }
+      }
+    },
+    "8": {
+      "nome": "Il Challenger",
+      "ali": [7, 9],
+      "integrazione": {
+        "sequenza": [8, 2, 4, 1, 7, 5],
+        "fasi": {
+          "0-3": { "punto": 8, "nome": "La forza istintiva", "desc": "Controllo, protezione, energia vitale" },
+          "3-12": { "punto": 2, "nome": "Il protettore tenero", "desc": "Cura, generosità infantile, tenerezza" },
+          "12-19": { "punto": 4, "nome": "L'adolescente vulnerabile", "desc": "Profondità emotiva sorprendente" },
+          "19-30": { "punto": 1, "nome": "Il guerriero di giustizia", "desc": "Principi chiari, integrità morale" },
+          "30-60": { "punto": 7, "nome": "Il leader gioioso", "desc": "Potere leggero, generosità, gioia" },
+          "60+": { "punto": 5, "nome": "Il saggio distaccato", "desc": "Saggezza contemplativa, visione ampia" }
+        },
+        "incroci": {
+          "8→2": "Durezza → Tenerezza aperta",
+          "2→4": "Dare → Autenticità vulnerabile",
+          "4→1": "Emozione → Principi solidi",
+          "1→7": "Rigore → Gioia di vivere",
+          "7→5": "Esperienza → Saggezza profonda",
+          "5→8": "Contemplazione → Potere integrato"
+        }
+      },
+      "disintegrazione": {
+        "sequenza": [8, 5, 7, 1, 4, 2],
+        "fasi": {
+          "0-3": { "punto": 8, "nome": "Il controllore eccessivo", "desc": "Controllo eccessivo, aggressività" },
+          "3-12": { "punto": 5, "nome": "Il sospettoso ritirato", "desc": "Ritiro sospettoso, paranoia" },
+          "12-19": { "punto": 7, "nome": "L'eccedente impulsivo", "desc": "Eccessi, impulsività, fuga" },
+          "19-30": { "punto": 1, "nome": "Il moralista punitivo", "desc": "Moralismo punitivo, giudizio severo" },
+          "30-60": { "punto": 4, "nome": "L'amaro risentito", "desc": "Amarezza, risentimento profondo" },
+          "60+": { "punto": 2, "nome": "Il dipendente nascosto", "desc": "Dipendenza emotiva nascosta, vulnerabilità negata" }
+        },
+        "incroci": {
+          "8→5": "Dominio → Ritiro paranoico",
+          "5→7": "Isolamento → Eccessi compensativi",
+          "7→1": "Fuga → Moralismo rigido",
+          "1→4": "Giudizio → Amarezza",
+          "4→2": "Risentimento → Dipendenza",
+          "2→8": "Bisogno → Ritorno alla violenza"
+        }
+      }
+    },
+    "9": {
+      "nome": "Il Pacificatore",
+      "ali": [8, 1],
+      "cicloBrève": true,
+      "integrazione": {
+        "sequenza": [9, 3, 6],
+        "fasi": {
+          "0-30": { "punto": 9, "nome": "L'armonizzatore", "desc": "Pace, armonia, fusione con l'ambiente, evitamento conflitti" },
+          "30-60": { "punto": 3, "nome": "Il realizzatore attivo", "desc": "Azione, realizzazione, presenza, affermazione nel mondo" },
+          "60+": { "punto": 6, "nome": "Il leale responsabile", "desc": "Lealtà profonda, responsabilità verso comunità" }
+        },
+        "incroci": {
+          "9→3": "L'inerzia giovanile si attiva nell'azione",
+          "3→6": "Il successo si trasforma in servizio",
+          "6→9": "La responsabilità matura si dissolve nella pace"
+        }
+      },
+      "disintegrazione": {
+        "sequenza": [9, 6, 3],
+        "fasi": {
+          "0-30": { "punto": 9, "nome": "L'addormentato", "desc": "Inerzia, evitamento, fusione dipendente" },
+          "30-60": { "punto": 6, "nome": "L'ansioso sospettoso", "desc": "Ansia crescente, sospetto, paura" },
+          "60+": { "punto": 3, "nome": "Il compensatore frenetico", "desc": "Compensazione frenetica nell'immagine" }
+        },
+        "incroci": {
+          "9→6": "Pace forzata → Ansia acuta",
+          "6→3": "Paura → Compensazione nell'apparenza",
+          "3→9": "Collasso → Ritorno all'inerzia"
+        }
+      }
+    }
+  },
+  "puntiAttributi": {
+    "1": { "dignita": "Grandezza", "virtu": "Prudenza", "vizio": "Gola", "gerarchia": "Serafini", "musa": "Urania", "facolta": "Mente", "melodia": "RE", "topica": "Super-Io", "meccanismo": "Formazione reattiva", "chakra": "3° Chakra (ombelico)", "pianeta": "Marte", "correlazione_cerebrale": "Amigdala", "idea_sacra": "Perfezione" },
+    "2": { "dignita": "Eternità", "virtu": "Perseveranza", "vizio": "Lussuria", "gerarchia": "Cherubini", "musa": "Polimnia", "facolta": "Intelletto", "melodia": "MI", "topica": "Io", "meccanismo": "Rimozione", "chakra": "6° Chakra (terzo occhio)", "pianeta": "Sole", "correlazione_cerebrale": "Talamo", "idea_sacra": "Volontà" },
+    "4": { "dignita": "Sapienza", "virtu": "Fede", "vizio": "Accidia", "gerarchia": "Dominazioni", "musa": "Erato", "facolta": "Immaginazione", "melodia": "FA", "topica": "Io", "meccanismo": "Introiezione", "chakra": "5° Chakra (gola)", "pianeta": "Mercurio", "correlazione_cerebrale": "Nucleo subtalamico", "idea_sacra": "Origine" },
+    "5": { "dignita": "Volontà", "virtu": "Speranza", "vizio": "Invidia", "gerarchia": "Potestà", "musa": "Melpomene", "facolta": "Udito", "melodia": "SOL", "topica": "Super-Io", "meccanismo": "Isolamento", "chakra": "1° Chakra (base)", "pianeta": "Saturno", "correlazione_cerebrale": "Putamen", "idea_sacra": "Onniscienza" },
+    "7": { "dignita": "Verità", "virtu": "Pazienza", "vizio": "Menzogna", "gerarchia": "Principati", "musa": "Calliope", "facolta": "Olfatto", "melodia": "LA", "topica": "Es", "meccanismo": "Razionalizzazione", "chakra": "2° Chakra (sacrale)", "pianeta": "Giove", "correlazione_cerebrale": "Globo pallido", "idea_sacra": "Saggezza" },
+    "8": { "dignita": "Gloria", "virtu": "Pietà", "vizio": "Incostanza", "gerarchia": "Arcangeli", "musa": "Clio", "facolta": "Gusto", "melodia": "SI", "topica": "Es", "meccanismo": "Diniego", "chakra": "4° Chakra (cuore)", "pianeta": "Venere", "correlazione_cerebrale": "Pars Reticularis e Substantia Nigra", "idea_sacra": "Verità" }
+  },
+  "note": "Nella conversazione con Carlo, i punti 3, 6 e 9 non avevano assegnazioni esplicite di attributi perché seguono il ciclo breve. I dati dei punti 1, 2, 4, 5, 7, 8 sono quelli confermati da Carlo nella conversazione."
+}

@@ -367,8 +367,145 @@ export default function TestResults() {
         </Card>
       )}
 
-      {/* Evolutionary Path */}
-      {result.percorso && (
+      {/* Personalized Evolutionary Paths */}
+      {result.percorsoPersonalizzato && (
+        <div className="space-y-4 mb-8">
+          <h2 className="text-2xl font-serif font-bold text-center">I Tuoi Percorsi Evolutivi</h2>
+          <p className="text-center text-sm text-muted-foreground max-w-2xl mx-auto mb-4">
+            A {result.eta} anni, ti trovi nella fase <strong className="text-foreground">{result.percorsoPersonalizzato.faseCorrente}</strong>. 
+            Ogni enneatipo attraversa due percorsi nella vita: Integrazione (crescita) e Disintegrazione (stress).
+          </p>
+
+          {/* Integration Path */}
+          <Card className="border-green-200 dark:border-green-800">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-serif text-green-700 dark:text-green-400 flex items-center gap-2">
+                <span className="text-xl">🌱</span> Percorso di Integrazione (Crescita)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {/* Sequence */}
+              <div className="flex items-center gap-1 flex-wrap mb-4">
+                {result.percorsoPersonalizzato.integrazione.sequenza.map((t: number, i: number) => (
+                  <span key={i} className="flex items-center gap-1">
+                    <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
+                      Object.values(result.percorsoPersonalizzato.integrazione.faseAttuale || {}).includes(t) 
+                        ? "bg-green-600 text-white ring-2 ring-green-400"
+                        : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
+                    }`}>{t}</span>
+                    {i < result.percorsoPersonalizzato.integrazione.sequenza.length - 1 && (
+                      <ArrowRight className="w-3 h-3 text-green-400" />
+                    )}
+                  </span>
+                ))}
+              </div>
+
+              {/* Life phases */}
+              <div className="space-y-3">
+                {Object.entries(result.percorsoPersonalizzato.integrazione.fasi).map(([fase, info]: [string, any]) => {
+                  const isActive = fase === result.percorsoPersonalizzato.faseCorrente;
+                  return (
+                    <div key={fase} className={`p-3 rounded-lg border transition-all ${
+                      isActive 
+                        ? "bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700 ring-1 ring-green-400" 
+                        : "border-border/50 opacity-75"
+                    }`}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${isActive ? "bg-green-600 text-white" : "bg-muted text-muted-foreground"}`}>
+                          {fase} anni
+                        </span>
+                        <span className="text-xs text-muted-foreground">Punto {info.punto}</span>
+                        {isActive && <Badge className="bg-green-100 text-green-700 text-[10px]">Fase attuale</Badge>}
+                      </div>
+                      <p className="font-semibold text-sm">{info.nome}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{info.desc}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Crossings */}
+              <div className="mt-4 pt-3 border-t border-green-200 dark:border-green-800">
+                <h4 className="text-xs font-semibold text-green-600 mb-2">Incroci evolutivi</h4>
+                <div className="grid sm:grid-cols-2 gap-1.5">
+                  {Object.entries(result.percorsoPersonalizzato.integrazione.incroci).map(([key, val]) => (
+                    <div key={key} className="text-xs">
+                      <span className="font-medium text-green-700 dark:text-green-400">{key}:</span>{' '}
+                      <span className="text-muted-foreground">{val as string}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Disintegration Path */}
+          <Card className="border-red-200 dark:border-red-800">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-serif text-red-700 dark:text-red-400 flex items-center gap-2">
+                <span className="text-xl">⚠️</span> Percorso di Disintegrazione (Stress)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {/* Sequence */}
+              <div className="flex items-center gap-1 flex-wrap mb-4">
+                {result.percorsoPersonalizzato.disintegrazione.sequenza.map((t: number, i: number) => (
+                  <span key={i} className="flex items-center gap-1">
+                    <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
+                      Object.values(result.percorsoPersonalizzato.disintegrazione.faseAttuale || {}).includes(t)
+                        ? "bg-red-600 text-white ring-2 ring-red-400"
+                        : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300"
+                    }`}>{t}</span>
+                    {i < result.percorsoPersonalizzato.disintegrazione.sequenza.length - 1 && (
+                      <ArrowRight className="w-3 h-3 text-red-400" />
+                    )}
+                  </span>
+                ))}
+              </div>
+
+              {/* Life phases */}
+              <div className="space-y-3">
+                {Object.entries(result.percorsoPersonalizzato.disintegrazione.fasi).map(([fase, info]: [string, any]) => {
+                  const isActive = fase === result.percorsoPersonalizzato.faseCorrente;
+                  return (
+                    <div key={fase} className={`p-3 rounded-lg border transition-all ${
+                      isActive 
+                        ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 ring-1 ring-red-400" 
+                        : "border-border/50 opacity-75"
+                    }`}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${isActive ? "bg-red-600 text-white" : "bg-muted text-muted-foreground"}`}>
+                          {fase} anni
+                        </span>
+                        <span className="text-xs text-muted-foreground">Punto {info.punto}</span>
+                        {isActive && <Badge className="bg-red-100 text-red-700 text-[10px]">Fase attuale</Badge>}
+                      </div>
+                      <p className="font-semibold text-sm">{info.nome}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{info.desc}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Crossings */}
+              <div className="mt-4 pt-3 border-t border-red-200 dark:border-red-800">
+                <h4 className="text-xs font-semibold text-red-600 mb-2">Incroci di stress</h4>
+                <div className="grid sm:grid-cols-2 gap-1.5">
+                  {Object.entries(result.percorsoPersonalizzato.disintegrazione.incroci).map(([key, val]) => (
+                    <div key={key} className="text-xs">
+                      <span className="font-medium text-red-700 dark:text-red-400">{key}:</span>{' '}
+                      <span className="text-muted-foreground">{val as string}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Old basic path as fallback */}
+      {!result.percorsoPersonalizzato && result.percorso && (
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="text-lg font-serif">Percorso Evolutivo</CardTitle>
@@ -380,20 +517,9 @@ export default function TestResults() {
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {result.percorso.integrazione?.map((t: number, i: number) => (
                     <span key={i} className="flex items-center gap-1">
-                      <span className="px-2 py-0.5 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-medium">
-                        {t}
-                      </span>
-                      {i < result.percorso.integrazione.length - 1 && (
-                        <ArrowRight className="w-3 h-3 text-muted-foreground" />
-                      )}
+                      <span className="px-2 py-0.5 rounded bg-green-100 text-green-700 text-xs font-medium">{t}</span>
+                      {i < result.percorso.integrazione.length - 1 && <ArrowRight className="w-3 h-3 text-muted-foreground" />}
                     </span>
-                  ))}
-                </div>
-                <div className="mt-3 space-y-1.5">
-                  {result.percorso.incrociIntegrazione && Object.entries(result.percorso.incrociIntegrazione).map(([key, val]) => (
-                    <div key={key} className="text-xs text-muted-foreground">
-                      <span className="font-medium text-foreground">{key}</span>: {val as string}
-                    </div>
                   ))}
                 </div>
               </div>
@@ -402,20 +528,9 @@ export default function TestResults() {
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {result.percorso.disintegrazione?.map((t: number, i: number) => (
                     <span key={i} className="flex items-center gap-1">
-                      <span className="px-2 py-0.5 rounded bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs font-medium">
-                        {t}
-                      </span>
-                      {i < result.percorso.disintegrazione.length - 1 && (
-                        <ArrowRight className="w-3 h-3 text-muted-foreground" />
-                      )}
+                      <span className="px-2 py-0.5 rounded bg-red-100 text-red-700 text-xs font-medium">{t}</span>
+                      {i < result.percorso.disintegrazione.length - 1 && <ArrowRight className="w-3 h-3 text-muted-foreground" />}
                     </span>
-                  ))}
-                </div>
-                <div className="mt-3 space-y-1.5">
-                  {result.percorso.incrociDisintegrazione && Object.entries(result.percorso.incrociDisintegrazione).map(([key, val]) => (
-                    <div key={key} className="text-xs text-muted-foreground">
-                      <span className="font-medium text-foreground">{key}</span>: {val as string}
-                    </div>
                   ))}
                 </div>
               </div>
