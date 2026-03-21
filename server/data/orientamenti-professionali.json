@@ -1,0 +1,301 @@
+{
+  "orientamenti": {
+    "1": {
+      "nome": "Il Perfezionista",
+      "descrizione": "Il tipo 1 eccelle in ruoli che richiedono precisione, integrità e miglioramento continuo. Sono motivati dal desiderio di fare le cose nel modo giusto e di contribuire al bene comune.",
+      "puntiForza": ["Attenzione ai dettagli", "Integrità", "Senso di responsabilità", "Disciplina", "Capacità organizzative", "Etica del lavoro"],
+      "ambiti": [
+        {
+          "settore": "Legale e Giustizia",
+          "ruoli": ["Avvocato", "Giudice", "Mediatore", "Consulente legale", "Investigatore"],
+          "motivazione": "Il desiderio di giustizia e correttezza trova espressione naturale nel sistema legale."
+        },
+        {
+          "settore": "Qualità e Controllo",
+          "ruoli": ["Quality Manager", "Auditor", "Ispettore", "Certificatore", "Revisore"],
+          "motivazione": "La precisione e l'attenzione ai dettagli sono essenziali per garantire standard elevati."
+        },
+        {
+          "settore": "Educazione e Formazione",
+          "ruoli": ["Insegnante", "Formatore", "Tutor", "Direttore scolastico", "Pedagogista"],
+          "motivazione": "Trasmettere valori e conoscenze corrette per migliorare le nuove generazioni."
+        },
+        {
+          "settore": "Sanità",
+          "ruoli": ["Medico", "Chirurgo", "Farmacista", "Tecnico di laboratorio", "Igienista"],
+          "motivazione": "La precisione è vitale e il lavoro ha un impatto diretto sul benessere delle persone."
+        },
+        {
+          "settore": "Ingegneria e Architettura",
+          "ruoli": ["Ingegnere civile", "Architetto", "Project Manager", "Urbanista", "Restauratore"],
+          "motivazione": "Progettare e costruire secondo standard elevati e normative precise."
+        }
+      ],
+      "consigli": "Cerca ambienti di lavoro che valorizzino l'eccellenza e l'integrità. Impara a delegare e ad accettare che 'abbastanza buono' a volte è sufficiente per evitare il burnout. Bilancia il perfezionismo con la compassione verso te stesso e gli altri."
+    },
+    "2": {
+      "nome": "L'Altruista",
+      "descrizione": "Il tipo 2 eccelle in ruoli che coinvolgono aiutare, supportare e prendersi cura degli altri. Sono motivati dal desiderio di essere necessari e di creare connessioni significative.",
+      "puntiForza": ["Empatia", "Capacità relazionali", "Generosità", "Intuizione emotiva", "Supporto", "Dedizione"],
+      "ambiti": [
+        {
+          "settore": "Sanità e Assistenza",
+          "ruoli": ["Infermiere", "Assistente sociale", "Fisioterapista", "Operatore socio-sanitario", "Psicologo"],
+          "motivazione": "Prendersi cura direttamente delle persone in momenti di vulnerabilità."
+        },
+        {
+          "settore": "Educazione",
+          "ruoli": ["Insegnante scuola primaria", "Educatore", "Tutor", "Counselor scolastico", "Animatore"],
+          "motivazione": "Supportare la crescita e lo sviluppo dei bambini e giovani."
+        },
+        {
+          "settore": "Risorse Umane",
+          "ruoli": ["HR Manager", "Recruiter", "Coach aziendale", "Responsabile formazione", "Mediatore"],
+          "motivazione": "Aiutare le persone a trovare il loro posto e a crescere professionalmente."
+        },
+        {
+          "settore": "Ospitalità e Servizi",
+          "ruoli": ["Event planner", "Responsabile accoglienza", "Wedding planner", "Concierge", "Customer care"],
+          "motivazione": "Creare esperienze positive e prendersi cura dei bisogni degli altri."
+        },
+        {
+          "settore": "Non Profit e Volontariato",
+          "ruoli": ["Coordinatore ONG", "Fundraiser", "Volontario", "Operatore umanitario", "Community manager"],
+          "motivazione": "Dedicarsi a cause che aiutano persone in difficoltà."
+        }
+      ],
+      "consigli": "Scegli professioni che ti permettano di aiutare senza sacrificare completamente te stesso. Impara a stabilire confini sani e a riconoscere i tuoi bisogni. Cerca ambienti dove il tuo contributo è riconosciuto e valorizzato."
+    },
+    "3": {
+      "nome": "Il Realizzatore",
+      "descrizione": "Il tipo 3 eccelle in ruoli competitivi e orientati ai risultati. Sono motivati dal successo, dal riconoscimento e dal raggiungimento di obiettivi ambiziosi.",
+      "puntiForza": ["Orientamento ai risultati", "Efficienza", "Adattabilità", "Carisma", "Motivazione", "Leadership"],
+      "ambiti": [
+        {
+          "settore": "Business e Management",
+          "ruoli": ["CEO", "Manager", "Consulente strategico", "Business developer", "Imprenditore"],
+          "motivazione": "Guidare organizzazioni verso il successo e raggiungere traguardi ambiziosi."
+        },
+        {
+          "settore": "Vendite e Marketing",
+          "ruoli": ["Sales Manager", "Marketing Director", "Brand Manager", "Account Executive", "PR Manager"],
+          "motivazione": "Raggiungere target, convincere e costruire immagine di successo."
+        },
+        {
+          "settore": "Finanza",
+          "ruoli": ["Investment Banker", "Financial Advisor", "Trader", "Analista finanziario", "Controller"],
+          "motivazione": "Risultati misurabili, competizione e ricompense tangibili."
+        },
+        {
+          "settore": "Intrattenimento e Media",
+          "ruoli": ["Attore", "Presentatore", "Influencer", "Producer", "Regista"],
+          "motivazione": "Visibilità, riconoscimento pubblico e successo misurabile."
+        },
+        {
+          "settore": "Sport e Fitness",
+          "ruoli": ["Atleta professionista", "Personal trainer", "Coach sportivo", "Manager sportivo", "Preparatore"],
+          "motivazione": "Competizione, risultati misurabili e riconoscimento delle performance."
+        }
+      ],
+      "consigli": "Cerca ruoli con obiettivi chiari e possibilità di avanzamento. Ricorda di bilanciare il successo esterno con l'autenticità interiore. Non sacrificare le relazioni e il benessere personale per il lavoro. Impara a valorizzare il processo, non solo i risultati."
+    },
+    "4": {
+      "nome": "L'Individualista",
+      "descrizione": "Il tipo 4 eccelle in ruoli creativi e autentici che permettono l'espressione personale. Sono motivati dal desiderio di creare qualcosa di unico e significativo.",
+      "puntiForza": ["Creatività", "Profondità emotiva", "Autenticità", "Sensibilità estetica", "Originalità", "Intuizione"],
+      "ambiti": [
+        {
+          "settore": "Arte e Design",
+          "ruoli": ["Artista", "Designer", "Illustratore", "Fotografo", "Scenografo", "Stilista"],
+          "motivazione": "Esprimere la propria visione unica attraverso la creazione artistica."
+        },
+        {
+          "settore": "Scrittura e Letteratura",
+          "ruoli": ["Scrittore", "Poeta", "Giornalista culturale", "Sceneggiatore", "Editor letterario"],
+          "motivazione": "Comunicare emozioni profonde e storie autentiche attraverso le parole."
+        },
+        {
+          "settore": "Musica e Performing Arts",
+          "ruoli": ["Musicista", "Compositore", "Cantante", "Ballerino", "Attore teatrale"],
+          "motivazione": "Esprimere emozioni attraverso la performance e connettersi profondamente con il pubblico."
+        },
+        {
+          "settore": "Psicologia e Counseling",
+          "ruoli": ["Psicoterapeuta", "Art therapist", "Counselor", "Life coach", "Terapeuta espressivo"],
+          "motivazione": "Lavorare con la profondità emotiva propria e altrui per facilitare trasformazione."
+        },
+        {
+          "settore": "Cinema e Video",
+          "ruoli": ["Regista indipendente", "Videomaker", "Montatore", "Documentarista", "Video artist"],
+          "motivazione": "Raccontare storie visive uniche e personali."
+        }
+      ],
+      "consigli": "Cerca lavori che permettano espressione autentica e creatività. Bilancia l'idealismo con la praticità per sostenere economicamente la tua arte. Trova modi per condividere la tua sensibilità senza isolarti. Considera collaborazioni che valorizzino la tua unicità."
+    },
+    "5": {
+      "nome": "L'Osservatore",
+      "descrizione": "Il tipo 5 eccelle in ruoli che richiedono analisi, ricerca e competenza specialistica. Sono motivati dal desiderio di comprendere profondamente e di padroneggiare conoscenze complesse.",
+      "puntiForza": ["Capacità analitica", "Concentrazione", "Competenza specialistica", "Indipendenza", "Obiettività", "Curiosità intellettuale"],
+      "ambiti": [
+        {
+          "settore": "Ricerca Scientifica",
+          "ruoli": ["Ricercatore", "Scienziato", "Analista dati", "Statistico", "Bioinformatico"],
+          "motivazione": "Esplorare e comprendere fenomeni complessi attraverso l'indagine sistematica."
+        },
+        {
+          "settore": "Tecnologia e IT",
+          "ruoli": ["Sviluppatore software", "Data scientist", "Sistemista", "Cybersecurity expert", "Architetto IT"],
+          "motivazione": "Padroneggiare sistemi complessi e risolvere problemi tecnici sofisticati."
+        },
+        {
+          "settore": "Accademia e Università",
+          "ruoli": ["Professore universitario", "Ricercatore accademico", "Bibliotecario specializzato", "Archivista"],
+          "motivazione": "Approfondire la conoscenza e trasmetterla in contesti specialistici."
+        },
+        {
+          "settore": "Consulenza Specialistica",
+          "ruoli": ["Consulente tecnico", "Esperto forense", "Analista strategico", "Think tank researcher"],
+          "motivazione": "Fornire expertise approfondita su questioni complesse."
+        },
+        {
+          "settore": "Filosofia e Teoria",
+          "ruoli": ["Filosofo", "Teorico", "Critico", "Analista politico", "Epistemologo"],
+          "motivazione": "Esplorare questioni fondamentali attraverso il pensiero astratto."
+        }
+      ],
+      "consigli": "Cerca ruoli che permettano autonomia e approfondimento. Bilancia il bisogno di solitudine con la collaborazione necessaria. Condividi la tua conoscenza per evitare l'isolamento. Ricorda che l'esperienza pratica è preziosa quanto la teoria."
+    },
+    "6": {
+      "nome": "Il Leale",
+      "descrizione": "Il tipo 6 eccelle in ruoli che richiedono affidabilità, previdenza e capacità di gestire rischi. Sono motivati dal desiderio di sicurezza e di appartenenza a un gruppo o causa.",
+      "puntiForza": ["Affidabilità", "Lealtà", "Capacità di previsione", "Problem solving", "Lavoro di squadra", "Responsabilità"],
+      "ambiti": [
+        {
+          "settore": "Sicurezza e Protezione",
+          "ruoli": ["Responsabile sicurezza", "Risk manager", "Analista rischi", "Security consultant", "Investigatore"],
+          "motivazione": "Proteggere persone e organizzazioni identificando e mitigando i rischi."
+        },
+        {
+          "settore": "Amministrazione e Compliance",
+          "ruoli": ["Amministratore", "Compliance officer", "Auditor", "Controllore", "Responsabile qualità"],
+          "motivazione": "Garantire che le procedure siano seguite e i rischi minimizzati."
+        },
+        {
+          "settore": "Servizi Pubblici",
+          "ruoli": ["Funzionario pubblico", "Vigile del fuoco", "Paramedico", "Poliziotto", "Militare"],
+          "motivazione": "Servire la comunità e garantire sicurezza e ordine."
+        },
+        {
+          "settore": "Consulenza e Supporto",
+          "ruoli": ["Consulente aziendale", "Project manager", "Coordinatore", "Facilitatore", "Mediatore"],
+          "motivazione": "Supportare organizzazioni nell'affrontare sfide e cambiamenti."
+        },
+        {
+          "settore": "Assicurazioni e Finanza",
+          "ruoli": ["Assicuratore", "Analista finanziario", "Pianificatore finanziario", "Attuario"],
+          "motivazione": "Aiutare le persone a proteggersi dai rischi finanziari."
+        }
+      ],
+      "consigli": "Cerca ambienti stabili con chiare strutture di supporto. Lavora sulla fiducia in te stesso per ridurre l'ansia decisionale. Bilancia la cautela con l'azione. Trova mentori e team affidabili che ti sostengano."
+    },
+    "7": {
+      "nome": "L'Entusiasta",
+      "descrizione": "Il tipo 7 eccelle in ruoli dinamici, stimolanti e vari. Sono motivati dal desiderio di esperienze nuove, libertà e possibilità illimitate.",
+      "puntiForza": ["Entusiasmo", "Creatività", "Versatilità", "Ottimismo", "Energia", "Capacità di networking"],
+      "ambiti": [
+        {
+          "settore": "Turismo e Viaggi",
+          "ruoli": ["Tour operator", "Travel blogger", "Guida turistica", "Event planner", "Organizzatore viaggi"],
+          "motivazione": "Esplorare il mondo e condividere esperienze stimolanti con gli altri."
+        },
+        {
+          "settore": "Intrattenimento",
+          "ruoli": ["Entertainer", "Animatore", "Presentatore", "Comico", "DJ", "Performer"],
+          "motivazione": "Portare gioia e divertimento, vivere esperienze varie e stimolanti."
+        },
+        {
+          "settore": "Imprenditoria e Startup",
+          "ruoli": ["Imprenditore", "Founder", "Innovatore", "Business developer", "Consulente innovazione"],
+          "motivazione": "Creare nuove opportunità, esplorare idee innovative e avere libertà."
+        },
+        {
+          "settore": "Marketing e Comunicazione",
+          "ruoli": ["Creative director", "Content creator", "Social media manager", "Copywriter", "Strategist"],
+          "motivazione": "Lavorare su progetti vari e creativi con stimoli continui."
+        },
+        {
+          "settore": "Consulenza e Formazione",
+          "ruoli": ["Consulente", "Formatore motivazionale", "Coach", "Speaker", "Facilitatore"],
+          "motivazione": "Varietà di progetti, interazione con persone diverse, stimoli continui."
+        }
+      ],
+      "consigli": "Cerca ruoli con varietà e autonomia, ma impara a portare a termine i progetti. Bilancia l'entusiasmo con la disciplina. Evita di disperdere le energie in troppe direzioni. Trova modi per integrare la tua natura esplorativa con impegni sostenibili."
+    },
+    "8": {
+      "nome": "Il Leader",
+      "descrizione": "Il tipo 8 eccelle in ruoli di potere, controllo e impatto diretto. Sono motivati dal desiderio di essere forti, autonomi e di proteggere i più deboli.",
+      "puntiForza": ["Leadership", "Decisionalità", "Coraggio", "Protezione", "Assertività", "Visione strategica"],
+      "ambiti": [
+        {
+          "settore": "Leadership e Management",
+          "ruoli": ["CEO", "Direttore generale", "Imprenditore", "Manager senior", "Team leader"],
+          "motivazione": "Guidare organizzazioni, prendere decisioni importanti e avere impatto diretto."
+        },
+        {
+          "settore": "Legale e Advocacy",
+          "ruoli": ["Avvocato penalista", "Procuratore", "Attivista", "Sindacalista", "Difensore diritti"],
+          "motivazione": "Combattere per la giustizia e proteggere chi non può difendersi."
+        },
+        {
+          "settore": "Politica e Istituzioni",
+          "ruoli": ["Politico", "Diplomatico", "Funzionario di alto livello", "Lobbista", "Attivista politico"],
+          "motivazione": "Esercitare potere per creare cambiamento e proteggere interessi."
+        },
+        {
+          "settore": "Forze dell'Ordine e Militare",
+          "ruoli": ["Ufficiale militare", "Comandante", "Investigatore", "Responsabile sicurezza", "Agente speciale"],
+          "motivazione": "Proteggere, comandare e affrontare situazioni di potere diretto."
+        },
+        {
+          "settore": "Business e Finanza",
+          "ruoli": ["Investment banker", "Venture capitalist", "Trader", "Negoziatore", "M&A specialist"],
+          "motivazione": "Operare in ambienti competitivi ad alto rischio e alta ricompensa."
+        }
+      ],
+      "consigli": "Cerca ruoli con autonomia e possibilità di impatto diretto. Impara a delegare e a fidarti degli altri. Bilancia la forza con la vulnerabilità. Usa il tuo potere per proteggere, non per dominare. Trova cause in cui credere profondamente."
+    },
+    "9": {
+      "nome": "Il Pacificatore",
+      "descrizione": "Il tipo 9 eccelle in ruoli che promuovono armonia, mediazione e supporto. Sono motivati dal desiderio di pace, connessione e stabilità.",
+      "puntiForza": ["Mediazione", "Empatia", "Pazienza", "Capacità di ascolto", "Stabilità", "Inclusività"],
+      "ambiti": [
+        {
+          "settore": "Mediazione e Risoluzione Conflitti",
+          "ruoli": ["Mediatore", "Facilitatore", "Negoziatore", "Arbitro", "Consulente di pace"],
+          "motivazione": "Aiutare le parti a trovare accordi e ristabilire l'armonia."
+        },
+        {
+          "settore": "Counseling e Supporto",
+          "ruoli": ["Counselor", "Terapeuta", "Coach", "Operatore olistico", "Assistente sociale"],
+          "motivazione": "Supportare le persone nel trovare pace interiore e benessere."
+        },
+        {
+          "settore": "Risorse Umane",
+          "ruoli": ["HR generalist", "Responsabile benessere", "Mediatore aziendale", "Employee relations"],
+          "motivazione": "Creare ambienti di lavoro armoniosi e supportare i dipendenti."
+        },
+        {
+          "settore": "Amministrazione e Supporto",
+          "ruoli": ["Assistente amministrativo", "Coordinatore", "Receptionist", "Segretario", "Back office"],
+          "motivazione": "Supportare il funzionamento dell'organizzazione in modo stabile e affidabile."
+        },
+        {
+          "settore": "Ambiente e Natura",
+          "ruoli": ["Guardia forestale", "Giardiniere", "Agronomo", "Ambientalista", "Guida naturalistica"],
+          "motivazione": "Lavorare in contesti naturali pacifici e contribuire all'armonia ambientale."
+        }
+      ],
+      "consigli": "Cerca ambienti di lavoro armoniosi e non eccessivamente competitivi. Impara ad affermare le tue opinioni e bisogni. Evita ruoli che richiedono conflitto costante. Trova modi per contribuire che valorizzino la tua capacità di creare connessioni e pace."
+    }
+  }
+}

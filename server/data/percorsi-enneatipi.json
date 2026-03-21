@@ -1,0 +1,173 @@
+{
+  "percorsi": {
+    "1": {
+      "percorso1": {
+        "dignita": "Grandezza",
+        "virtù_partenza": "Prudenza",
+        "vizio_partenza": "Lussuria",
+        "influenza_iniziale": "Serafini",
+        "vak": "V",
+        "facolta": "Mente",
+        "percorso_numeri": "1-4-2-8-5-7",
+        "musa": "Urania (astronomia)",
+        "domanda": "Perché?",
+        "topica": "Super-Io",
+        "meccanismo": "Formazione reattiva",
+        "correlazione_cerebrale": "Corteccia prefrontale dorsolaterale",
+        "chakra": "3° Chakra",
+        "fasce_eta": {
+          "0-3": {
+            "dignita": "Grandezza",
+            "virtu": "Prudenza",
+            "vizio": "Lussuria",
+            "gerarchia": "Serafini",
+            "musa": "Urania",
+            "facolta": "Mente",
+            "chakra": "3° Chakra",
+            "topica": "Super-Io",
+            "meccanismo": "Formazione reattiva"
+          },
+          "3-12": {
+            "dignita": "Grandezza",
+            "virtu": "Prudenza",
+            "vizio": "Lussuria",
+            "gerarchia": "Serafini",
+            "musa": "Urania",
+            "facolta": "Mente",
+            "chakra": "3° Chakra",
+            "topica": "Super-Io",
+            "meccanismo": "Formazione reattiva"
+          },
+          "12-19": {
+            "dignita": "Gloria",
+            "virtu": "Temperanza",
+            "vizio": "Superbia",
+            "gerarchia": "Troni",
+            "musa": "Euterpe",
+            "facolta": "Ragione",
+            "chakra": "-",
+            "topica": "Io",
+            "meccanismo": "Identificazione"
+          },
+          "20-30": {
+            "dignita": "Volontà",
+            "virtu": "Fede",
+            "vizio": "Accidia",
+            "gerarchia": "Cherubini",
+            "musa": "Polimnia",
+            "facolta": "Intelletto",
+            "chakra": "4° Chakra",
+            "topica": "Es",
+            "meccanismo": "Rimozione"
+          },
+          "25-60": {
+            "dignita": "Potenza",
+            "virtu": "Carità",
+            "vizio": "Ira",
+            "gerarchia": "Virtù",
+            "musa": "Tersicore",
+            "facolta": "Vista",
+            "chakra": "-",
+            "topica": "Super-Io",
+            "meccanismo": "Proiezione"
+          },
+          "60+": {
+            "dignita": "Eternità",
+            "virtu": "Speranza",
+            "vizio": "Invidia",
+            "gerarchia": "Potestà",
+            "musa": "Melpomene",
+            "facolta": "Udito",
+            "chakra": "1° Chakra",
+            "topica": "Es",
+            "meccanismo": "Isolamento"
+          }
+        }
+      },
+      "percorso2": {
+        "dignita": "Grandezza",
+        "virtù_partenza": "Prudenza",
+        "vizio_partenza": "Lussuria",
+        "influenza_iniziale": "Serafini",
+        "vak": "V",
+        "facolta": "Mente",
+        "percorso_numeri": "1-7-5-2-8-4",
+        "musa": "Urania (astronomia)",
+        "domanda": "Perché?",
+        "topica": "Super-Io",
+        "meccanismo": "Formazione reattiva",
+        "correlazione_cerebrale": "Corteccia prefrontale dorsolaterale",
+        "chakra": "3° Chakra",
+        "fasce_eta": {
+          "0-3": {
+            "dignita": "Grandezza",
+            "virtu": "Prudenza",
+            "vizio": "Lussuria",
+            "gerarchia": "Serafini",
+            "musa": "Urania",
+            "facolta": "Mente",
+            "chakra": "3° Chakra",
+            "topica": "Super-Io",
+            "meccanismo": "Formazione reattiva"
+          },
+          "3-12": {
+            "dignita": "Grandezza",
+            "virtu": "Prudenza",
+            "vizio": "Lussuria",
+            "gerarchia": "Serafini",
+            "musa": "Urania",
+            "facolta": "Mente",
+            "chakra": "3° Chakra",
+            "topica": "Super-Io",
+            "meccanismo": "Formazione reattiva"
+          },
+          "12-19": {
+            "dignita": "Sapienza",
+            "virtu": "Fortezza",
+            "vizio": "Gola",
+            "gerarchia": "Principati",
+            "musa": "Calliope",
+            "facolta": "Olfatto",
+            "chakra": "2° Chakra",
+            "topica": "Io",
+            "meccanismo": "Razionalizzazione"
+          },
+          "20-30": {
+            "dignita": "Eternità",
+            "virtu": "Speranza",
+            "vizio": "Invidia",
+            "gerarchia": "Potestà",
+            "musa": "Melpomene",
+            "facolta": "Udito",
+            "chakra": "1° Chakra",
+            "topica": "Es",
+            "meccanismo": "Isolamento"
+          },
+          "25-60": {
+            "dignita": "Volontà",
+            "virtu": "Fede",
+            "vizio": "Accidia",
+            "gerarchia": "Cherubini",
+            "musa": "Polimnia",
+            "facolta": "Intelletto",
+            "chakra": "4° Chakra",
+            "topica": "Es",
+            "meccanismo": "Rimozione"
+          },
+          "60+": {
+            "dignita": "Potenza",
+            "virtu": "Giustizia",
+            "vizio": "Avarizia",
+            "gerarchia": "Dominazioni",
+            "musa": "Erato",
+            "facolta": "Immaginazione",
+            "chakra": "6° Chakra",
+            "topica": "Io",
+            "meccanismo": "Introiezione"
+          }
+        }
+      }
+    }
+  },
+  "note": "Dati estratti da L'Enneagramma delle Età, pagine 58-107. Per ora implementato solo enneatipo 1 come esempio. Gli altri enneatipi (2-9) seguono struttura simile con dati specifici dal documento."
+}

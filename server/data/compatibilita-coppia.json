@@ -1,0 +1,364 @@
+{
+  "compatibilita": {
+    "1-1": {
+      "livello": "buona",
+      "percentuale": 75,
+      "descrizione": "Due Perfezionisti insieme condividono alti standard morali e desiderio di miglioramento. Possono sostenersi reciprocamente nella crescita, ma rischiano di essere eccessivamente critici l'uno verso l'altro.",
+      "puntiForza": ["Valori condivisi", "Integrità morale", "Impegno reciproco", "Desiderio di eccellenza"],
+      "sfide": ["Eccessiva critica", "Rigidità", "Difficoltà a rilassarsi insieme", "Perfezionismo paralizzante"],
+      "consigli": "Imparate a perdonarvi reciprocamente gli errori e a celebrare i successi senza cercare sempre la perfezione. Dedicate tempo al divertimento senza giudizio."
+    },
+    "1-2": {
+      "livello": "ottima",
+      "percentuale": 85,
+      "descrizione": "Il Perfezionista e l'Altruista formano una coppia complementare: l'1 porta struttura e principi, il 2 porta calore e supporto emotivo. Insieme possono creare una relazione equilibrata e orientata al servizio.",
+      "puntiForza": ["Complementarità", "Valori etici condivisi", "Supporto reciproco", "Orientamento al bene comune"],
+      "sfide": ["L'1 può sembrare freddo al 2", "Il 2 può sentirsi non apprezzato", "Difficoltà nell'esprimere bisogni personali"],
+      "consigli": "L'1 deve imparare a esprimere apprezzamento verbalmente, il 2 deve rispettare i confini e i tempi dell'1. Comunicate apertamente i vostri bisogni."
+    },
+    "1-3": {
+      "livello": "buona",
+      "percentuale": 70,
+      "descrizione": "Perfezionista e Realizzatore condividono orientamento al successo e disciplina. Possono costruire insieme grandi progetti, ma rischiano di trascurare l'intimità emotiva concentrandosi troppo sugli obiettivi.",
+      "puntiForza": ["Produttività", "Ambizione condivisa", "Efficienza", "Rispetto reciproco"],
+      "sfide": ["Competitività", "Mancanza di intimità emotiva", "Workaholism", "Difficoltà a rilassarsi"],
+      "consigli": "Programmate tempo di qualità insieme senza parlare di lavoro o obiettivi. Imparate a essere vulnerabili l'uno con l'altro."
+    },
+    "1-4": {
+      "livello": "media",
+      "percentuale": 60,
+      "descrizione": "L'incontro tra il Perfezionista razionale e l'Individualista emotivo può essere arricchente ma impegnativo. L'1 porta stabilità, il 4 porta profondità emotiva e creatività.",
+      "puntiForza": ["Crescita reciproca", "Bilanciamento razionalità-emozione", "Profondità", "Autenticità"],
+      "sfide": ["Conflitto tra logica ed emozione", "L'1 può sembrare insensibile", "Il 4 può sembrare drammatico", "Diversi modi di processare le esperienze"],
+      "consigli": "L'1 deve accogliere le emozioni del 4 senza giudicarle, il 4 deve apprezzare la stabilità che l'1 offre. Trovate un linguaggio comune per esprimere i sentimenti."
+    },
+    "1-5": {
+      "livello": "buona",
+      "percentuale": 72,
+      "descrizione": "Perfezionista e Osservatore condividono bisogno di competenza e autonomia. Entrambi apprezzano la privacy e possono rispettare reciprocamente gli spazi personali.",
+      "puntiForza": ["Rispetto reciproco", "Indipendenza", "Profondità intellettuale", "Pochi conflitti"],
+      "sfide": ["Distacco emotivo", "Mancanza di spontaneità", "Difficoltà nell'intimità", "Comunicazione limitata"],
+      "consigli": "Sforzatevi di condividere le emozioni, non solo i pensieri. Create rituali di connessione emotiva regolari."
+    },
+    "1-6": {
+      "livello": "ottima",
+      "percentuale": 80,
+      "descrizione": "Perfezionista e Leale formano una coppia stabile e responsabile. Condividono senso del dovere e desiderio di sicurezza, creando una base solida per una relazione duratura.",
+      "puntiForza": ["Affidabilità", "Lealtà", "Valori condivisi", "Senso di responsabilità", "Stabilità"],
+      "sfide": ["Ansia condivisa", "Eccessiva preoccupazione", "Rigidità", "Difficoltà a godersi il presente"],
+      "consigli": "Imparate a rilassarvi insieme e a fidarvi del processo. Non lasciate che l'ansia domini la relazione."
+    },
+    "1-7": {
+      "livello": "media",
+      "percentuale": 65,
+      "descrizione": "L'incontro tra il Perfezionista serio e l'Entusiasta gioioso può portare equilibrio o tensione. Il 7 insegna all'1 a divertirsi, l'1 porta struttura al 7.",
+      "puntiForza": ["Complementarità", "Bilanciamento serietà-leggerezza", "Crescita reciproca", "Energia"],
+      "sfide": ["Diversi ritmi di vita", "L'1 può sembrare noioso al 7", "Il 7 può sembrare irresponsabile all'1", "Conflitti su priorità"],
+      "consigli": "Trovate attività che soddisfino entrambi: avventure pianificate per il 7, momenti di riflessione per l'1. Apprezzate le differenze."
+    },
+    "1-8": {
+      "livello": "buona",
+      "percentuale": 73,
+      "descrizione": "Perfezionista e Leader condividono forza di carattere e senso di giustizia. Possono essere una coppia potente, ma devono gestire la tendenza al controllo di entrambi.",
+      "puntiForza": ["Forza", "Integrità", "Capacità di azione", "Protezione reciproca", "Rispetto"],
+      "sfide": ["Lotte di potere", "Testardaggine", "Difficoltà a cedere", "Conflitti intensi"],
+      "consigli": "Imparate a scegliere le vostre battaglie e a cedere quando non è essenziale. Rispettate la forza dell'altro senza competere."
+    },
+    "1-9": {
+      "livello": "ottima",
+      "percentuale": 82,
+      "descrizione": "Perfezionista e Pacificatore formano una coppia armoniosa. Il 9 porta calma e accettazione, l'1 porta direzione e motivazione. Si bilanciano naturalmente.",
+      "puntiForza": ["Armonia", "Complementarità", "Stabilità", "Accettazione reciproca", "Pace"],
+      "sfide": ["Il 9 può evitare i conflitti necessari", "L'1 può essere troppo critico", "Passività del 9", "Frustrazione dell'1"],
+      "consigli": "Il 9 deve imparare ad affrontare i problemi direttamente, l'1 deve accettare l'imperfezione. Comunicate con gentilezza."
+    },
+    "2-2": {
+      "livello": "buona",
+      "percentuale": 70,
+      "descrizione": "Due Altruisti insieme creano una relazione calorosa e premurosa. Entrambi sono attenti ai bisogni dell'altro, ma rischiano di trascurare i propri bisogni personali.",
+      "puntiForza": ["Empatia", "Calore", "Supporto reciproco", "Generosità", "Intimità emotiva"],
+      "sfide": ["Difficoltà a chiedere per sé", "Competizione nel dare", "Bisogni personali trascurati", "Codipendenza"],
+      "consigli": "Imparate a ricevere quanto date. Dedicate tempo ai vostri bisogni individuali senza sensi di colpa."
+    },
+    "2-3": {
+      "livello": "ottima",
+      "percentuale": 85,
+      "descrizione": "Altruista e Realizzatore formano una coppia dinamica e orientata al successo. Il 2 supporta emotivamente il 3, il 3 valorizza e riconosce il 2.",
+      "puntiForza": ["Supporto reciproco", "Successo condiviso", "Energia positiva", "Complementarità", "Immagine sociale forte"],
+      "sfide": ["Superficialità emotiva", "Focus eccessivo sull'immagine", "Difficoltà con vulnerabilità", "Workaholism del 3"],
+      "consigli": "Create spazi di autenticità dove potete essere voi stessi senza maschere. Il 3 deve rallentare per connettersi emotivamente."
+    },
+    "2-4": {
+      "livello": "buona",
+      "percentuale": 75,
+      "descrizione": "Altruista e Individualista condividono profondità emotiva e sensibilità. Il 2 offre supporto pratico, il 4 porta autenticità e profondità alla relazione.",
+      "puntiForza": ["Profondità emotiva", "Empatia", "Creatività", "Intimità", "Autenticità"],
+      "sfide": ["Intensità emotiva", "Il 2 può sentirsi rifiutato", "Il 4 può sentirsi soffocato", "Drammi"],
+      "consigli": "Il 2 deve rispettare i momenti di solitudine del 4, il 4 deve apprezzare la presenza costante del 2. Bilanciate vicinanza e spazio."
+    },
+    "2-5": {
+      "livello": "media",
+      "percentuale": 58,
+      "descrizione": "L'incontro tra l'Altruista emotivo e l'Osservatore cerebrale può essere difficile. Il 2 cerca connessione, il 5 cerca spazio. Richiedono molta comprensione reciproca.",
+      "puntiForza": ["Complementarità", "Crescita reciproca", "Il 2 porta calore", "Il 5 porta stabilità"],
+      "sfide": ["Bisogni opposti di vicinanza/distanza", "Il 2 si sente respinto", "Il 5 si sente invaso", "Comunicazione difficile"],
+      "consigli": "Negoziate chiaramente i bisogni di spazio e vicinanza. Il 2 deve rispettare i confini, il 5 deve fare sforzi per connettersi emotivamente."
+    },
+    "2-6": {
+      "livello": "ottima",
+      "percentuale": 83,
+      "descrizione": "Altruista e Leale formano una coppia affettuosa e leale. Entrambi valorizzano la sicurezza relazionale e sono pronti a impegnarsi profondamente.",
+      "puntiForza": ["Lealtà", "Affetto", "Sicurezza", "Impegno", "Supporto reciproco", "Stabilità"],
+      "sfide": ["Ansia condivisa", "Dipendenza reciproca", "Difficoltà con l'indipendenza", "Paura dell'abbandono"],
+      "consigli": "Coltivate l'indipendenza individuale all'interno della coppia. Non lasciate che l'ansia domini la relazione."
+    },
+    "2-7": {
+      "livello": "buona",
+      "percentuale": 78,
+      "descrizione": "Altruista ed Entusiasta creano una coppia energica e sociale. Il 2 porta profondità emotiva, il 7 porta gioia e avventura. Insieme si divertono molto.",
+      "puntiForza": ["Energia", "Socialità", "Ottimismo", "Divertimento", "Generosità condivisa"],
+      "sfide": ["Il 7 evita la profondità emotiva", "Il 2 può sentirsi trascurato", "Superficialità", "Impegno del 7"],
+      "consigli": "Il 7 deve rallentare per connettersi emotivamente, il 2 deve unirsi alle avventure del 7 senza aspettarsi sempre profondità."
+    },
+    "2-8": {
+      "livello": "ottima",
+      "percentuale": 80,
+      "descrizione": "Altruista e Leader formano una coppia potente e protettiva. Il 2 ammorbidisce l'8, l'8 protegge e valorizza il 2. Si completano bene.",
+      "puntiForza": ["Protezione reciproca", "Forza", "Passione", "Lealtà", "Complementarità"],
+      "sfide": ["Lotte di potere sottili", "Il 2 può manipolare", "L'8 può dominare", "Intensità"],
+      "consigli": "Siate diretti nei vostri bisogni invece di manipolare o dominare. Rispettate la forza dell'altro."
+    },
+    "2-9": {
+      "livello": "ottima",
+      "percentuale": 88,
+      "descrizione": "Altruista e Pacificatore formano una delle coppie più armoniose. Entrambi sono orientati agli altri e cercano pace e connessione. Creano un ambiente relazionale caloroso e accogliente.",
+      "puntiForza": ["Armonia", "Accettazione", "Calore", "Supporto", "Pace", "Gentilezza"],
+      "sfide": ["Difficoltà ad affrontare conflitti", "Bisogni personali trascurati", "Passività", "Evitamento"],
+      "consigli": "Imparate ad affrontare i conflitti in modo costruttivo. Dedicate tempo ai vostri bisogni individuali."
+    },
+    "3-3": {
+      "livello": "buona",
+      "percentuale": 72,
+      "descrizione": "Due Realizzatori insieme creano una coppia dinamica e di successo. Condividono ambizione e energia, ma rischiano di competere e di trascurare l'intimità emotiva.",
+      "puntiForza": ["Successo", "Energia", "Efficienza", "Motivazione reciproca", "Immagine forte"],
+      "sfide": ["Competizione", "Workaholism", "Mancanza di intimità", "Superficialità emotiva", "Burnout"],
+      "consigli": "Create spazi di vulnerabilità dove potete essere autentici. Non lasciate che il lavoro domini completamente la relazione."
+    },
+    "3-4": {
+      "livello": "media",
+      "percentuale": 65,
+      "descrizione": "Realizzatore e Individualista hanno approcci molto diversi alla vita. Il 3 è orientato all'esterno e al successo, il 4 all'interno e all'autenticità. Possono arricchirsi reciprocamente o scontrarsi.",
+      "puntiForza": ["Complementarità", "Crescita reciproca", "Il 3 porta praticità", "Il 4 porta profondità"],
+      "sfide": ["Valori diversi", "Il 4 vede il 3 come superficiale", "Il 3 vede il 4 come impratico", "Comunicazione difficile"],
+      "consigli": "Apprezzate le differenze invece di giudicarle. Il 3 deve rallentare per la profondità emotiva, il 4 deve apprezzare i successi del 3."
+    },
+    "3-5": {
+      "livello": "media",
+      "percentuale": 62,
+      "descrizione": "Realizzatore e Osservatore hanno ritmi di vita molto diversi. Il 3 è attivo e sociale, il 5 è riservato e riflessivo. Richiedono molta comprensione reciproca.",
+      "puntiForza": ["Competenza condivisa", "Rispetto reciproco", "Il 3 porta azione", "Il 5 porta riflessione"],
+      "sfide": ["Ritmi diversi", "Bisogni sociali opposti", "Il 3 può sembrare superficiale", "Il 5 può sembrare distaccato"],
+      "consigli": "Rispettate i diversi bisogni di socialità e solitudine. Trovate attività che soddisfino entrambi."
+    },
+    "3-6": {
+      "livello": "buona",
+      "percentuale": 74,
+      "descrizione": "Realizzatore e Leale formano una coppia produttiva e responsabile. Il 3 porta ottimismo e azione, il 6 porta lealtà e previdenza.",
+      "puntiForza": ["Produttività", "Lealtà", "Complementarità", "Stabilità", "Impegno"],
+      "sfide": ["Ansia del 6 vs ottimismo del 3", "Il 6 dubita", "Il 3 minimizza le preoccupazioni", "Ritmi diversi"],
+      "consigli": "Il 3 deve prendere sul serio le preoccupazioni del 6, il 6 deve fidarsi dell'ottimismo del 3. Bilanciate cautela e azione."
+    },
+    "3-7": {
+      "livello": "ottima",
+      "percentuale": 85,
+      "descrizione": "Realizzatore ed Entusiasta formano una coppia energica, ottimista e orientata al successo. Condividono amore per la vita e l'azione, creando una relazione dinamica e divertente.",
+      "puntiForza": ["Energia", "Ottimismo", "Avventura", "Successo", "Divertimento", "Socialità"],
+      "sfide": ["Evitamento delle emozioni difficili", "Superficialità", "Workaholism", "Mancanza di profondità"],
+      "consigli": "Create spazi per la vulnerabilità e l'intimità emotiva. Non evitate sempre le emozioni difficili."
+    },
+    "3-8": {
+      "livello": "ottima",
+      "percentuale": 82,
+      "descrizione": "Realizzatore e Leader formano una coppia potente e dinamica. Entrambi sono orientati all'azione e al successo, con grande energia e determinazione.",
+      "puntiForza": ["Potere", "Successo", "Energia", "Determinazione", "Rispetto reciproco", "Passione"],
+      "sfide": ["Lotte di potere", "Competizione", "Workaholism", "Difficoltà con vulnerabilità"],
+      "consigli": "Collaborate invece di competere. Create spazi di vulnerabilità dove potete abbassare le difese."
+    },
+    "3-9": {
+      "livello": "buona",
+      "percentuale": 76,
+      "descrizione": "Realizzatore e Pacificatore si bilanciano bene. Il 3 porta energia e direzione, il 9 porta calma e accettazione. Insieme creano equilibrio.",
+      "puntiForza": ["Equilibrio", "Complementarità", "Il 3 motiva il 9", "Il 9 calma il 3", "Armonia"],
+      "sfide": ["Ritmi diversi", "Il 9 può sentirsi pressato", "Il 3 può frustrarsi con la passività del 9", "Comunicazione"],
+      "consigli": "Il 3 deve rallentare e apprezzare il ritmo del 9, il 9 deve comunicare i propri bisogni chiaramente."
+    },
+    "4-4": {
+      "livello": "media",
+      "percentuale": 60,
+      "descrizione": "Due Individualisti insieme creano una relazione intensa e profonda. Condividono sensibilità e creatività, ma rischiano di amplificare drammi e instabilità emotiva.",
+      "puntiForza": ["Profondità", "Autenticità", "Creatività", "Comprensione reciproca", "Intimità emotiva"],
+      "sfide": ["Intensità eccessiva", "Drammi", "Instabilità", "Competizione nella sofferenza", "Alti e bassi estremi"],
+      "consigli": "Cercate stabilità esterna e supporto. Non alimentate reciprocamente i drammi. Praticate gratitudine insieme."
+    },
+    "4-5": {
+      "livello": "buona",
+      "percentuale": 73,
+      "descrizione": "Individualista e Osservatore condividono profondità e bisogno di autenticità. Entrambi apprezzano l'intimità selettiva e possono creare una connessione unica.",
+      "puntiForza": ["Profondità", "Autenticità", "Rispetto reciproco", "Creatività", "Intimità selettiva"],
+      "sfide": ["Distacco emotivo", "Isolamento condiviso", "Difficoltà con il mondo esterno", "Malinconia"],
+      "consigli": "Bilanciate l'intimità profonda con connessioni esterne. Non isolatevi troppo dal mondo."
+    },
+    "4-6": {
+      "livello": "buona",
+      "percentuale": 70,
+      "descrizione": "Individualista e Leale possono formare una coppia profonda e leale. Il 4 porta creatività e profondità emotiva, il 6 porta stabilità e impegno.",
+      "puntiForza": ["Lealtà", "Profondità", "Impegno", "Supporto reciproco", "Autenticità"],
+      "sfide": ["Ansia e malinconia condivise", "Intensità emotiva", "Il 4 può sembrare instabile al 6", "Il 6 può sembrare ansioso al 4"],
+      "consigli": "Bilanciate l'intensità emotiva con stabilità pratica. Non alimentate reciprocamente ansia e malinconia."
+    },
+    "4-7": {
+      "livello": "media",
+      "percentuale": 64,
+      "descrizione": "Individualista ed Entusiasta hanno approcci opposti alle emozioni. Il 4 le approfondisce, il 7 le evita. Possono bilanciarsi o scontrarsi.",
+      "puntiForza": ["Complementarità", "Il 4 porta profondità", "Il 7 porta leggerezza", "Creatività", "Passione"],
+      "sfide": ["Approcci emotivi opposti", "Il 4 vede il 7 come superficiale", "Il 7 vede il 4 come pesante", "Conflitti"],
+      "consigli": "Apprezzate le differenze. Il 7 deve permettere momenti di profondità, il 4 deve unirsi alla leggerezza del 7."
+    },
+    "4-8": {
+      "livello": "buona",
+      "percentuale": 75,
+      "descrizione": "Individualista e Leader formano una coppia intensa e appassionata. Entrambi sono autentici e diretti, creando una connessione profonda e potente.",
+      "puntiForza": ["Intensità", "Autenticità", "Passione", "Onestà", "Forza emotiva", "Lealtà"],
+      "sfide": ["Conflitti intensi", "Testardaggine", "Drammi", "Lotte di potere emotive"],
+      "consigli": "Canalizzate l'intensità in modo costruttivo. Imparate a de-escalare i conflitti prima che diventino distruttivi."
+    },
+    "4-9": {
+      "livello": "ottima",
+      "percentuale": 80,
+      "descrizione": "Individualista e Pacificatore si complementano bene. Il 4 porta profondità e autenticità, il 9 porta calma e accettazione. Insieme creano un ambiente sicuro per l'espressione emotiva.",
+      "puntiForza": ["Accettazione", "Profondità", "Calma", "Creatività", "Supporto emotivo", "Armonia"],
+      "sfide": ["Il 9 può evitare l'intensità del 4", "Il 4 può frustrarsi con la passività del 9", "Comunicazione indiretta"],
+      "consigli": "Il 9 deve affrontare le emozioni del 4 invece di evitarle, il 4 deve apprezzare la stabilità del 9."
+    },
+    "5-5": {
+      "livello": "buona",
+      "percentuale": 68,
+      "descrizione": "Due Osservatori insieme creano una relazione intellettuale e rispettosa. Condividono bisogno di privacy e autonomia, ma rischiano distacco emotivo eccessivo.",
+      "puntiForza": ["Rispetto reciproco", "Indipendenza", "Profondità intellettuale", "Privacy", "Pochi conflitti"],
+      "sfide": ["Distacco emotivo", "Isolamento", "Mancanza di calore", "Difficoltà con intimità fisica", "Solitudine"],
+      "consigli": "Sforzatevi di creare momenti di connessione emotiva e fisica. Non lasciate che l'intelletto domini completamente."
+    },
+    "5-6": {
+      "livello": "buona",
+      "percentuale": 72,
+      "descrizione": "Osservatore e Leale condividono bisogno di sicurezza e tendenza all'analisi. Possono formare una coppia stabile e intellettualmente stimolante.",
+      "puntiForza": ["Stabilità", "Profondità intellettuale", "Lealtà", "Rispetto reciproco", "Affidabilità"],
+      "sfide": ["Ansia condivisa", "Eccessiva analisi", "Difficoltà con l'azione", "Distacco emotivo"],
+      "consigli": "Bilanciate l'analisi con l'azione. Create rituali di connessione emotiva per bilanciare l'intellettualizzazione."
+    },
+    "5-7": {
+      "livello": "media",
+      "percentuale": 63,
+      "descrizione": "Osservatore ed Entusiasta hanno bisogni energetici molto diversi. Il 5 cerca solitudine, il 7 cerca stimolazione. Richiedono molta comprensione reciproca.",
+      "puntiForza": ["Curiosità intellettuale", "Complementarità", "Il 5 porta profondità", "Il 7 porta energia"],
+      "sfide": ["Bisogni energetici opposti", "Il 5 si sente sopraffatto", "Il 7 si sente limitato", "Socialità"],
+      "consigli": "Negoziate chiaramente i bisogni di solitudine e socialità. Trovate attività intellettuali che soddisfino entrambi."
+    },
+    "5-8": {
+      "livello": "buona",
+      "percentuale": 70,
+      "descrizione": "Osservatore e Leader si rispettano reciprocamente per la loro forza. Il 5 porta riflessione, l'8 porta azione. Possono completarsi se rispettano le differenze.",
+      "puntiForza": ["Rispetto reciproco", "Indipendenza", "Complementarità", "Forza", "Onestà"],
+      "sfide": ["Distacco del 5 vs intensità dell'8", "Conflitti su intimità", "Comunicazione", "Bisogni diversi"],
+      "consigli": "Il 5 deve fare sforzi per connettersi emotivamente, l'8 deve rispettare i bisogni di spazio del 5."
+    },
+    "5-9": {
+      "livello": "ottima",
+      "percentuale": 78,
+      "descrizione": "Osservatore e Pacificatore formano una coppia tranquilla e armoniosa. Entrambi apprezzano la pace e rispettano lo spazio dell'altro, creando un ambiente sereno.",
+      "puntiForza": ["Pace", "Rispetto reciproco", "Armonia", "Pochi conflitti", "Accettazione", "Tranquillità"],
+      "sfide": ["Passività condivisa", "Difficoltà con l'azione", "Isolamento", "Evitamento dei conflitti necessari"],
+      "consigli": "Sforzatevi di prendere iniziative e affrontare i problemi. Non lasciate che la passività domini completamente."
+    },
+    "6-6": {
+      "livello": "buona",
+      "percentuale": 70,
+      "descrizione": "Due Leali insieme creano una relazione stabile e affidabile. Condividono valori di lealtà e impegno, ma rischiano di amplificare reciprocamente l'ansia.",
+      "puntiForza": ["Lealtà", "Affidabilità", "Impegno", "Supporto reciproco", "Stabilità", "Valori condivisi"],
+      "sfide": ["Ansia amplificata", "Eccessiva preoccupazione", "Difficoltà con il cambiamento", "Paranoia"],
+      "consigli": "Cercate supporto esterno per gestire l'ansia. Non alimentate reciprocamente le preoccupazioni."
+    },
+    "6-7": {
+      "livello": "ottima",
+      "percentuale": 82,
+      "descrizione": "Leale ed Entusiasta si bilanciano perfettamente. Il 6 porta stabilità e previdenza, il 7 porta ottimismo e avventura. Insieme creano equilibrio tra sicurezza e spontaneità.",
+      "puntiForza": ["Equilibrio", "Complementarità", "Il 6 porta stabilità", "Il 7 porta gioia", "Lealtà", "Divertimento"],
+      "sfide": ["Ansia del 6 vs evitamento del 7", "Bisogni di sicurezza diversi", "Il 7 può sembrare irresponsabile"],
+      "consigli": "Il 7 deve rassicurare il 6 con impegno concreto, il 6 deve unirsi alle avventure del 7 senza eccessive preoccupazioni."
+    },
+    "6-8": {
+      "livello": "ottima",
+      "percentuale": 80,
+      "descrizione": "Leale e Leader formano una coppia forte e protettiva. Il 6 trova sicurezza nella forza dell'8, l'8 apprezza la lealtà del 6. Insieme sono una squadra potente.",
+      "puntiForza": ["Protezione reciproca", "Lealtà", "Forza", "Affidabilità", "Impegno", "Sicurezza"],
+      "sfide": ["Il 6 può testare l'8", "L'8 può dominare", "Conflitti di potere", "Intensità"],
+      "consigli": "Il 6 deve fidarsi invece di testare continuamente, l'8 deve essere paziente con le insicurezze del 6."
+    },
+    "6-9": {
+      "livello": "ottima",
+      "percentuale": 85,
+      "descrizione": "Leale e Pacificatore formano una coppia stabile e armoniosa. Entrambi valorizzano la sicurezza e la pace, creando un ambiente relazionale confortevole e duraturo.",
+      "puntiForza": ["Stabilità", "Armonia", "Lealtà", "Supporto", "Pace", "Affidabilità", "Impegno"],
+      "sfide": ["Evitamento dei conflitti", "Ansia del 6 vs passività del 9", "Difficoltà con il cambiamento"],
+      "consigli": "Affrontate i problemi invece di evitarli. Il 9 deve essere più assertivo, il 6 deve fidarsi di più."
+    },
+    "7-7": {
+      "livello": "ottima",
+      "percentuale": 80,
+      "descrizione": "Due Entusiasti insieme creano una relazione energica, divertente e piena di avventure. Condividono amore per la vita e l'esplorazione, vivendo intensamente insieme.",
+      "puntiForza": ["Divertimento", "Avventura", "Energia", "Ottimismo", "Spontaneità", "Gioia"],
+      "sfide": ["Evitamento delle responsabilità", "Superficialità", "Difficoltà con impegno", "Mancanza di profondità"],
+      "consigli": "Create momenti di profondità e intimità emotiva. Affrontate le responsabilità insieme invece di evitarle."
+    },
+    "7-8": {
+      "livello": "ottima",
+      "percentuale": 83,
+      "descrizione": "Entusiasta e Leader formano una coppia energica e potente. Entrambi sono orientati all'azione e all'intensità, creando una relazione dinamica e appassionata.",
+      "puntiForza": ["Energia", "Passione", "Avventura", "Forza", "Intensità", "Azione", "Divertimento"],
+      "sfide": ["Eccessiva intensità", "Conflitti esplosivi", "Evitamento vulnerabilità", "Impulsività"],
+      "consigli": "Create spazi di calma e vulnerabilità. Imparate a rallentare e a processare le emozioni invece di agire sempre."
+    },
+    "7-9": {
+      "livello": "ottima",
+      "percentuale": 84,
+      "descrizione": "Entusiasta e Pacificatore si complementano meravigliosamente. Il 7 porta energia e avventura, il 9 porta calma e accettazione. Insieme creano una relazione equilibrata e piacevole.",
+      "puntiForza": ["Equilibrio", "Armonia", "Divertimento", "Accettazione", "Pace", "Ottimismo"],
+      "sfide": ["Il 9 può sentirsi sopraffatto", "Il 7 può frustrarsi con la passività del 9", "Evitamento conflitti"],
+      "consigli": "Il 7 deve rallentare per il 9, il 9 deve comunicare i propri bisogni chiaramente. Affrontate i problemi insieme."
+    },
+    "8-8": {
+      "livello": "media",
+      "percentuale": 65,
+      "descrizione": "Due Leader insieme creano una coppia potente ma potenzialmente conflittuale. Entrambi sono forti e dominanti, il che può portare a lotte di potere intense.",
+      "puntiForza": ["Forza", "Passione", "Onestà", "Rispetto reciproco", "Intensità", "Lealtà"],
+      "sfide": ["Lotte di potere", "Conflitti intensi", "Testardaggine", "Difficoltà a cedere", "Dominanza"],
+      "consigli": "Imparate a scegliere le battaglie e a cedere quando non è essenziale. Collaborate invece di competere."
+    },
+    "8-9": {
+      "livello": "ottima",
+      "percentuale": 88,
+      "descrizione": "Leader e Pacificatore formano una delle coppie più complementari. L'8 porta forza e direzione, il 9 porta calma e accettazione. Si bilanciano perfettamente.",
+      "puntiForza": ["Complementarità perfetta", "Equilibrio", "L'8 protegge il 9", "Il 9 calma l'8", "Armonia", "Stabilità"],
+      "sfide": ["L'8 può dominare", "Il 9 può essere troppo passivo", "Comunicazione", "Il 9 evita i conflitti"],
+      "consigli": "L'8 deve essere paziente e gentile, il 9 deve essere più assertivo e comunicare i propri bisogni."
+    },
+    "9-9": {
+      "livello": "buona",
+      "percentuale": 75,
+      "descrizione": "Due Pacificatori insieme creano una relazione armoniosa e tranquilla. Condividono amore per la pace e l'accettazione, ma rischiano passività eccessiva.",
+      "puntiForza": ["Armonia", "Pace", "Accettazione", "Supporto reciproco", "Stabilità", "Gentilezza"],
+      "sfide": ["Passività estrema", "Difficoltà con decisioni", "Evitamento conflitti necessari", "Mancanza di direzione"],
+      "consigli": "Sforzatevi di prendere iniziative e affrontare i problemi. Cercate supporto esterno per la motivazione."
+    }
+  }
+}

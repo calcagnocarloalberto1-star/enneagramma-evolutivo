@@ -1,0 +1,177 @@
+{
+  "etaEnneatipi": {
+    "9": { "eta": "0-7 anni", "nome": "Età dell'Innocenza", "descrizione": "Periodo in cui si forma l'identità di base e si sperimenta il mondo con curiosità e fiducia" },
+    "7": { "eta": "8-14 anni", "nome": "Età dell'Esplorazione", "descrizione": "Periodo in cui si sviluppa la creatività e si cerca il piacere e la varietà nelle esperienze" },
+    "6": { "eta": "15-21 anni", "nome": "Età della Formazione", "descrizione": "Periodo in cui si affrontano le sfide della pubertà e si cerca la sicurezza e l'appartenenza in un gruppo" },
+    "5": { "eta": "22-28 anni", "nome": "Età della Ricerca", "descrizione": "Periodo in cui si approfondiscono le proprie conoscenze e si cerca la competenza e l'autonomia" },
+    "4": { "eta": "29-35 anni", "nome": "Età dell'Affermazione", "descrizione": "Periodo in cui si esprime la propria individualità e si cerca la bellezza e il significato nella vita" },
+    "3": { "eta": "36-42 anni", "nome": "Età della Responsabilità", "descrizione": "Periodo in cui si realizzano i propri obiettivi e si cerca il successo e il riconoscimento" },
+    "2": { "eta": "43-49 anni", "nome": "Età della Ripresa", "descrizione": "Periodo in cui si rivedono le proprie priorità e si cerca l'amore e il servizio verso gli altri" },
+    "1": { "eta": "50-56 anni", "nome": "Età della Saggezza", "descrizione": "Periodo in cui si integra la propria esperienza e si cerca la perfezione e l'integrità" },
+    "8": { "eta": "57+ anni", "nome": "Età della Trascendenza", "descrizione": "Periodo in cui si superano i propri limiti e si cerca la forza e la libertà" }
+  },
+  "percorsi": {
+    "1": {
+      "integrazione": [1, 7, 5, 8, 2, 4, 1],
+      "disintegrazione": [1, 4, 2, 8, 5, 7, 1],
+      "incrociIntegrazione": {
+        "1->7": "Rigidità → Spontaneità gioiosa",
+        "7->5": "Dispersione → Profondità contemplativa",
+        "5->8": "Ritiro → Azione potente",
+        "8->2": "Forza → Tenerezza",
+        "2->4": "Altruismo → Autenticità",
+        "4->1": "Emozione → Integrità rinnovata"
+      },
+      "incrociDisintegrazione": {
+        "1->4": "Controllo → Dramma emotivo",
+        "4->2": "Vittimismo → Manipolazione affettiva",
+        "2->8": "Bisogno → Aggressività",
+        "8->5": "Dominio → Ritiro paranoico",
+        "5->7": "Isolamento → Fuga maniaca",
+        "7->1": "Caos → Rigidità punitiva"
+      }
+    },
+    "2": {
+      "integrazione": [2, 4, 1, 7, 5, 8, 2],
+      "disintegrazione": [2, 8, 5, 7, 1, 4, 2],
+      "incrociIntegrazione": {
+        "2->4": "Dare compulsivo → Autenticità personale",
+        "4->1": "Emozione → Disciplina interiore",
+        "1->7": "Dovere → Piacere genuino",
+        "7->5": "Esperienza → Comprensione profonda",
+        "5->8": "Conoscenza → Potere azione",
+        "8->2": "Forza → Compassione rinnovata"
+      },
+      "incrociDisintegrazione": {
+        "2->8": "Aiuto → Dominio aggressivo",
+        "8->5": "Controllo → Paranoia isolante",
+        "5->7": "Ritiro → Dispersione frenetica",
+        "7->1": "Piacere → Giudizio severo",
+        "1->4": "Perfezione → Autocommiserazione",
+        "4->2": "Dramma → Manipolazione bisognosa"
+      }
+    },
+    "3": {
+      "integrazione": [3, 6, 9, 3],
+      "disintegrazione": [3, 9, 6, 3],
+      "incrociIntegrazione": {
+        "3->6": "Immagine → Lealtà autentica",
+        "6->9": "Ansia → Pace interiore",
+        "9->3": "Inerzia → Azione efficace rinnovata"
+      },
+      "incrociDisintegrazione": {
+        "3->9": "Successo → Apatia paralizzante",
+        "9->6": "Pace → Ansia diffusa",
+        "6->3": "Dubbio → Iperattività compulsiva"
+      }
+    },
+    "4": {
+      "integrazione": [4, 1, 7, 5, 8, 2, 4],
+      "disintegrazione": [4, 2, 8, 5, 7, 1, 4],
+      "incrociIntegrazione": {
+        "4->1": "Emozione → Disciplina equilibrata",
+        "1->7": "Rigore → Gioia spontanea",
+        "7->5": "Esperienza → Saggezza profonda",
+        "5->8": "Ritiro → Forza assertiva",
+        "8->2": "Potere → Generosità",
+        "2->4": "Dare → Autenticità rinnovata"
+      },
+      "incrociDisintegrazione": {
+        "4->2": "Vittimismo → Manipolazione emotiva",
+        "2->8": "Bisogno → Aggressione",
+        "8->5": "Dominio → Isolamento paranoico",
+        "5->7": "Ritiro → Fuga maniaca",
+        "7->1": "Caos → Rigidità punitiva",
+        "1->4": "Controllo → Dramma rinnovato"
+      }
+    },
+    "5": {
+      "integrazione": [5, 8, 2, 4, 1, 7, 5],
+      "disintegrazione": [5, 7, 1, 4, 2, 8, 5],
+      "incrociIntegrazione": {
+        "5->8": "Conoscenza → Azione potente",
+        "8->2": "Forza → Compassione",
+        "2->4": "Dare → Autenticità",
+        "4->1": "Emozione → Integrità",
+        "1->7": "Dovere → Gioia",
+        "7->5": "Esperienza → Saggezza rinnovata"
+      },
+      "incrociDisintegrazione": {
+        "5->7": "Ritiro → Fuga dispersiva",
+        "7->1": "Caos → Rigidità giudicante",
+        "1->4": "Controllo → Dramma emotivo",
+        "4->2": "Vittimismo → Manipolazione",
+        "2->8": "Bisogno → Aggressività",
+        "8->5": "Dominio → Paranoia rinnovata"
+      }
+    },
+    "6": {
+      "integrazione": [6, 9, 3, 6],
+      "disintegrazione": [6, 3, 9, 6],
+      "incrociIntegrazione": {
+        "6->9": "Ansia → Pace interiore",
+        "9->3": "Inerzia → Azione efficace",
+        "3->6": "Immagine → Lealtà rinnovata"
+      },
+      "incrociDisintegrazione": {
+        "6->3": "Dubbio → Iperattività compulsiva",
+        "3->9": "Successo → Apatia",
+        "9->6": "Pace → Ansia rinnovata"
+      }
+    },
+    "7": {
+      "integrazione": [7, 5, 8, 2, 4, 1, 7],
+      "disintegrazione": [7, 1, 4, 2, 8, 5, 7],
+      "incrociIntegrazione": {
+        "7->5": "Dispersione → Profondità contemplativa",
+        "5->8": "Ritiro → Azione potente",
+        "8->2": "Forza → Tenerezza",
+        "2->4": "Altruismo → Autenticità",
+        "4->1": "Emozione → Integrità",
+        "1->7": "Rigidità → Gioia rinnovata"
+      },
+      "incrociDisintegrazione": {
+        "7->1": "Caos → Rigidità punitiva",
+        "1->4": "Controllo → Dramma emotivo",
+        "4->2": "Vittimismo → Manipolazione",
+        "2->8": "Bisogno → Aggressività",
+        "8->5": "Dominio → Ritiro paranoico",
+        "5->7": "Isolamento → Fuga rinnovata"
+      }
+    },
+    "8": {
+      "integrazione": [8, 2, 4, 1, 7, 5, 8],
+      "disintegrazione": [8, 5, 7, 1, 4, 2, 8],
+      "incrociIntegrazione": {
+        "8->2": "Forza → Compassione generosa",
+        "2->4": "Dare → Autenticità profonda",
+        "4->1": "Emozione → Integrità",
+        "1->7": "Dovere → Gioia spontanea",
+        "7->5": "Esperienza → Saggezza",
+        "5->8": "Conoscenza → Potere rinnovato"
+      },
+      "incrociDisintegrazione": {
+        "8->5": "Dominio → Ritiro paranoico",
+        "5->7": "Isolamento → Fuga maniaca",
+        "7->1": "Caos → Rigidità giudicante",
+        "1->4": "Controllo → Dramma emotivo",
+        "4->2": "Vittimismo → Manipolazione",
+        "2->8": "Bisogno → Aggressività rinnovata"
+      }
+    },
+    "9": {
+      "integrazione": [9, 3, 6, 9],
+      "disintegrazione": [9, 6, 3, 9],
+      "incrociIntegrazione": {
+        "9->3": "Inerzia → Azione efficace",
+        "3->6": "Immagine → Lealtà autentica",
+        "6->9": "Ansia → Pace rinnovata"
+      },
+      "incrociDisintegrazione": {
+        "9->6": "Pace → Ansia diffusa",
+        "6->3": "Dubbio → Iperattività compulsiva",
+        "3->9": "Successo → Apatia rinnovata"
+      }
+    }
+  }
+}

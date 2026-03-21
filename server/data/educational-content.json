@@ -1,0 +1,232 @@
+{
+  "introduzione": {
+    "titolo": "Cos'è l'Enneagramma Evolutivo?",
+    "contenuto": "L'Enneagramma Evolutivo è un sistema di conoscenza spirituale che combina l'antica saggezza dell'Enneagramma con correlazioni vediche, angeliche e simboliche. Attraverso i nove enneatipi, puoi comprendere la tua essenza profonda e il tuo percorso di crescita.\n\nOgni enneatipo rappresenta un pattern di personalità con caratteristiche uniche, virtù da coltivare e vizi da trasformare. Il sistema considera anche l'età e la fase del percorso (ciclo lungo di 6 fasi o ciclo breve di 3 fasi), permettendoti di comprendere dove ti trovi nel tuo cammino evolutivo."
+  },
+  "enneatipi": [
+    {
+      "numero": 1,
+      "nome": "Il Perfezionista",
+      "descrizione": "L'Enneatipo 1 è guidato dal desiderio di perfezione e integrità. Sono persone principiate, etiche e dedicate al miglioramento di sé e del mondo. La loro sfida è imparare ad accettare l'imperfezione come parte della vita.",
+      "virtu": "Serenità",
+      "vizio": "Ira",
+      "motivazione": "Essere buoni, corretti e integri",
+      "paura": "Essere corrotti, cattivi o imperfetti",
+      "consigli": [
+        "Pratica l'auto-compassione e accetta i tuoi errori",
+        "Impara a distinguere tra standard elevati e perfezionismo rigido",
+        "Coltiva la capacità di rilassarti e goderti il momento presente",
+        "Riconosci che il progresso è più importante della perfezione"
+      ]
+    },
+    {
+      "numero": 2,
+      "nome": "L'Altruista",
+      "descrizione": "L'Enneatipo 2 è caratterizzato dal bisogno di essere amato e apprezzato attraverso l'aiuto agli altri. Sono persone empatiche, generose e attente ai bisogni altrui. La loro sfida è imparare ad amare se stessi senza dipendere dall'approvazione esterna.",
+      "virtu": "Umiltà",
+      "vizio": "Orgoglio",
+      "motivazione": "Essere amati e apprezzati",
+      "paura": "Essere non amati o non necessari",
+      "consigli": [
+        "Impara a riconoscere e esprimere i tuoi bisogni",
+        "Pratica il dare senza aspettative di ritorno",
+        "Coltiva l'amor proprio indipendentemente dall'approvazione altrui",
+        "Stabilisci confini sani nelle relazioni"
+      ]
+    },
+    {
+      "numero": 3,
+      "nome": "Il Realizzatore",
+      "descrizione": "L'Enneatipo 3 è motivato dal successo e dal riconoscimento. Sono persone ambiziose, efficienti e orientate agli obiettivi. La loro sfida è scoprire il proprio valore autentico al di là dei risultati e dell'immagine.",
+      "virtu": "Autenticità",
+      "vizio": "Vanità",
+      "motivazione": "Essere di successo e ammirati",
+      "paura": "Essere senza valore o fallire",
+      "consigli": [
+        "Connettiti con i tuoi sentimenti autentici",
+        "Valuta te stesso per chi sei, non per ciò che fai",
+        "Rallenta e goditi il processo, non solo i risultati",
+        "Pratica la vulnerabilità e l'autenticità nelle relazioni"
+      ]
+    },
+    {
+      "numero": 4,
+      "nome": "L'Individualista",
+      "descrizione": "L'Enneatipo 4 cerca significato, autenticità e profondità emotiva. Sono persone creative, sensibili e introspettive. La loro sfida è trovare equilibrio tra l'unicità personale e la connessione con gli altri.",
+      "virtu": "Equanimità",
+      "vizio": "Invidia",
+      "motivazione": "Essere unici e autentici",
+      "paura": "Non avere identità o significato",
+      "consigli": [
+        "Pratica la gratitudine per ciò che hai",
+        "Bilancia l'introspezione con l'azione nel mondo",
+        "Riconosci che tutti hanno qualcosa di speciale",
+        "Coltiva la stabilità emotiva e l'equilibrio"
+      ]
+    },
+    {
+      "numero": 5,
+      "nome": "L'Osservatore",
+      "descrizione": "L'Enneatipo 5 è guidato dal desiderio di conoscenza e comprensione. Sono persone analitiche, indipendenti e riservate. La loro sfida è imparare a condividere se stessi e le proprie risorse con gli altri.",
+      "virtu": "Distacco",
+      "vizio": "Avarizia",
+      "motivazione": "Essere competenti e capaci",
+      "paura": "Essere incompetenti o invasi",
+      "consigli": [
+        "Pratica la condivisione delle tue conoscenze ed emozioni",
+        "Bilancia il pensiero con l'azione e l'esperienza diretta",
+        "Riconosci che le relazioni arricchiscono la vita",
+        "Permetti a te stesso di essere vulnerabile e dipendente"
+      ]
+    },
+    {
+      "numero": 6,
+      "nome": "Il Leale",
+      "descrizione": "L'Enneatipo 6 cerca sicurezza e supporto. Sono persone responsabili, leali e attente ai pericoli. La loro sfida è sviluppare fiducia in se stessi e nel mondo, superando l'ansia e il dubbio.",
+      "virtu": "Coraggio",
+      "vizio": "Paura",
+      "motivazione": "Avere sicurezza e supporto",
+      "paura": "Essere senza supporto o guida",
+      "consigli": [
+        "Sviluppa fiducia nella tua capacità di affrontare le sfide",
+        "Pratica il radicamento nel momento presente",
+        "Riconosci quando la paura è irrazionale",
+        "Coltiva l'indipendenza e l'auto-affidamento"
+      ]
+    },
+    {
+      "numero": 7,
+      "nome": "L'Entusiasta",
+      "descrizione": "L'Enneatipo 7 è motivato dalla ricerca di gioia e nuove esperienze. Sono persone ottimiste, versatili e avventurose. La loro sfida è imparare a stare con il dolore e la limitazione senza fuggire.",
+      "virtu": "Sobrietà",
+      "vizio": "Gola",
+      "motivazione": "Essere felici e soddisfatti",
+      "paura": "Essere privati o intrappolati nel dolore",
+      "consigli": [
+        "Pratica la presenza e l'apprezzamento del momento",
+        "Permetti a te stesso di sentire emozioni difficili",
+        "Completa i progetti prima di iniziarne di nuovi",
+        "Coltiva la profondità oltre alla varietà"
+      ]
+    },
+    {
+      "numero": 8,
+      "nome": "Il Capo",
+      "descrizione": "L'Enneatipo 8 cerca potere e controllo. Sono persone forti, decisive e protettive. La loro sfida è imparare la vulnerabilità e riconoscere che la vera forza include anche la tenerezza.",
+      "virtu": "Innocenza",
+      "vizio": "Lussuria",
+      "motivazione": "Essere forti e in controllo",
+      "paura": "Essere controllati o feriti",
+      "consigli": [
+        "Pratica la vulnerabilità e la tenerezza",
+        "Riconosci l'impatto della tua forza sugli altri",
+        "Impara a delegare e fidarti degli altri",
+        "Coltiva la moderazione e la sensibilità"
+      ]
+    },
+    {
+      "numero": 9,
+      "nome": "Il Pacificatore",
+      "descrizione": "L'Enneatipo 9 cerca pace e armonia. Sono persone accomodanti, ricettive e stabili. La loro sfida è affermare se stessi e riconoscere che il conflitto può essere costruttivo.",
+      "virtu": "Azione",
+      "vizio": "Accidia",
+      "motivazione": "Avere pace interiore ed esterna",
+      "paura": "Conflitto e separazione",
+      "consigli": [
+        "Pratica l'assertività e l'espressione delle tue opinioni",
+        "Riconosci l'importanza delle tue priorità",
+        "Affronta i conflitti invece di evitarli",
+        "Coltiva l'energia e l'iniziativa personale"
+      ]
+    }
+  ],
+  "percorsi": {
+    "primo": {
+      "titolo": "Primo Percorso Evolutivo",
+      "descrizione": "Il primo percorso rappresenta la sequenza primaria di Dignità che ogni enneatipo attraversa durante la vita. Questo percorso definisce le tappe fondamentali del cammino spirituale, con correlazioni specifiche per ogni fascia d'età (Virtù, Vizi, Gerarchie, Muse, Facoltà, Melodie, Chakra, Pianeti)."
+    },
+    "secondo": {
+      "titolo": "Secondo Percorso Evolutivo",
+      "descrizione": "Il secondo percorso offre una sequenza alternativa di Dignità, con punti di shock (Legge dei 7) in fasce d'età diverse rispetto al primo percorso. Entrambi i percorsi sono validi e complementari, permettendo di comprendere le diverse sfaccettature del proprio cammino evolutivo."
+    }
+  },
+  "fasi": {
+    "percorsi_lunghi": {
+      "titolo": "Percorsi Lunghi (6 Fasi)",
+      "descrizione": "Gli enneatipi 1, 2, 4, 5, 7, 8 seguono percorsi evolutivi articolati in sei fasi distinte, ciascuna corrispondente a una specifica fascia d'età e a una Dignità (valore spirituale). Ogni fase porta nuove sfide, virtù da coltivare e vizi da trasformare.",
+      "enneatipi": [1, 2, 4, 5, 7, 8],
+      "fasi": [
+        {
+          "numero": 1,
+          "eta": "0-3 anni",
+          "focus": "Zoccolo Duro - Formazione del nucleo della personalità (stessa Dignità in entrambi i percorsi)"
+        },
+        {
+          "numero": 2,
+          "eta": "3-12 anni",
+          "focus": "Formazione Caratteriale - Sviluppo del carattere e prime relazioni"
+        },
+        {
+          "numero": 3,
+          "eta": "12-19 anni",
+          "focus": "Adolescenza - Periodo di trasformazione e ricerca identità"
+        },
+        {
+          "numero": 4,
+          "eta": "20-30 anni",
+          "focus": "Giovinezza - Unificazione esperienze e definizione percorso"
+        },
+        {
+          "numero": 5,
+          "eta": "25-60 anni",
+          "focus": "Età Adulta - Percorsi differenziati (accavallamento 25-30 anni)"
+        },
+        {
+          "numero": 6,
+          "eta": "60+ anni",
+          "focus": "Maturità - Saggezza, trascendenza e completamento"
+        }
+      ]
+    },
+    "percorsi_brevi": {
+      "titolo": "Percorsi Brevi (3 Fasi)",
+      "descrizione": "Gli enneatipi 3, 6, 9 seguono percorsi evolutivi più rapidi e intensi, articolati in tre fasi principali. Questi percorsi concentrano le esperienze in cicli più brevi ma ugualmente profondi.",
+      "enneatipi": [3, 6, 9],
+      "fasi": [
+        {
+          "numero": 1,
+          "eta": "0-30 anni",
+          "focus": "Giovinezza - Formazione, apprendimento e costruzione identità"
+        },
+        {
+          "numero": 2,
+          "eta": "30-60 anni",
+          "focus": "Età Adulta - Realizzazione, azione e maturazione"
+        },
+        {
+          "numero": 3,
+          "eta": "60+ anni",
+          "focus": "Maturità - Saggezza, completamento e trasmissione"
+        }
+      ]
+    },
+    "punti_shock": {
+      "titolo": "Punti di Shock (Legge dei 7)",
+      "descrizione": "Ogni percorso evolutivo include un punto di shock, una fascia d'età in cui si verifica una discontinuità significativa nel cammino. Questi momenti rappresentano opportunità di trasformazione profonda e richiedono particolare consapevolezza e supporto."
+    }
+  },
+  "risorse": [
+    {
+      "titolo": "I Nove Frutti dell'Albero della Vita",
+      "descrizione": "Il test dell'Enneagramma Evolutivo si basa sui nove frutti dell'Albero della Vita, ciascuno rappresentante aspetti diversi della personalità umana. Attraverso 180 domande (20 per ogni frutto), il test identifica il tuo enneatipo base."
+    },
+    {
+      "titolo": "Le Ali dell'Enneagramma",
+      "descrizione": "Ogni enneatipo ha due ali: i tipi adiacenti sul diagramma. Le ali influenzano e arricchiscono il tipo base, creando sottotipi unici. Ad esempio, un Tipo 1 può avere un'ala 9 o un'ala 2."
+    },
+    {
+      "titolo": "Le Correlazioni Vediche",
+      "descrizione": "L'Enneagramma Evolutivo integra correlazioni con la tradizione vedica, includendo chakra, pianeti e altre corrispondenze simboliche che arricchiscono la comprensione del proprio tipo."
+    }
+  ]
+}
