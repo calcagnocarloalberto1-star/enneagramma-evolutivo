@@ -1,8 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, BookOpen, Users, Compass, Star } from "lucide-react";
-import enneagramDiagram from "@assets/enneagram-diagram.webp";
+import { ArrowRight, BookOpen, Users, Compass, Star, Scale, GraduationCap, Pen, Globe } from "lucide-react";
 import ruotaLullo from "@assets/ruota-lullo.webp";
 import chakraSymbols from "@assets/chakra-symbols.webp";
 
@@ -14,36 +13,141 @@ export default function About() {
           Chi Siamo
         </h1>
         <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-          L'Enneagramma Evolutivo è un sistema innovativo di conoscenza di sé che integra tradizione e modernità.
+          L'Enneagramma Evolutivo nasce da vent'anni di studi e pratica professionale nella mediazione e nella conoscenza di sé.
         </p>
       </div>
 
-      {/* Methodology */}
+      {/* Author Bio - Main Section */}
       <section className="mb-16">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 className="text-2xl font-serif font-bold mb-4">La Nostra Metodologia</h2>
-            <div className="space-y-3 text-muted-foreground leading-relaxed">
-              <p>
-                L'Enneagramma Evolutivo nasce dall'intuizione dell'avvocato <strong className="text-foreground">Carlo Alberto Calcagno</strong>, 
-                che ha integrato diverse tradizioni sapienziali in un unico sistema coerente di auto-conoscenza.
-              </p>
-              <p>
-                Il test dei <strong className="text-foreground">9 Frutti dell'Albero della Vita</strong> rappresenta un approccio 
-                unico alla tipologia dell'Enneagramma, in cui ogni frutto simbolico corrisponde a un enneatipo 
-                e porta con sé un ricco patrimonio di correlazioni spirituali, psicologiche e culturali.
-              </p>
-              <p>
-                Questo sistema non si limita a classificare, ma offre un <strong className="text-foreground">percorso evolutivo</strong> personalizzato 
-                che tiene conto dell'età, delle ali, delle linee di integrazione e disintegrazione, 
-                e delle correlazioni con le tradizioni vediche, angeliche e musicali.
-              </p>
+        <Card className="overflow-hidden border-[#c9a227]/20">
+          <div className="bg-gradient-to-r from-[#1a1a2e] to-[#0f3460] p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[#c9a227]/20 border-2 border-[#c9a227]/40 flex items-center justify-center shrink-0">
+                <span className="text-4xl sm:text-5xl font-serif font-bold text-[#c9a227]">CA</span>
+              </div>
+              <div className="text-center sm:text-left">
+                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#f0e6d3] mb-1">
+                  Carlo Alberto Calcagno
+                </h2>
+                <p className="text-[#c9a227] font-medium mb-3">
+                  Mediatore · Formatore · Autore
+                </p>
+                <p className="text-[#f0e6d3]/80 text-sm leading-relaxed max-w-xl">
+                  Ideatore dell'Enneagramma Evolutivo, un sistema che integra la sapienza di Raimondo Lullo, 
+                  le gerarchie angeliche, la psicologia moderna e i simboli dell'Albero della Vita 
+                  in un percorso unico di crescita personale.
+                </p>
+              </div>
             </div>
           </div>
-          <div className="flex justify-center">
-            <img src={enneagramDiagram} alt="Diagramma Enneagramma" className="w-full max-w-sm rounded-2xl shadow-lg" />
-          </div>
-        </div>
+          <CardContent className="p-6 sm:p-8">
+            <div className="space-y-4 text-muted-foreground leading-relaxed">
+              <p>
+                <strong className="text-foreground">Carlo Alberto Calcagno</strong> (Arenzano, 1963) è mediatore civile, commerciale e familiare, 
+                formatore e autore, con sede professionale a Genova. Pur essendo iscritto all'Ordine degli Avvocati di Genova, 
+                dal 2019 si dedica esclusivamente alla mediazione, alla formazione e alla ricerca.
+              </p>
+              <p>
+                Mediatore civile e commerciale dal 2010 e mediatore familiare professionista certificato ai sensi della norma UNI 11644:2016, 
+                è associato A.I.Me.F. (Associazione Italiana Mediatori Familiari) dal 2017, di cui è consigliere regionale. 
+                Rappresenta l'Italia nel <strong className="text-foreground">Consiglio Internazionale di Mediazione (CIM-ICM)</strong>.
+              </p>
+              <p>
+                È Vice Direttore della <strong className="text-foreground">Scuola di Alta Formazione U.N.A.M.</strong> (Unione Nazionale Avvocati 
+                per la Mediazione) e responsabile scientifico di organismi di mediazione e formazione presso il Tribunale di Genova, 
+                il Tribunale di Reggio Emilia e gli organismi Concordia et Ius e Mediamo. 
+                È componente del Comitato direttivo per la mediazione e la negoziazione assistita del Consiglio dell'Ordine degli Avvocati di Genova.
+              </p>
+              <p>
+                Formatore accreditato dal <strong className="text-foreground">Ministero della Giustizia</strong> per mediatori civili e commerciali (dal 2011) 
+                e per mediatori familiari (dal 2017), ha insegnato negoziazione assistita e mediazione civile e commerciale 
+                alla Scuola di Specializzazione per le Professioni Legali dell'Università di Genova (2017) 
+                ed è stato docente presso la Scuola Superiore della Magistratura. 
+                Ha ricoperto il ruolo di coach dell'Università di Pavia per la Competizione Italiana di Mediazione (CIM) nel 2016 e 2017.
+              </p>
+              <p>
+                Esperto di strumenti alternativi al giudizio dal 2003, ha dedicato vent'anni allo studio 
+                dei sistemi comparati di risoluzione dei conflitti. È autore di diversi volumi e articoli scientifici, tra cui:
+              </p>
+            </div>
+
+            {/* Publications */}
+            <div className="mt-6 space-y-3">
+              <h3 className="font-serif font-bold text-lg flex items-center gap-2">
+                <Pen className="w-5 h-5 text-[#c9a227]" />
+                Pubblicazioni principali
+              </h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <BookOpen className="w-4 h-4 text-[#c9a227] shrink-0 mt-0.5" />
+                  <span>
+                    <strong className="text-foreground">Breve storia della risoluzione del conflitto. I sistemi di composizione dall'origine al XXI secolo</strong>, 
+                    prefazione di Marco Marinaro, Aracne Editrice, 2014 (575 pp.)
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <BookOpen className="w-4 h-4 text-[#c9a227] shrink-0 mt-0.5" />
+                  <span>
+                    <strong className="text-foreground">Il legale e la mediazione. I doveri e la pratica dell'avvocato mediatore e dell'accompagnatore alla procedura</strong>, 
+                    Aracne Editrice, 2014 (215 pp.)
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <BookOpen className="w-4 h-4 text-[#c9a227] shrink-0 mt-0.5" />
+                  <span>
+                    Numerosi saggi e articoli su mediazione civile, commerciale e familiare, tecniche di negoziazione, 
+                    storia dei sistemi giuridici e rapporto tra diritto e letteratura, pubblicati su riviste specializzate e portali giuridici.
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Roles Grid */}
+            <div className="mt-8 grid sm:grid-cols-2 gap-3">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#faf8f5]">
+                <Scale className="w-5 h-5 text-[#c9a227] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">Mediazione</p>
+                  <p className="text-xs text-muted-foreground">Civile, commerciale e familiare dal 2010</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#faf8f5]">
+                <GraduationCap className="w-5 h-5 text-[#c9a227] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">Formazione</p>
+                  <p className="text-xs text-muted-foreground">Accreditato dal Ministero della Giustizia</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#faf8f5]">
+                <Globe className="w-5 h-5 text-[#c9a227] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">CIM-ICM</p>
+                  <p className="text-xs text-muted-foreground">Rappresentante per l'Italia</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#faf8f5]">
+                <Pen className="w-5 h-5 text-[#c9a227] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">Blog e divulgazione</p>
+                  <p className="text-xs text-muted-foreground">mediaresenzaconfini.org</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Enneagramma Evolutivo connection */}
+            <div className="mt-8 p-4 rounded-lg border border-[#c9a227]/20 bg-[#c9a227]/5">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                <strong className="text-foreground">L'Enneagramma Evolutivo</strong> è il frutto di vent'anni di studi sull'Enneagramma 
+                e della pratica quotidiana nella mediazione familiare. Carlo Alberto ha integrato gli insegnamenti 
+                di Raimondo Lullo, Evagrio Pontico, Gurdjieff e Claudio Naranjo con le tecniche di PNL, 
+                il genogramma e le neuroscienze, creando un sistema che non si limita a classificare la personalità 
+                ma offre un percorso evolutivo concreto attraverso le fasi della vita. 
+                Come Enneatipo 1 con Ala 9, porta nella sua pratica la ricerca dell'integrità 
+                e la sensibilità verso l'armonia nelle relazioni.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
       {/* Historical Roots */}
