@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/percorsi", label: "Percorsi di Vita" },
   { href: "/compatibilita/coppia", label: "Coppia" },
   { href: "/compatibilita/famiglia", label: "Famiglia" },
+  { href: "/compatibilita/lavoro", label: "Lavoro" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "Chi Siamo" },
 ];

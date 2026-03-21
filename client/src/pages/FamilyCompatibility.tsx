@@ -15,10 +15,40 @@ import {
   type JourneyPhase,
 } from "@/data/percorsi-eta";
 
+// Adjacent wings on the enneagram circle (wrapping: 9→1, 1→9)
+function getWings(type: number): number[] {
+  if (type < 1 || type > 9) return [];
+  const left = type === 1 ? 9 : type - 1;
+  const right = type === 9 ? 1 : type + 1;
+  return [left, right];
+}
+
+const wingDescriptions: Record<string, string> = {
+  "1w9": "più riflessivo e calmo, idealistico",
+  "1w2": "più caloroso e orientato agli altri",
+  "2w1": "più disciplinato e critico",
+  "2w3": "più ambizioso e orientato al successo",
+  "3w2": "più carismatico e relazionale",
+  "3w4": "più introspettivo e creativo",
+  "4w3": "più orientato al risultato e visibile",
+  "4w5": "più riservato e intellettuale",
+  "5w4": "più creativo e emotivo",
+  "5w6": "più analitico e leale",
+  "6w5": "più introverso e cerebrale",
+  "6w7": "più estroverso e avventuroso",
+  "7w6": "più responsabile e leale",
+  "7w8": "più assertivo e deciso",
+  "8w7": "più energico e impulsivo",
+  "8w9": "più calmo e protettivo",
+  "9w8": "più assertivo e determinato",
+  "9w1": "più ordinato e principiale",
+};
+
 interface FamilyMember {
   id: number;
   nome: string;
   enneatipo: string;
+  ala: string;
   percorso: string;
   eta: string;
 }
@@ -32,8 +62,13 @@ function MemberPhaseCard({ member, phase }: { member: FamilyMember; phase: Journ
           <div>
             <div className="font-semibold text-sm">{member.nome}</div>
             <div className="text-xs text-muted-foreground">
-              Tipo {member.enneatipo} P{member.percorso} — {member.eta} anni — Fase enneatipo {phase.enneatipo}
+              Tipo {member.enneatipo}{member.ala && member.ala !== "nessuna" ? ` con Ala ${member.ala}` : ""} P{member.percorso} — {member.eta} anni — Fase enneatipo {phase.enneatipo}
             </div>
+            {member.ala && member.ala !== "nessuna" && wingDescriptions[`${member.enneatipo}w${member.ala}`] && (
+              <div className="text-xs text-primary">
+                {wingDescriptions[`${member.enneatipo}w${member.ala}`]}
+              </div>
+            )}
           </div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
@@ -60,12 +95,12 @@ function PairComparison({ m1, m2, p1, p2 }: { m1: FamilyMember; m2: FamilyMember
   return (
     <Card className="border-primary/10">
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-serif flex items-center gap-2">
+        <CardTitle className="text-sm font-serif flex items-center gap-2 flex-wrap">
           <span>{fruitEmoji[parseInt(m1.enneatipo)]}</span>
-          {m1.nome}
+          {m1.nome}{m1.ala && m1.ala !== "nessuna" ? ` (Ala ${m1.ala})` : ""}
           <Heart className="w-3.5 h-3.5 text-rose-400" />
           <span>{fruitEmoji[parseInt(m2.enneatipo)]}</span>
-          {m2.nome}
+          {m2.nome}{m2.ala && m2.ala !== "nessuna" ? ` (Ala ${m2.ala})` : ""}
           <Badge variant="secondary" className="ml-auto">{compatScore}% affinità</Badge>
         </CardTitle>
       </CardHeader>
@@ -101,6 +136,19 @@ function PairComparison({ m1, m2, p1, p2 }: { m1: FamilyMember; m2: FamilyMember
             </div>
           </div>
         )}
+        {/* Wing influence note */}
+        {((m1.ala && m1.ala !== "nessuna") || (m2.ala && m2.ala !== "nessuna")) && (
+          <div className="text-xs text-muted-foreground bg-primary/5 p-2 rounded">
+            <span className="font-medium text-primary">Ali:</span>{" "}
+            {m1.ala && m1.ala !== "nessuna" && (
+              <span>{m1.nome} ({m1.enneatipo}w{m1.ala}: {wingDescriptions[`${m1.enneatipo}w${m1.ala}`]})</span>
+            )}
+            {m1.ala && m1.ala !== "nessuna" && m2.ala && m2.ala !== "nessuna" && " — "}
+            {m2.ala && m2.ala !== "nessuna" && (
+              <span>{m2.nome} ({m2.enneatipo}w{m2.ala}: {wingDescriptions[`${m2.enneatipo}w${m2.ala}`]})</span>
+            )}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -108,14 +156,14 @@ function PairComparison({ m1, m2, p1, p2 }: { m1: FamilyMember; m2: FamilyMember
 
 export default function FamilyCompatibility() {
   const [members, setMembers] = useState<FamilyMember[]>([
-    { id: 1, nome: "Genitore 1", enneatipo: "", percorso: "1", eta: "" },
-    { id: 2, nome: "Genitore 2", enneatipo: "", percorso: "1", eta: "" },
-    { id: 3, nome: "Figlio/a", enneatipo: "", percorso: "1", eta: "" },
+    { id: 1, nome: "Genitore 1", enneatipo: "", ala: "nessuna", percorso: "1", eta: "" },
+    { id: 2, nome: "Genitore 2", enneatipo: "", ala: "nessuna", percorso: "1", eta: "" },
+    { id: 3, nome: "Figlio/a", enneatipo: "", ala: "nessuna", percorso: "1", eta: "" },
   ]);
   let nextId = Math.max(...members.map(m => m.id)) + 1;
 
   const addMember = () => {
-    setMembers([...members, { id: nextId++, nome: `Membro ${members.length + 1}`, enneatipo: "", percorso: "1", eta: "" }]);
+    setMembers([...members, { id: nextId++, nome: `Membro ${members.length + 1}`, enneatipo: "", ala: "nessuna", percorso: "1", eta: "" }]);
   };
 
   const removeMember = (id: number) => {
@@ -124,7 +172,12 @@ export default function FamilyCompatibility() {
   };
 
   const updateMember = (id: number, field: keyof FamilyMember, value: string) => {
-    setMembers(members.map(m => m.id === id ? { ...m, [field]: value } : m));
+    setMembers(members.map(m => {
+      if (m.id !== id) return m;
+      // Reset ala when enneatipo changes
+      if (field === "enneatipo") return { ...m, enneatipo: value, ala: "nessuna" };
+      return { ...m, [field]: value };
+    }));
   };
 
   // Get valid members (with all fields filled)
@@ -176,7 +229,7 @@ export default function FamilyCompatibility() {
         </CardHeader>
         <CardContent className="space-y-4">
           {members.map((m) => (
-            <div key={m.id} className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-end p-3 bg-muted/30 rounded-lg">
+            <div key={m.id} className="grid grid-cols-1 sm:grid-cols-6 gap-3 items-end p-3 bg-muted/30 rounded-lg">
               <div>
                 <label className="text-xs font-medium mb-1 block">Nome</label>
                 <Input
@@ -196,6 +249,26 @@ export default function FamilyCompatibility() {
                     {Array.from({ length: 9 }, (_, i) => i + 1).map(n => (
                       <SelectItem key={n} value={String(n)}>
                         {fruitEmoji[n]} {n}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-xs font-medium mb-1 block">Ala</label>
+                <Select
+                  value={m.ala}
+                  onValueChange={(v) => updateMember(m.id, "ala", v)}
+                  disabled={!m.enneatipo}
+                >
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="—" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="nessuna">Nessuna</SelectItem>
+                    {m.enneatipo && getWings(parseInt(m.enneatipo)).map(w => (
+                      <SelectItem key={w} value={String(w)}>
+                        {w}
                       </SelectItem>
                     ))}
                   </SelectContent>

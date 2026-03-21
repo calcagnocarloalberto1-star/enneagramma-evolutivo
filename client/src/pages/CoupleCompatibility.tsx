@@ -24,6 +24,36 @@ const typeEmoji: Record<number, string> = {
   5: "🍇", 6: "🫐", 7: "🍍", 8: "🍑", 9: "🍓",
 };
 
+// Adjacent wings on the enneagram circle (wrapping: 9→1, 1→9)
+function getWings(type: number): number[] {
+  if (type < 1 || type > 9) return [];
+  const left = type === 1 ? 9 : type - 1;
+  const right = type === 9 ? 1 : type + 1;
+  return [left, right];
+}
+
+const wingDescriptions: Record<string, string> = {
+  "1w9": "più riflessivo e calmo, idealistico",
+  "1w2": "più caloroso e orientato agli altri",
+  "2w1": "più disciplinato e critico",
+  "2w3": "più ambizioso e orientato al successo",
+  "3w2": "più carismatico e relazionale",
+  "3w4": "più introspettivo e creativo",
+  "4w3": "più orientato al risultato e visibile",
+  "4w5": "più riservato e intellettuale",
+  "5w4": "più creativo e emotivo",
+  "5w6": "più analitico e leale",
+  "6w5": "più introverso e cerebrale",
+  "6w7": "più estroverso e avventuroso",
+  "7w6": "più responsabile e leale",
+  "7w8": "più assertivo e deciso",
+  "8w7": "più energico e impulsivo",
+  "8w9": "più calmo e protettivo",
+  "9w8": "più assertivo e determinato",
+  "9w1": "più ordinato e principiale",
+};
+
+
 const levelColors: Record<string, string> = {
   eccellente: "bg-green-500",
   ottima: "bg-emerald-500",
@@ -162,10 +192,16 @@ function AgeCompatSection({ type1, type2, age1, age2, percorso1, percorso2 }: {
 export default function CoupleCompatibility() {
   const [type1, setType1] = useState<string>("");
   const [type2, setType2] = useState<string>("");
+  const [wing1, setWing1] = useState<string>("nessuna");
+  const [wing2, setWing2] = useState<string>("nessuna");
   const [age1, setAge1] = useState<string>("");
   const [age2, setAge2] = useState<string>("");
   const [percorso1, setPercorso1] = useState<string>("1");
   const [percorso2, setPercorso2] = useState<string>("1");
+
+  // Reset wing when enneatipo changes
+  const handleType1Change = (v: string) => { setType1(v); setWing1("nessuna"); };
+  const handleType2Change = (v: string) => { setType2(v); setWing2("nessuna"); };
 
   const shouldFetch = type1 && type2;
   const hasAges = age1 && age2;
@@ -196,40 +232,80 @@ export default function CoupleCompatibility() {
       <Card className="mb-8">
         <CardContent className="p-6">
           <div className="grid sm:grid-cols-3 gap-4 items-end mb-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Partner 1 — Enneatipo</label>
-              <Select value={type1} onValueChange={setType1}>
-                <SelectTrigger data-testid="select-type1">
-                  <SelectValue placeholder="Seleziona enneatipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 9 }, (_, i) => i + 1).map(n => (
-                    <SelectItem key={n} value={String(n)}>
-                      {typeEmoji[n]} Tipo {n} — {typeNames[n]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Partner 1 — Enneatipo</label>
+                <Select value={type1} onValueChange={handleType1Change}>
+                  <SelectTrigger data-testid="select-type1">
+                    <SelectValue placeholder="Seleziona enneatipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 9 }, (_, i) => i + 1).map(n => (
+                      <SelectItem key={n} value={String(n)}>
+                        {typeEmoji[n]} Tipo {n} — {typeNames[n]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {type1 && (
+                <div>
+                  <label className="text-xs mb-1 block">Ala</label>
+                  <Select value={wing1} onValueChange={setWing1}>
+                    <SelectTrigger className="h-9">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="nessuna">Nessuna</SelectItem>
+                      {getWings(parseInt(type1)).map(w => (
+                        <SelectItem key={w} value={String(w)}>
+                          Ala {w} — {wingDescriptions[`${type1}w${w}`] || ""}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center items-center">
               <Heart className="w-8 h-8 text-rose-400" />
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-2 block">Partner 2 — Enneatipo</label>
-              <Select value={type2} onValueChange={setType2}>
-                <SelectTrigger data-testid="select-type2">
-                  <SelectValue placeholder="Seleziona enneatipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 9 }, (_, i) => i + 1).map(n => (
-                    <SelectItem key={n} value={String(n)}>
-                      {typeEmoji[n]} Tipo {n} — {typeNames[n]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Partner 2 — Enneatipo</label>
+                <Select value={type2} onValueChange={handleType2Change}>
+                  <SelectTrigger data-testid="select-type2">
+                    <SelectValue placeholder="Seleziona enneatipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 9 }, (_, i) => i + 1).map(n => (
+                      <SelectItem key={n} value={String(n)}>
+                        {typeEmoji[n]} Tipo {n} — {typeNames[n]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {type2 && (
+                <div>
+                  <label className="text-xs mb-1 block">Ala</label>
+                  <Select value={wing2} onValueChange={setWing2}>
+                    <SelectTrigger className="h-9">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="nessuna">Nessuna</SelectItem>
+                      {getWings(parseInt(type2)).map(w => (
+                        <SelectItem key={w} value={String(w)}>
+                          Ala {w} — {wingDescriptions[`${type2}w${w}`] || ""}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
           </div>
 
@@ -322,11 +398,11 @@ export default function CoupleCompatibility() {
               </TabsContent>
 
               <TabsContent value="base" className="mt-4 space-y-6">
-                <BaseCompatibilitySection compat={compat} type1={type1} type2={type2} percentage={percentage} />
+                <BaseCompatibilitySection compat={compat} type1={type1} type2={type2} wing1={wing1} wing2={wing2} percentage={percentage} />
               </TabsContent>
             </Tabs>
           ) : (
-            <BaseCompatibilitySection compat={compat} type1={type1} type2={type2} percentage={percentage} />
+            <BaseCompatibilitySection compat={compat} type1={type1} type2={type2} wing1={wing1} wing2={wing2} percentage={percentage} />
           )}
         </div>
       )}
@@ -342,9 +418,14 @@ export default function CoupleCompatibility() {
   );
 }
 
-function BaseCompatibilitySection({ compat, type1, type2, percentage }: {
-  compat: any; type1: string; type2: string; percentage: number;
+function BaseCompatibilitySection({ compat, type1, type2, wing1, wing2, percentage }: {
+  compat: any; type1: string; type2: string; wing1: string; wing2: string; percentage: number;
 }) {
+  const wing1Label = wing1 && wing1 !== "nessuna" ? `Ala ${wing1}` : null;
+  const wing2Label = wing2 && wing2 !== "nessuna" ? `Ala ${wing2}` : null;
+  const wing1Desc = wing1 && wing1 !== "nessuna" ? wingDescriptions[`${type1}w${wing1}`] : null;
+  const wing2Desc = wing2 && wing2 !== "nessuna" ? wingDescriptions[`${type2}w${wing2}`] : null;
+
   return (
     <>
       {/* Compatibility meter */}
@@ -355,11 +436,13 @@ function BaseCompatibilitySection({ compat, type1, type2, percentage }: {
               <div className="text-center">
                 <div className="text-3xl">{typeEmoji[parseInt(type1)]}</div>
                 <div className="text-xs text-muted-foreground mt-1">Tipo {type1}</div>
+                {wing1Label && <div className="text-xs text-primary mt-0.5">{wing1Label}</div>}
               </div>
               <Heart className="w-6 h-6 text-rose-500" />
               <div className="text-center">
                 <div className="text-3xl">{typeEmoji[parseInt(type2)]}</div>
                 <div className="text-xs text-muted-foreground mt-1">Tipo {type2}</div>
+                {wing2Label && <div className="text-xs text-primary mt-0.5">{wing2Label}</div>}
               </div>
             </div>
 
@@ -379,6 +462,32 @@ function BaseCompatibilitySection({ compat, type1, type2, percentage }: {
           <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-description">
             {compat.descrizione}
           </p>
+
+          {/* Wing influence on compatibility */}
+          {(wing1Desc || wing2Desc) && (
+            <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/10">
+              <h4 className="text-sm font-medium mb-2 flex items-center gap-1.5">
+                <Star className="w-4 h-4 text-primary" /> Influenza delle Ali
+              </h4>
+              <div className="space-y-1.5 text-xs text-muted-foreground">
+                {wing1Desc && (
+                  <p>
+                    <strong>Partner 1</strong> (Tipo {type1} con Ala {wing1}): essendo {wing1Desc}, questa sfumatura influenza la dinamica di coppia rendendo il partner più sfaccettato rispetto al tipo base.
+                  </p>
+                )}
+                {wing2Desc && (
+                  <p>
+                    <strong>Partner 2</strong> (Tipo {type2} con Ala {wing2}): essendo {wing2Desc}, questo colora la relazione con qualità aggiuntive che moderano o amplificano le caratteristiche del tipo base.
+                  </p>
+                )}
+                {wing1Desc && wing2Desc && (
+                  <p className="pt-1 text-foreground/70 font-medium">
+                    La combinazione di queste ali può creare una dinamica unica: le sfumature di personalità introdotte dalle ali possono attenuare alcune sfide o rafforzare i punti di forza della coppia.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
