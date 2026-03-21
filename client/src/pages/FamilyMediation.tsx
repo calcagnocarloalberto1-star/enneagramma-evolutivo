@@ -14,7 +14,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Heart, Users, Target, Shield, BookOpen, AlertTriangle, Download, Info, Baby, MessageCircle, Brain } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Heart, Users, Target, Shield, BookOpen, AlertTriangle, Download, Info, Baby, MessageCircle, Brain, FileText, Loader2 } from "lucide-react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
@@ -68,7 +69,10 @@ export default function FamilyMediation() {
   const [numFigli, setNumFigli] = useState("");
   const [etaFigli, setEtaFigli] = useState("");
   const [livelloConflitto, setLivelloConflitto] = useState("medio");
+  const [inquadramento, setInquadramento] = useState("");
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const [minutaText, setMinutaText] = useState("");
+  const [minutaLoading, setMinutaLoading] = useState(false);
 
   const t1 = parseInt(type1);
   const t2 = parseInt(type2);
@@ -126,6 +130,68 @@ export default function FamilyMediation() {
 
   function handleReset() {
     setShowAnalysis(false);
+    setMinutaText("");
+  }
+
+  async function generateMinuta() {
+    setMinutaLoading(true);
+    setMinutaText("");
+    try {
+      const res = await fetch("/api/mediation/minuta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tipo: "familiare",
+          parte1: { nome: nome1 || "Membro 1", enneatipo: t1, ala: wing1, sottotipo: sottotipo1 },
+          parte2: { nome: nome2 || "Membro 2", enneatipo: t2, ala: wing2, sottotipo: sottotipo2 },
+          tipoControversia: tipoMediazione,
+          livelloConflitto,
+          inquadramento,
+          figliCoinvolti,
+          numFigli,
+          etaFigli,
+        }),
+      });
+      const data = await res.json();
+      if (data.minuta) setMinutaText(data.minuta);
+      else setMinutaText("Errore nella generazione della minuta.");
+    } catch {
+      setMinutaText("Errore di connessione. Riprova più tardi.");
+    } finally {
+      setMinutaLoading(false);
+    }
+  }
+
+  function generateMinutaPdf() {
+    if (!minutaText) return;
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const contentWidth = pageWidth - margin * 2;
+    let y = 20;
+
+    const checkPage = (needed: number) => {
+      if (y + needed > doc.internal.pageSize.getHeight() - 25) {
+        doc.addPage();
+        y = 20;
+      }
+    };
+
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Minuta di Accordo - Mediazione Familiare", pageWidth / 2, y, { align: "center" });
+    y += 10;
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const lines = doc.splitTextToSize(minutaText, contentWidth);
+    for (const line of lines) {
+      checkPage(6);
+      doc.text(line, margin, y);
+      y += 5;
+    }
+
+    doc.save(`minuta-mediazione-familiare-${t1}-${t2}.pdf`);
   }
 
   function generatePdf() {
@@ -286,6 +352,36 @@ export default function FamilyMediation() {
       </section>
 
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+        {/* Introductory Card */}
+        <Card className="border-[#c9a227]/30 bg-gradient-to-br from-primary/5 to-[#c9a227]/5">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-primary">
+              <Users className="w-5 h-5 text-[#c9a227]" />
+              La Sessione Congiunta nella Mediazione Familiare
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm text-muted-foreground">
+            <p>
+              La sessione congiunta è il cuore della mediazione familiare. A differenza della mediazione civile e commerciale, dove il focus è sulla controversia, nella mediazione familiare il mediatore lavora sulle relazioni e sui bisogni emotivi delle parti.
+            </p>
+            <p className="font-medium text-primary">Principi fondamentali:</p>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Impermanenza: le posizioni di oggi possono cambiare domani. Ogni porta resta aperta.</li>
+              <li>Compassione: "La compassione non è una relazione tra il guaritore ed il ferito. È un rapporto tra eguali" (Pema Chödrön).</li>
+              <li>Interdipendenza: l'esperienza di ciascuno dipende da come percepisce che l'altro lo percepisce.</li>
+            </ul>
+            <p className="font-medium text-primary">Il mediatore familiare fonda la sessione su tre pilastri:</p>
+            <ol className="list-decimal list-inside space-y-1 ml-2">
+              <li>Creare uno spazio sicuro dove ogni membro della famiglia si senta ascoltato</li>
+              <li>Facilitare la comunicazione tra personalità diverse usando l'Enneagramma come mappa</li>
+              <li>Costruire accordi sostenibili che rispettino i bisogni profondi di ciascun enneatipo</li>
+            </ol>
+            <p className="text-xs italic">
+              Compila i campi sottostanti e inserisci l'inquadramento della vicenda per ottenere un'analisi personalizzata, strategie per il mediatore e una bozza di accordo.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Input Form */}
         <Card className="border-[#c9a227]/30">
           <CardHeader>
@@ -480,6 +576,18 @@ export default function FamilyMediation() {
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Inquadramento della Vicenda */}
+            <div>
+              <Label>Inquadramento della Vicenda</Label>
+              <Textarea
+                placeholder="Descrivi brevemente i fatti, le pretese delle parti, il contesto della controversia e gli eventuali tentativi di soluzione precedenti..."
+                value={inquadramento}
+                onChange={(e) => { setInquadramento(e.target.value); setShowAnalysis(false); }}
+                rows={5}
+                className="mt-1"
+              />
             </div>
 
             <div className="flex gap-3">
@@ -741,6 +849,57 @@ export default function FamilyMediation() {
                 </CardContent>
               </Card>
             )}
+
+            {/* E) Minuta di Accordo */}
+            <Card className="border-[#c9a227]/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-[#c9a227]" />
+                  E) Minuta di Accordo
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Genera una bozza di accordo di mediazione familiare personalizzata in base agli enneatipi dei membri e alla descrizione della vicenda. Il linguaggio dell'accordo viene adattato allo stile comunicativo di ciascuna parte.
+                </p>
+                {!minutaText && (
+                  <Button
+                    onClick={generateMinuta}
+                    disabled={minutaLoading}
+                    className="bg-[#c9a227] hover:bg-[#d4a843] text-[#1a1a2e] font-semibold"
+                  >
+                    {minutaLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Generazione in corso...
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="w-4 h-4 mr-2" />
+                        Genera Minuta
+                      </>
+                    )}
+                  </Button>
+                )}
+                {minutaText && (
+                  <div className="space-y-4">
+                    <div className="p-6 rounded-lg bg-muted/30 border whitespace-pre-line text-sm font-mono leading-relaxed">
+                      {minutaText}
+                    </div>
+                    <div className="flex gap-3">
+                      <Button onClick={generateMinutaPdf} variant="outline" className="gap-2">
+                        <Download className="w-4 h-4" />
+                        Scarica Minuta PDF
+                      </Button>
+                      <Button onClick={generateMinuta} variant="outline" className="gap-2">
+                        <FileText className="w-4 h-4" />
+                        Rigenera Minuta
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </>
         )}
       </div>

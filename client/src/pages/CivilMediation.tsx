@@ -13,7 +13,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Scale, Users, Target, Shield, BookOpen, AlertTriangle, Download, Info } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Scale, Users, Target, Shield, BookOpen, AlertTriangle, Download, Info, FileText, Loader2 } from "lucide-react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
@@ -55,7 +56,10 @@ export default function CivilMediation() {
   const [sottotipo2, setSottotipo2] = useState("");
   const [tipoControversia, setTipoControversia] = useState("");
   const [livelloConflitto, setLivelloConflitto] = useState("medio");
+  const [inquadramento, setInquadramento] = useState("");
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const [minutaText, setMinutaText] = useState("");
+  const [minutaLoading, setMinutaLoading] = useState(false);
 
   const t1 = parseInt(type1);
   const t2 = parseInt(type2);
@@ -99,6 +103,65 @@ export default function CivilMediation() {
 
   function handleReset() {
     setShowAnalysis(false);
+    setMinutaText("");
+  }
+
+  async function generateMinuta() {
+    setMinutaLoading(true);
+    setMinutaText("");
+    try {
+      const res = await fetch("/api/mediation/minuta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tipo: "civile",
+          parte1: { nome: nome1 || "Parte 1", enneatipo: t1, ala: wing1, sottotipo: sottotipo1 },
+          parte2: { nome: nome2 || "Parte 2", enneatipo: t2, ala: wing2, sottotipo: sottotipo2 },
+          tipoControversia,
+          livelloConflitto,
+          inquadramento,
+        }),
+      });
+      const data = await res.json();
+      if (data.minuta) setMinutaText(data.minuta);
+      else setMinutaText("Errore nella generazione della minuta.");
+    } catch {
+      setMinutaText("Errore di connessione. Riprova più tardi.");
+    } finally {
+      setMinutaLoading(false);
+    }
+  }
+
+  function generateMinutaPdf() {
+    if (!minutaText) return;
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const contentWidth = pageWidth - margin * 2;
+    let y = 20;
+
+    const checkPage = (needed: number) => {
+      if (y + needed > doc.internal.pageSize.getHeight() - 25) {
+        doc.addPage();
+        y = 20;
+      }
+    };
+
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Minuta di Accordo - Mediazione Civile", pageWidth / 2, y, { align: "center" });
+    y += 10;
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const lines = doc.splitTextToSize(minutaText, contentWidth);
+    for (const line of lines) {
+      checkPage(6);
+      doc.text(line, margin, y);
+      y += 5;
+    }
+
+    doc.save(`minuta-mediazione-civile-${t1}-${t2}.pdf`);
   }
 
   function generatePdf() {
@@ -241,6 +304,33 @@ export default function CivilMediation() {
       </section>
 
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+        {/* Introductory Card */}
+        <Card className="border-[#c9a227]/30 bg-gradient-to-br from-primary/5 to-[#c9a227]/5">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-primary">
+              <Users className="w-5 h-5 text-[#c9a227]" />
+              La Sessione Congiunta nella Mediazione Civile e Commerciale
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm text-muted-foreground">
+            <p>
+              La sessione congiunta è il momento centrale della mediazione civile e commerciale. Il mediatore facilita il dialogo tra le parti per raggiungere una soluzione condivisa della controversia, lavorando sugli interessi sottostanti alle posizioni dichiarate.
+            </p>
+            <p className="font-medium text-primary">Principi fondamentali:</p>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Volontarietà: le parti partecipano liberamente e possono ritirarsi in qualsiasi momento</li>
+              <li>Riservatezza: tutto ciò che emerge in mediazione resta confidenziale</li>
+              <li>Neutralità: il mediatore non giudica, non decide, ma facilita la comunicazione</li>
+            </ul>
+            <p>
+              Il mediatore civile fonda la sessione sulla comprensione dei diversi stili comunicativi delle parti, utilizzando l'Enneagramma come strumento per personalizzare l'approccio e costruire accordi sostenibili che rispondano ai bisogni profondi di ciascuno.
+            </p>
+            <p className="text-xs italic">
+              Compila i campi sottostanti e inserisci l'inquadramento della vicenda per ottenere un'analisi personalizzata, strategie per il mediatore e una bozza di accordo.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Input Form */}
         <Card className="border-[#c9a227]/30">
           <CardHeader>
@@ -379,6 +469,18 @@ export default function CivilMediation() {
                   </div>
                 </RadioGroup>
               </div>
+            </div>
+
+            {/* Inquadramento della Vicenda */}
+            <div>
+              <Label>Inquadramento della Vicenda</Label>
+              <Textarea
+                placeholder="Descrivi brevemente i fatti, le pretese delle parti, il contesto della controversia e gli eventuali tentativi di soluzione precedenti..."
+                value={inquadramento}
+                onChange={(e) => { setInquadramento(e.target.value); setShowAnalysis(false); }}
+                rows={5}
+                className="mt-1"
+              />
             </div>
 
             <div className="flex gap-3">
@@ -614,6 +716,57 @@ export default function CivilMediation() {
                 </CardContent>
               </Card>
             )}
+
+            {/* E) Minuta di Accordo */}
+            <Card className="border-[#c9a227]/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-[#c9a227]" />
+                  E) Minuta di Accordo
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Genera una bozza di accordo di mediazione personalizzata in base agli enneatipi delle parti e alla descrizione della vicenda. Il linguaggio dell'accordo viene adattato allo stile comunicativo di ciascuna parte.
+                </p>
+                {!minutaText && (
+                  <Button
+                    onClick={generateMinuta}
+                    disabled={minutaLoading}
+                    className="bg-[#c9a227] hover:bg-[#d4a843] text-[#1a1a2e] font-semibold"
+                  >
+                    {minutaLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Generazione in corso...
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="w-4 h-4 mr-2" />
+                        Genera Minuta
+                      </>
+                    )}
+                  </Button>
+                )}
+                {minutaText && (
+                  <div className="space-y-4">
+                    <div className="p-6 rounded-lg bg-muted/30 border whitespace-pre-line text-sm font-mono leading-relaxed">
+                      {minutaText}
+                    </div>
+                    <div className="flex gap-3">
+                      <Button onClick={generateMinutaPdf} variant="outline" className="gap-2">
+                        <Download className="w-4 h-4" />
+                        Scarica Minuta PDF
+                      </Button>
+                      <Button onClick={generateMinuta} variant="outline" className="gap-2">
+                        <FileText className="w-4 h-4" />
+                        Rigenera Minuta
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </>
         )}
       </div>

@@ -502,5 +502,196 @@ export async function registerRoutes(
     }
   });
 
+  // POST generate minuta di accordo
+  app.post("/api/mediation/minuta", async (req, res) => {
+    try {
+      const { tipo, parte1, parte2, tipoControversia, livelloConflitto, inquadramento, figliCoinvolti, numFigli, etaFigli } = req.body;
+
+      if (!parte1?.enneatipo || !parte2?.enneatipo) {
+        return res.status(400).json({ error: "Dati delle parti mancanti" });
+      }
+
+      const typeNamesLocal: Record<number, string> = {
+        1: "Il Perfezionista", 2: "L'Altruista", 3: "Il Realizzatore",
+        4: "L'Individualista", 5: "L'Osservatore", 6: "Il Leale",
+        7: "L'Entusiasta", 8: "Il Leader", 9: "Il Pacificatore"
+      };
+
+      const enneatipoLanguageGuide: Record<number, string> = {
+        1: "Linguaggio preciso, regole chiare, enfasi su equità e correttezza. Clausole ben definite senza ambiguità.",
+        2: "Linguaggio che preserva le relazioni, cura reciproca, toni caldi. Enfasi sulla collaborazione e il benessere delle persone coinvolte.",
+        3: "Linguaggio efficiente, orientato ai risultati, deliverables chiari. Tempistiche definite e obiettivi misurabili.",
+        4: "Riconoscimento dell'unicità della situazione, espressione autentica. Clausole che rispettano la sensibilità e l'individualità.",
+        5: "Linguaggio dettagliato, logico, ben documentato. Ogni clausola motivata razionalmente con riferimenti precisi.",
+        6: "Focus sulla sicurezza, piani di contingenza, riferimenti alla lealtà. Garanzie e meccanismi di protezione chiari.",
+        7: "Framing positivo, possibilità future, flessibilità. Linguaggio aperto che mantiene opzioni e guarda al futuro.",
+        8: "Linguaggio diretto, enfasi sulla giustizia, equilibrio di potere chiaro. Clausole forti e inequivocabili.",
+        9: "Orientamento all'armonia, bilanciamento, inclusività. Linguaggio che favorisce la pace e il consenso reciproco."
+      };
+
+      const tipoLabel = tipo === "familiare" ? "FAMILIARE" : "CIVILE E COMMERCIALE";
+      const nome1 = parte1.nome || "Parte 1";
+      const nome2 = parte2.nome || "Parte 2";
+      const e1 = parte1.enneatipo;
+      const e2 = parte2.enneatipo;
+
+      const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+
+      if (GEMINI_API_KEY) {
+        try {
+          const { GoogleGenerativeAI } = await import("@google/generative-ai");
+          const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+          const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+          const prompt = `Sei un mediatore professionista esperto. Genera una MINUTA DI ACCORDO DI MEDIAZIONE ${tipoLabel} in italiano formale.
+
+DATI DEL CASO:
+- Tipo mediazione: ${tipoLabel}
+- ${nome1}: Enneatipo ${e1} (${typeNamesLocal[e1]})${parte1.ala && parte1.ala !== "nessuna" ? `, Ala ${parte1.ala}` : ""}${parte1.sottotipo ? `, Sottotipo: ${parte1.sottotipo}` : ""}
+- ${nome2}: Enneatipo ${e2} (${typeNamesLocal[e2]})${parte2.ala && parte2.ala !== "nessuna" ? `, Ala ${parte2.ala}` : ""}${parte2.sottotipo ? `, Sottotipo: ${parte2.sottotipo}` : ""}
+${tipoControversia ? `- Tipo controversia: ${tipoControversia}` : ""}
+- Livello conflitto: ${livelloConflitto || "medio"}
+${inquadramento ? `- Descrizione del caso: ${inquadramento}` : ""}
+${figliCoinvolti ? `- Figli coinvolti: ${numFigli || "sì"}${etaFigli ? ` (età: ${etaFigli})` : ""}` : ""}
+
+GUIDA LINGUISTICA PER ENNEATIPO:
+- Per ${nome1} (Tipo ${e1}): ${enneatipoLanguageGuide[e1]}
+- Per ${nome2} (Tipo ${e2}): ${enneatipoLanguageGuide[e2]}
+
+ISTRUZIONI:
+1. Struttura il documento come un verbale di accordo di mediazione formale
+2. Includi: INTESTAZIONE, PREMESSE (con fatti del caso), IDENTIFICAZIONE DELLE PARTI, ACCORDI RAGGIUNTI (clausole specifiche adattate al tipo di controversia e ai bisogni delle parti), CLAUSOLA DI REVISIONE, CLAUSOLA DI SALVAGUARDIA, FIRME
+3. Il linguaggio delle clausole deve COMBINARE gli stili comunicativi di entrambi gli enneatipi per risultare accettabile a entrambe le parti
+4. Usa la descrizione del caso per creare clausole specifiche e concrete, non generiche
+${figliCoinvolti ? "5. Includi una sezione dedicata al piano genitoriale con disposizioni per i figli" : ""}
+6. Includi una sezione su come gestire eventuali controversie relative all'accordo stesso
+7. Termina con le righe per le firme delle parti e del mediatore
+8. Scrivi SOLO il testo dell'accordo, senza commenti o spiegazioni aggiuntive`;
+
+          const result = await model.generateContent(prompt);
+          const text = result.response.text();
+          if (text) {
+            return res.json({ minuta: text, generatedBy: "ai" });
+          }
+        } catch (aiError) {
+          console.error("[Minuta] Gemini API error, falling back to static:", aiError);
+        }
+      }
+
+      // Static fallback
+      const today = new Date().toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
+      const guidaParte1 = enneatipoLanguageGuide[e1] || "";
+      const guidaParte2 = enneatipoLanguageGuide[e2] || "";
+
+      let minuta = `VERBALE DI ACCORDO DI MEDIAZIONE ${tipoLabel}\n\n`;
+      minuta += `Data: ${today}\n`;
+      minuta += `Procedimento di mediazione n. ___/${new Date().getFullYear()}\n\n`;
+
+      minuta += `═══════════════════════════════════════\n`;
+      minuta += `PREMESSE\n`;
+      minuta += `═══════════════════════════════════════\n\n`;
+      minuta += `In data odierna, presso l'Organismo di Mediazione _______________, `;
+      minuta += `si sono presentate le seguenti parti per tentare una composizione ${tipo === "familiare" ? "delle questioni familiari" : "della controversia civile e commerciale"} che le oppone.\n\n`;
+      if (inquadramento) {
+        minuta += `Oggetto della mediazione:\n${inquadramento}\n\n`;
+      }
+      if (tipoControversia) {
+        minuta += `Materia: ${tipoControversia}\n`;
+      }
+      minuta += `Livello di conflittualità dichiarato: ${livelloConflitto || "medio"}\n\n`;
+
+      minuta += `═══════════════════════════════════════\n`;
+      minuta += `IDENTIFICAZIONE DELLE PARTI\n`;
+      minuta += `═══════════════════════════════════════\n\n`;
+
+      minuta += `PARTE 1: ${nome1}\n`;
+      minuta += `Profilo di personalità: Enneatipo ${e1} — ${typeNamesLocal[e1]}\n`;
+      minuta += `Approccio comunicativo privilegiato: ${guidaParte1}\n\n`;
+
+      minuta += `PARTE 2: ${nome2}\n`;
+      minuta += `Profilo di personalità: Enneatipo ${e2} — ${typeNamesLocal[e2]}\n`;
+      minuta += `Approccio comunicativo privilegiato: ${guidaParte2}\n\n`;
+
+      if (figliCoinvolti) {
+        minuta += `Figli coinvolti: ${numFigli || "sì"}`;
+        if (etaFigli) minuta += ` (età: ${etaFigli})`;
+        minuta += `\n\n`;
+      }
+
+      minuta += `═══════════════════════════════════════\n`;
+      minuta += `ACCORDI RAGGIUNTI\n`;
+      minuta += `═══════════════════════════════════════\n\n`;
+
+      minuta += `Le parti, con l'assistenza del mediatore, hanno raggiunto i seguenti accordi:\n\n`;
+
+      minuta += `Art. 1 — Oggetto dell'accordo\n`;
+      minuta += `Le parti convengono di risolvere la controversia in oggetto secondo i termini e le condizioni qui di seguito specificati, `;
+      minuta += `nel rispetto dei principi di equità, buona fede e reciproca collaborazione.\n\n`;
+
+      minuta += `Art. 2 — Obblighi di ${nome1}\n`;
+      minuta += `${nome1} si impegna a: _______________________________________________\n`;
+      minuta += `[Clausole da compilare in base all'accordo raggiunto]\n\n`;
+
+      minuta += `Art. 3 — Obblighi di ${nome2}\n`;
+      minuta += `${nome2} si impegna a: _______________________________________________\n`;
+      minuta += `[Clausole da compilare in base all'accordo raggiunto]\n\n`;
+
+      minuta += `Art. 4 — Termini e modalità\n`;
+      minuta += `Gli impegni di cui sopra dovranno essere adempiuti entro il termine di ______________ `;
+      minuta += `dalla data di sottoscrizione del presente accordo.\n\n`;
+
+      if (figliCoinvolti) {
+        minuta += `═══════════════════════════════════════\n`;
+        minuta += `PIANO GENITORIALE\n`;
+        minuta += `═══════════════════════════════════════\n\n`;
+        minuta += `Art. 5 — Affidamento e responsabilità genitoriale\n`;
+        minuta += `Le parti concordano un affidamento ______________ dei figli minori.\n\n`;
+        minuta += `Art. 6 — Tempi di permanenza\n`;
+        minuta += `I figli trascorreranno: _______________________________________________\n\n`;
+        minuta += `Art. 7 — Contributo al mantenimento\n`;
+        minuta += `Il contributo al mantenimento dei figli è fissato in € _______/mese.\n\n`;
+      }
+
+      minuta += `═══════════════════════════════════════\n`;
+      minuta += `CLAUSOLA DI REVISIONE\n`;
+      minuta += `═══════════════════════════════════════\n\n`;
+      minuta += `Le parti si impegnano a riesaminare i termini del presente accordo qualora `;
+      minuta += `sopraggiungano circostanze sostanzialmente diverse da quelle esistenti alla data `;
+      minuta += `della presente sottoscrizione. In tale evenienza, le parti si impegnano a ricorrere `;
+      minuta += `nuovamente alla mediazione prima di adire le vie giudiziarie.\n\n`;
+
+      minuta += `═══════════════════════════════════════\n`;
+      minuta += `CLAUSOLA DI SALVAGUARDIA\n`;
+      minuta += `═══════════════════════════════════════\n\n`;
+      minuta += `Qualora una o più clausole del presente accordo risultino invalide o inapplicabili, `;
+      minuta += `le restanti clausole manterranno la loro piena efficacia. Le parti si impegnano a `;
+      minuta += `sostituire le clausole invalide con disposizioni valide che si avvicinino il più possibile `;
+      minuta += `allo scopo economico e giuridico delle clausole sostituite.\n\n`;
+
+      minuta += `═══════════════════════════════════════\n`;
+      minuta += `GESTIONE DELLE CONTROVERSIE SULL'ACCORDO\n`;
+      minuta += `═══════════════════════════════════════\n\n`;
+      minuta += `Per qualsiasi controversia relativa all'interpretazione o all'esecuzione del presente `;
+      minuta += `accordo, le parti si impegnano a ricorrere preventivamente a un nuovo tentativo di `;
+      minuta += `mediazione presso il medesimo Organismo, prima di adire l'Autorità Giudiziaria.\n\n`;
+
+      minuta += `═══════════════════════════════════════\n`;
+      minuta += `FIRME\n`;
+      minuta += `═══════════════════════════════════════\n\n`;
+      minuta += `Luogo: _______________  Data: ${today}\n\n`;
+      minuta += `${nome1}\n`;
+      minuta += `_________________________________\n\n`;
+      minuta += `${nome2}\n`;
+      minuta += `_________________________________\n\n`;
+      minuta += `Il Mediatore\n`;
+      minuta += `_________________________________\n`;
+
+      res.json({ minuta, generatedBy: "static" });
+    } catch (err: any) {
+      console.error("[Minuta] Error:", err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   return httpServer;
 }
