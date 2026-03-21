@@ -9,15 +9,15 @@ const typeEmoji: Record<number, string> = {
 };
 
 const typeColors: Record<number, string> = {
-  1: "from-red-500 to-red-600",
-  2: "from-orange-500 to-amber-600",
-  3: "from-yellow-500 to-yellow-600",
-  4: "from-blue-500 to-[#0f3460]",
+  1: "from-red-700 to-red-800",
+  2: "from-amber-600 to-amber-700",
+  3: "from-yellow-600 to-yellow-700",
+  4: "from-[#0f3460] to-[#1a1a2e]",
   5: "from-[#16213e] to-[#0f3460]",
-  6: "from-teal-500 to-cyan-600",
-  7: "from-amber-400 to-orange-500",
-  8: "from-rose-500 to-red-600",
-  9: "from-green-500 to-emerald-600",
+  6: "from-teal-700 to-teal-800",
+  7: "from-[#c9a227] to-[#9a7b0a]",
+  8: "from-rose-700 to-red-800",
+  9: "from-emerald-700 to-emerald-800",
 };
 
 export default function EnneatipiList() {
