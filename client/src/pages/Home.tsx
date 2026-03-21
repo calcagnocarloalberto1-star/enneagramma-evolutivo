@@ -2,8 +2,8 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Heart, Users, Briefcase, Sparkles } from "lucide-react";
-import enneagramDiagram from "@assets/enneagram-diagram.webp";
 import ruotaLullo from "@assets/ruota-lullo.webp";
+import ruotaLulloClassica from "@assets/ruota-lullo-classica.png";
 
 const features = [
   {
@@ -80,9 +80,9 @@ export default function Home() {
             </div>
             <div className="flex justify-center">
               <img
-                src={enneagramDiagram}
-                alt="Diagramma dell'Enneagramma"
-                className="w-64 h-64 md:w-80 md:h-80 object-contain drop-shadow-2xl opacity-90"
+                src={ruotaLullo}
+                alt="La Ruota di Raimondo Lullo"
+                className="w-64 h-64 md:w-80 md:h-80 object-contain drop-shadow-2xl opacity-90 rounded-xl"
                 data-testid="img-hero-enneagram"
               />
             </div>
@@ -141,9 +141,9 @@ export default function Home() {
           </div>
           <div className="flex justify-center">
             <img
-              src={ruotaLullo}
-              alt="La Ruota di Raimondo Lullo"
-              className="w-full max-w-md rounded-2xl shadow-xl"
+              src={ruotaLulloClassica}
+              alt="La Ruota di Raimondo Lullo - Schema Classico"
+              className="w-full max-w-sm rounded-2xl shadow-xl bg-white p-4"
               data-testid="img-ruota-lullo"
             />
           </div>
