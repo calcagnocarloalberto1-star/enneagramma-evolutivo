@@ -32,7 +32,7 @@ const fruitEmoji: Record<number, string> = {
 const typeColors: Record<number, string> = {
   1: "bg-red-100 text-red-700", 2: "bg-orange-100 text-orange-700",
   3: "bg-yellow-100 text-yellow-700", 4: "bg-blue-100 text-blue-700",
-  5: "bg-indigo-100 text-indigo-700", 6: "bg-teal-100 text-teal-700",
+  5: "bg-[#0f3460]/10 text-[#0f3460]", 6: "bg-teal-100 text-teal-700",
   7: "bg-amber-100 text-amber-700", 8: "bg-rose-100 text-rose-700",
   9: "bg-green-100 text-green-700",
 };
@@ -272,14 +272,14 @@ export default function TestResults() {
         <div className="h-[350px]" data-testid="chart-radar">
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart data={radarData}>
-              <PolarGrid stroke="hsl(270, 20%, 85%)" />
+              <PolarGrid stroke="hsl(36, 18%, 85%)" />
               <PolarAngleAxis dataKey="type" tick={{ fontSize: 12 }} />
               <PolarRadiusAxis angle={90} domain={[0, 20]} tick={{ fontSize: 10 }} />
               <Radar
                 name="Punteggio"
                 dataKey="score"
-                stroke="hsl(271, 76%, 53%)"
-                fill="hsl(271, 76%, 53%)"
+                stroke="hsl(214, 73%, 22%)"
+                fill="hsl(214, 73%, 22%)"
                 fillOpacity={0.3}
                 strokeWidth={2}
               />
@@ -385,12 +385,12 @@ export default function TestResults() {
               )}
             </div>
             {result.educativo.consigli && result.educativo.consigli.length > 0 && (
-              <div className="mt-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                <h4 className="text-sm font-semibold text-purple-800 dark:text-purple-200 mb-2">Consigli per la crescita</h4>
+              <div className="mt-4 p-4 bg-[#f5f0e8] dark:bg-[#0f3460]/20 rounded-lg border border-[#c9a227]/30 dark:border-[#c9a227]/20">
+                <h4 className="text-sm font-semibold text-[#16213e] dark:text-[#f0e6d3] mb-2">Consigli per la crescita</h4>
                 <ul className="space-y-1.5">
                   {result.educativo.consigli.map((c: string, i: number) => (
-                    <li key={i} className="text-xs text-purple-700 dark:text-purple-300 flex gap-2">
-                      <span className="text-purple-400 shrink-0">•</span> {c}
+                    <li key={i} className="text-xs text-[#16213e] dark:text-[#f0e6d3]/80 flex gap-2">
+                      <span className="text-[#c9a227] shrink-0">•</span> {c}
                     </li>
                   ))}
                 </ul>
@@ -811,7 +811,7 @@ export default function TestResults() {
           <CardContent className="grid sm:grid-cols-3 gap-6">
             <div>
               <h4 className="font-semibold text-sm mb-2 flex items-center gap-1.5">
-                <Gem className="w-4 h-4 text-purple-500" /> Pietre Curative
+                <Gem className="w-4 h-4 text-[#c9a227]" /> Pietre Curative
               </h4>
               <div className="flex flex-wrap gap-1.5">
                 {attrs.pietre_curative?.map((p: string) => (
@@ -1043,7 +1043,7 @@ export default function TestResults() {
 
       {/* Punti Caldi (from main) */}
       {result.percorsoPersonalizzato?.puntiCaldi && result.percorsoPersonalizzato.puntiCaldi.length > 0 && (
-        <Card className="mb-8 border-purple-200 dark:border-purple-800">
+        <Card className="mb-8 border-[#c9a227]/30 dark:border-[#c9a227]/20">
           <CardHeader>
             <CardTitle className="text-lg font-serif flex items-center gap-2">
               <span className="text-xl">🔥</span> Punti Caldi — Incroci tra Percorsi
@@ -1056,9 +1056,9 @@ export default function TestResults() {
           <CardContent>
             <div className="space-y-4">
               {result.percorsoPersonalizzato.puntiCaldi.map((pc: any) => (
-                <div key={pc.punto} className="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
+                <div key={pc.punto} className="p-4 rounded-lg bg-[#f5f0e8] dark:bg-[#0f3460]/20 border border-[#c9a227]/30 dark:border-[#c9a227]/20">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center text-lg font-bold shrink-0">{pc.punto}</span>
+                    <span className="w-10 h-10 rounded-full bg-[#0f3460] text-[#f0e6d3] flex items-center justify-center text-lg font-bold shrink-0">{pc.punto}</span>
                     <div className="flex-1">
                       <p className="text-sm font-semibold text-foreground">{pc.significato}</p>
                       <div className="flex gap-3 mt-1">
@@ -1071,8 +1071,8 @@ export default function TestResults() {
                     <p className="text-xs text-muted-foreground leading-relaxed mb-2">{pc.esempio}</p>
                   )}
                   {pc.domanda_chiave && (
-                    <div className="mt-2 p-2 rounded bg-purple-100 dark:bg-purple-800/30">
-                      <p className="text-xs font-semibold text-purple-800 dark:text-purple-200 italic">
+                    <div className="mt-2 p-2 rounded bg-[#ebe5d9] dark:bg-[#0f3460]/30">
+                      <p className="text-xs font-semibold text-[#16213e] dark:text-[#f0e6d3] italic">
                         Domanda chiave: {pc.domanda_chiave}
                       </p>
                     </div>
@@ -1081,7 +1081,7 @@ export default function TestResults() {
               ))}
             </div>
             {result.percorsoPersonalizzato.statistiche && (
-              <div className="mt-4 pt-3 border-t border-purple-200 dark:border-purple-800 text-center">
+              <div className="mt-4 pt-3 border-t border-[#c9a227]/30 dark:border-[#c9a227]/20 text-center">
                 <p className="text-[11px] text-muted-foreground">
                   Totale incroci nel sistema: <strong>{result.percorsoPersonalizzato.statistiche.totaleComplessivo}</strong>
                   ({result.percorsoPersonalizzato.statistiche.totaleIncrociCicloLungo} ciclo lungo + {result.percorsoPersonalizzato.statistiche.totaleIncrociCicloBreve} ciclo breve)
@@ -1168,7 +1168,7 @@ export default function TestResults() {
 
       {/* IL TUO PROFILO PERSONALE (from main) */}
       {attrs && result.percorsoPersonalizzato && (
-        <Card className="mb-8 border-2 border-primary/30 bg-gradient-to-br from-purple-50/50 to-blue-50/50 dark:from-purple-950/20 dark:to-blue-950/20">
+        <Card className="mb-8 border-2 border-[#c9a227]/30 bg-gradient-to-br from-[#f5f0e8]/50 to-[#faf8f5]/50 dark:from-[#16213e]/20 dark:to-[#0f3460]/10">
           <CardHeader>
             <CardTitle className="text-xl font-serif flex items-center gap-2 text-primary">
               <span className="text-2xl">👤</span> Il Tuo Profilo Personale

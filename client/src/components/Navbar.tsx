@@ -46,7 +46,7 @@ export default function Navbar() {
                 href={link.href}
                 className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                   location === link.href
-                    ? "text-primary bg-primary/10"
+                    ? "text-[#c9a227] bg-[#c9a227]/10"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 }`}
                 data-testid={`nav-link-${link.href.replace(/\//g, '-')}`}
@@ -59,7 +59,7 @@ export default function Navbar() {
           {/* CTA + mobile toggle */}
           <div className="flex items-center gap-2">
             <Link href="/test" className="hidden sm:block">
-              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground" data-testid="button-start-test-nav">
+              <Button size="sm" className="bg-[#c9a227] hover:bg-[#d4a843] text-[#1a1a2e] font-semibold" data-testid="button-start-test-nav">
                 Inizia il Test
               </Button>
             </Link>
@@ -83,7 +83,7 @@ export default function Navbar() {
                 href={link.href}
                 className={`block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                   location === link.href
-                    ? "text-primary bg-primary/10"
+                    ? "text-[#c9a227] bg-[#c9a227]/10"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 }`}
                 onClick={() => setMobileOpen(false)}
@@ -93,7 +93,7 @@ export default function Navbar() {
               </Link>
             ))}
             <Link href="/test" onClick={() => setMobileOpen(false)}>
-              <Button className="w-full mt-2 bg-primary hover:bg-primary/90" data-testid="button-start-test-mobile">
+              <Button className="w-full mt-2 bg-[#c9a227] hover:bg-[#d4a843] text-[#1a1a2e] font-semibold" data-testid="button-start-test-mobile">
                 Inizia il Test
               </Button>
             </Link>

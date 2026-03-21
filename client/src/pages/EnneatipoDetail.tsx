@@ -349,7 +349,7 @@ export default function EnneatipoDetail() {
               <div className="grid sm:grid-cols-3 gap-6">
                 <div>
                   <h4 className="font-semibold text-sm mb-2 flex items-center gap-1.5">
-                    <Gem className="w-4 h-4 text-purple-500" /> Pietre Curative
+                    <Gem className="w-4 h-4 text-[#c9a227]" /> Pietre Curative
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {data.pietre_curative?.map((p: string) => (

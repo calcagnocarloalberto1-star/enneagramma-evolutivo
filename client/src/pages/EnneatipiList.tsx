@@ -12,8 +12,8 @@ const typeColors: Record<number, string> = {
   1: "from-red-500 to-red-600",
   2: "from-orange-500 to-amber-600",
   3: "from-yellow-500 to-yellow-600",
-  4: "from-blue-500 to-indigo-600",
-  5: "from-indigo-500 to-purple-600",
+  4: "from-blue-500 to-[#0f3460]",
+  5: "from-[#16213e] to-[#0f3460]",
   6: "from-teal-500 to-cyan-600",
   7: "from-amber-400 to-orange-500",
   8: "from-rose-500 to-red-600",
@@ -47,7 +47,7 @@ export default function EnneatipiList() {
           {enneatipi?.map((t) => (
             <Link key={t.numero} href={`/enneatipi/${t.numero}`}>
               <Card className="group cursor-pointer hover:shadow-lg transition-all h-full overflow-hidden" data-testid={`card-enneatipo-${t.numero}`}>
-                <div className={`h-2 bg-gradient-to-r ${typeColors[t.numero] || "from-purple-500 to-indigo-500"}`} />
+                <div className={`h-2 bg-gradient-to-r ${typeColors[t.numero] || "from-[#16213e] to-[#0f3460]"}`} />
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between">
                     <div>

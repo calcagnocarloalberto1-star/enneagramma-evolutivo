@@ -11,8 +11,8 @@ const features = [
     desc: "Scopri il tuo enneatipo attraverso il test dei 9 Frutti dell'Albero della Vita",
     icon: Sparkles,
     href: "/test",
-    color: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
-    borderColor: "border-purple-200 dark:border-purple-800",
+    color: "bg-[#c9a227]/10 text-[#c9a227] dark:text-[#d4a843]",
+    borderColor: "border-[#c9a227]/20 dark:border-[#c9a227]/30",
   },
   {
     title: "Compatibilità di Coppia",
@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-700 via-purple-600 to-indigo-700 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] text-[#f0e6d3]">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%),
@@ -57,22 +57,22 @@ export default function Home() {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-6" data-testid="text-hero-title">
                 Enneagramma Evolutivo
               </h1>
-              <p className="text-xl md:text-2xl font-serif text-white/90 mb-4" data-testid="text-hero-subtitle">
+              <p className="text-xl md:text-2xl font-serif text-[#f0e6d3]/90 mb-4" data-testid="text-hero-subtitle">
                 I 9 frutti del tuo cammino interiore
               </p>
-              <p className="text-base text-white/75 mb-8 max-w-lg leading-relaxed">
+              <p className="text-base text-[#f0e6d3]/75 mb-8 max-w-lg leading-relaxed">
                 Scopri il tuo enneatipo attraverso un percorso unico che integra la sapienza di Raimondo Lullo, 
                 le gerarchie angeliche e i simboli dell'Albero della Vita.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/test">
-                  <Button size="lg" className="bg-white text-purple-700 hover:bg-white/90 font-semibold" data-testid="button-hero-test">
+                  <Button size="lg" className="bg-[#f0e6d3] text-[#1a1a2e] hover:bg-[#f0e6d3]/90 font-semibold" data-testid="button-hero-test">
                     Fai il Test Gratuito
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
                 <Link href="/enneatipi">
-                  <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10" data-testid="button-hero-enneatipi">
+                  <Button size="lg" variant="outline" className="border-[#f0e6d3]/40 text-[#f0e6d3] hover:bg-[#f0e6d3]/10" data-testid="button-hero-enneatipi">
                     Scopri i 9 Enneatipi
                   </Button>
                 </Link>
@@ -151,7 +151,7 @@ export default function Home() {
       </section>
 
       {/* 9 Fruits Preview */}
-      <section className="bg-gradient-to-b from-purple-50 to-white dark:from-purple-950/20 dark:to-background py-20">
+      <section className="bg-gradient-to-b from-[#f5f0e8] to-white dark:from-[#16213e]/20 dark:to-background py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">I 9 Frutti dell'Albero della Vita</h2>
@@ -185,15 +185,15 @@ export default function Home() {
 
       {/* CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-white text-center">
+        <div className="bg-gradient-to-r from-[#1a1a2e] to-[#0f3460] rounded-2xl p-8 md:p-12 text-[#f0e6d3] text-center">
           <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4" data-testid="text-cta-title">
             Inizia il Tuo Viaggio
           </h2>
-          <p className="text-lg text-white/80 mb-6 max-w-xl mx-auto">
+          <p className="text-lg text-[#f0e6d3]/80 mb-6 max-w-xl mx-auto">
             Completa il test dei 9 Frutti e scopri il tuo enneatipo, la tua ala e il tuo percorso evolutivo personalizzato.
           </p>
           <Link href="/test">
-            <Button size="lg" className="bg-white text-purple-700 hover:bg-white/90 font-semibold" data-testid="button-cta-test">
+            <Button size="lg" className="bg-[#c9a227] text-[#1a1a2e] hover:bg-[#d4a843] font-semibold" data-testid="button-cta-test">
               Fai il Test Ora — È Gratuito
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
