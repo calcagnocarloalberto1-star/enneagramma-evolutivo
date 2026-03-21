@@ -1,10 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import { useRoute, Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
-import { ArrowRight, Star, Gem, Music, Brain, Shield, Sparkles, Heart } from "lucide-react";
+import { ArrowRight, Star, Gem, Music, Brain, Shield, Sparkles, Heart, FileText, Download, Loader2 } from "lucide-react";
 
 const fruitNames: Record<number, string> = {
   1: "Mela", 2: "Pera", 3: "Ciliegia", 4: "Nespola",
@@ -742,6 +744,11 @@ export default function TestResults() {
         </Card>
       )}
 
+      {/* Narrative Profile Generation */}
+      {id && (
+        <NarrativeProfileSection testResultId={parseInt(id)} enneatipo={enneatipo} attrs={attrs} eta={result.eta} ala={ala} />
+      )}
+
       {/* Actions */}
       <div className="flex flex-wrap gap-3 justify-center pb-8">
         <Link href="/test">
@@ -759,5 +766,142 @@ export default function TestResults() {
         </Link>
       </div>
     </div>
+  );
+}
+
+// Narrative Profile Component
+function NarrativeProfileSection({ testResultId, enneatipo, attrs, eta, ala }: {
+  testResultId: number; enneatipo: number; attrs: any; eta: number; ala: number | null;
+}) {
+  const [narrative, setNarrative] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const generateMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/profile/generate", { testResultId });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      setNarrative(data.narrative);
+      setIsGenerating(false);
+    },
+    onError: () => {
+      setIsGenerating(false);
+    }
+  });
+
+  const handleGenerate = () => {
+    setIsGenerating(true);
+    generateMutation.mutate();
+  };
+
+  const handleDownloadPDF = () => {
+    if (!narrative) return;
+    // Create a printable HTML and use browser print
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    
+    const typeNames: Record<number, string> = {
+      1: "Il Perfezionista", 2: "L'Altruista", 3: "Il Realizzatore",
+      4: "L'Individualista", 5: "L'Investigatore", 6: "Il Leale",
+      7: "L'Entusiasta", 8: "Il Challenger", 9: "Il Pacificatore"
+    };
+    
+    // Convert markdown-like text to HTML
+    const htmlContent = narrative
+      .replace(/## (.*)/g, '<h2 style="color:#7C3AED;margin-top:24px;margin-bottom:12px;font-family:Georgia,serif;">$1</h2>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '</p><p style="margin-bottom:12px;line-height:1.7;">')
+      .replace(/\n/g, '<br/>');
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html><head>
+        <title>Profilo Enneagramma Evolutivo - Enneatipo ${enneatipo}</title>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap');
+          body { font-family: 'DM Sans', sans-serif; max-width: 800px; margin: 0 auto; padding: 40px; color: #333; line-height: 1.7; }
+          h1 { font-family: 'Cormorant Garamond', serif; color: #7C3AED; text-align: center; font-size: 28px; margin-bottom: 4px; }
+          h2 { font-family: 'Cormorant Garamond', serif; color: #7C3AED; font-size: 20px; border-bottom: 1px solid #E9D5FF; padding-bottom: 6px; }
+          .subtitle { text-align: center; color: #666; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 18px; margin-bottom: 30px; }
+          .header-info { text-align: center; margin-bottom: 30px; }
+          .badge { display: inline-block; background: #F3E8FF; color: #7C3AED; padding: 4px 12px; border-radius: 20px; font-size: 13px; margin: 4px; }
+          p { margin-bottom: 12px; }
+          strong { color: #4C1D95; }
+          .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #E9D5FF; color: #999; font-size: 12px; }
+          @media print { body { padding: 20px; } }
+        </style>
+      </head><body>
+        <h1>\u{1F34E} Enneagramma Evolutivo</h1>
+        <div class="subtitle">Profilo Personalizzato</div>
+        <div class="header-info">
+          <div style="font-size:40px;margin-bottom:8px;">\u{1F34E}</div>
+          <div style="font-size:22px;font-weight:bold;font-family:'Cormorant Garamond',serif;">Enneatipo ${enneatipo}: ${typeNames[enneatipo]}</div>
+          ${ala ? `<span class="badge">Ala ${ala}</span>` : ''}
+          <span class="badge">${eta} anni</span>
+        </div>
+        <p style="margin-bottom:12px;line-height:1.7;">${htmlContent}</p>
+        <div class="footer">
+          Profilo generato da Enneagramma Evolutivo<br/>
+          Sistema basato sugli studi di Raimondo Lullo, Athanasio Kircher e G.I. Gurdjieff<br/>
+          ${new Date().toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+        </div>
+      </body></html>
+    `);
+    printWindow.document.close();
+    setTimeout(() => printWindow.print(), 500);
+  };
+
+  if (!narrative) {
+    return (
+      <Card className="mb-8 border-dashed border-2 border-primary/30">
+        <CardContent className="p-8 text-center">
+          <FileText className="w-12 h-12 text-primary/40 mx-auto mb-4" />
+          <h3 className="text-lg font-serif font-bold mb-2">Genera il Tuo Profilo Narrativo Completo</h3>
+          <p className="text-sm text-muted-foreground mb-4 max-w-lg mx-auto">
+            L'intelligenza artificiale analizzer\u00e0 i tuoi risultati e creer\u00e0 un profilo personalizzato 
+            e dettagliato del tuo percorso evolutivo, nello stile dell'Enneagramma Evolutivo.
+          </p>
+          <Button 
+            onClick={handleGenerate} 
+            disabled={isGenerating}
+            className="bg-primary hover:bg-primary/90"
+            size="lg"
+          >
+            {isGenerating ? (
+              <><Loader2 className="mr-2 w-4 h-4 animate-spin" /> Generazione in corso (30-60 sec)...</>
+            ) : (
+              <><FileText className="mr-2 w-4 h-4" /> Genera Profilo Narrativo</>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="mb-8 border-2 border-primary/20">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-xl font-serif flex items-center gap-2 text-primary">
+          <FileText className="w-5 h-5" /> Il Tuo Profilo Narrativo
+        </CardTitle>
+        <Button variant="outline" size="sm" onClick={handleDownloadPDF}>
+          <Download className="mr-2 w-4 h-4" /> Scarica PDF
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div className="prose prose-sm dark:prose-invert max-w-none" 
+          dangerouslySetInnerHTML={{ 
+            __html: narrative
+              .replace(/## (.*)/g, '<h2 class="text-lg font-serif font-bold text-primary mt-6 mb-3 border-b border-primary/20 pb-1">$1</h2>')
+              .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')
+              .replace(/\*(.*?)\*/g, '<em>$1</em>')
+              .replace(/\n\n/g, '</p><p class="text-sm text-muted-foreground leading-relaxed mb-3">')
+              .replace(/\n/g, '<br/>')
+          }} 
+        />
+      </CardContent>
+    </Card>
   );
 }

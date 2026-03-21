@@ -252,6 +252,38 @@ export async function registerRoutes(
     });
   });
 
+  // POST generate narrative profile
+  app.post("/api/profile/generate", async (req, res) => {
+    try {
+      const { testResultId } = req.body;
+      const result = storage.getTestResult(testResultId);
+      if (!result) {
+        return res.status(404).json({ error: "Risultato non trovato" });
+      }
+      
+      const attrs = attributiEnneatipi.enneatipi[String(result.enneatipo)];
+      const percorsoPersonalizzato = getPercorsoPersonalizzato(result.enneatipo, result.eta);
+      const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === result.enneatipo || String(e.numero) === String(result.enneatipo));
+      
+      const { generateNarrativeProfile } = await import('./profile-generator');
+      const narrative = await generateNarrativeProfile({
+        enneatipo: result.enneatipo,
+        ala: result.ala,
+        eta: result.eta,
+        punteggiFrutti: JSON.parse(result.punteggiFrutti),
+        attrs,
+        percorsoPersonalizzato,
+        educativo: eduInfo,
+        descrizioni: attributiDescrizioni,
+      });
+      
+      res.json({ narrative, testResultId });
+    } catch (err: any) {
+      console.error("[Profile] Error:", err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   // GET couple compatibility
   app.get("/api/compatibility/:type1/:type2", (req, res) => {
     const t1 = parseInt(req.params.type1);
