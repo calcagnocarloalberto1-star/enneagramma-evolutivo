@@ -13,6 +13,8 @@ import {
   getJourney,
   getCurrentPhase,
   getCurrentPhaseIndex,
+  getATForEnneatipo,
+  AT_DISCLAIMER,
   typeNames as journeyTypeNames,
   fruitEmoji as journeyFruitEmoji,
   type Journey,
@@ -770,6 +772,51 @@ export default function TestResults() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Analisi Transazionale Summary */}
+          {(() => {
+            const at = getATForEnneatipo(enneatipo);
+            if (!at) return null;
+            return (
+              <Card className="border-primary/20">
+                <CardContent className="p-5">
+                  <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
+                    <Brain className="w-4 h-4 text-primary" /> Adattamento AT
+                  </h3>
+                  <p className="text-xs text-muted-foreground italic mb-3">{AT_DISCLAIMER}</p>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <Badge className="bg-primary/10 text-primary">{at.nome}</Badge>
+                    <Badge variant="secondary">{at.nomeAlternativo}</Badge>
+                    <Badge variant="outline">{at.tipo}</Badge>
+                  </div>
+                  {/* Le Tre Porte */}
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    <div className="p-2 rounded bg-green-50 dark:bg-green-900/20 text-center">
+                      <div className="text-[10px] font-medium text-green-700 dark:text-green-300 uppercase">Porta Aperta</div>
+                      <div className="font-semibold text-xs">{at.portaAperta}</div>
+                    </div>
+                    <div className="p-2 rounded bg-blue-50 dark:bg-blue-900/20 text-center">
+                      <div className="text-[10px] font-medium text-blue-700 dark:text-blue-300 uppercase">Bersaglio</div>
+                      <div className="font-semibold text-xs">{at.portaBersaglio}</div>
+                    </div>
+                    <div className="p-2 rounded bg-red-50 dark:bg-red-900/20 text-center">
+                      <div className="text-[10px] font-medium text-red-700 dark:text-red-300 uppercase">Trappola</div>
+                      <div className="font-semibold text-xs">{at.portaTrappola}</div>
+                    </div>
+                  </div>
+                  <div className="text-sm space-y-1.5">
+                    <div><span className="text-muted-foreground">Spinta:</span> <span className="font-medium">{at.spinta}</span></div>
+                    <div><span className="text-muted-foreground">Copione:</span> <span className="font-medium">{at.copione}</span> — <span className="text-xs italic">{at.copioneMotto}</span></div>
+                  </div>
+                  <Link href={`/enneatipi/${enneatipo}#analisi-transazionale`}>
+                    <Button variant="link" className="text-xs px-0 mt-2 h-auto">
+                      Vedi profilo AT completo <ArrowRight className="ml-1 w-3 h-3" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            );
+          })()}
 
           {/* Correlations */}
           <Card>

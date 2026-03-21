@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Users, Plus, Trash2, Heart, AlertTriangle, Check, FileText, Download } from "lucide-react";
+import { Users, Plus, Trash2, Heart, AlertTriangle, Check, FileText, Download, Brain, Lightbulb } from "lucide-react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
@@ -12,6 +12,9 @@ import {
   getCurrentPhase,
   findSharedAttributes,
   findDifferentAttributes,
+  getATForEnneatipo,
+  getATInterazione,
+  AT_DISCLAIMER,
   typeNames,
   fruitEmoji,
   type JourneyPhase,
@@ -535,6 +538,72 @@ export default function FamilyCompatibility() {
           </div>
         </div>
       )}
+
+      {/* AT Family Dynamics */}
+      {memberPhases.length >= 2 && (() => {
+        const membersWithAT = memberPhases
+          .map(({ member }) => ({
+            member,
+            at: getATForEnneatipo(parseInt(member.enneatipo)),
+          }))
+          .filter((m): m is { member: FamilyMember; at: NonNullable<ReturnType<typeof getATForEnneatipo>> } => !!m.at);
+        if (membersWithAT.length < 2) return null;
+        return (
+          <div className="space-y-4 mt-8">
+            <h2 className="text-xl font-serif font-bold flex items-center gap-2">
+              <Brain className="w-5 h-5 text-primary" /> Dinamiche degli Adattamenti (AT)
+            </h2>
+            <p className="text-xs text-muted-foreground italic p-2 rounded bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+              {AT_DISCLAIMER}
+            </p>
+            {/* Member AT cards */}
+            <div className="grid sm:grid-cols-2 gap-3">
+              {membersWithAT.map(({ member, at }) => (
+                <Card key={member.id} className="bg-muted/30">
+                  <CardContent className="p-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">{fruitEmoji[parseInt(member.enneatipo)]}</span>
+                      <div>
+                        <div className="font-semibold text-sm">{member.nome}</div>
+                        <div className="text-xs text-muted-foreground">{at.nome} ({at.nomeAlternativo})</div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1 text-center text-xs">
+                      <div className="p-1 rounded bg-green-50 dark:bg-green-900/20"><div className="font-medium text-green-700 dark:text-green-300">{at.portaAperta}</div></div>
+                      <div className="p-1 rounded bg-blue-50 dark:bg-blue-900/20"><div className="font-medium text-blue-700 dark:text-blue-300">{at.portaBersaglio}</div></div>
+                      <div className="p-1 rounded bg-red-50 dark:bg-red-900/20"><div className="font-medium text-red-700 dark:text-red-300">{at.portaTrappola}</div></div>
+                    </div>
+                    <div className="mt-1.5 text-xs text-muted-foreground">Spinta: <span className="font-medium">{at.spinta}</span> — Sequenza: <span className="font-medium">{at.sequenzaPorte}</span></div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            {/* Pairwise AT interactions */}
+            <div className="space-y-3">
+              {membersWithAT.flatMap((m1, i) =>
+                membersWithAT.slice(i + 1).map((m2) => {
+                  const inter = getATInterazione(parseInt(m1.member.enneatipo), parseInt(m2.member.enneatipo));
+                  if (!inter) return null;
+                  return (
+                    <div key={`${m1.member.id}-${m2.member.id}`} className={`p-3 rounded-lg border text-sm ${
+                      inter.tipo === "attrazione" ? "border-rose-200 dark:border-rose-800 bg-rose-50/50 dark:bg-rose-900/10" :
+                      inter.tipo === "problematica" ? "border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/10" :
+                      "border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10"
+                    }`}>
+                      <div className="font-semibold text-xs mb-1">{m1.member.nome} + {m2.member.nome}</div>
+                      <p className="text-xs text-muted-foreground mb-1.5">{inter.descrizione}</p>
+                      <div className="flex items-start gap-1.5">
+                        <Lightbulb className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                        <p className="text-xs text-muted-foreground">{inter.consiglio}</p>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Summary Comment + PDF Download */}
       {memberPhases.length >= 2 && pairs.length > 0 && (() => {

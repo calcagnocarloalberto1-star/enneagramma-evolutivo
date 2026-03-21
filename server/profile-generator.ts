@@ -25,6 +25,25 @@ const fruitNames: Record<number, string> = {
   5: "Uva", 6: "Mirtillo", 7: "Ananas", 8: "Albicocca", 9: "Fragola"
 };
 
+// AT adaptation data for Gemini prompt enrichment
+const atAdaptations: Record<number, {
+  nome: string; nomeAlternativo: string; tipo: string;
+  portaAperta: string; portaBersaglio: string; portaTrappola: string;
+  spinta: string; copione: string; copioneMotto: string;
+  dilemma: string; ingiunzioni: string; obiettiviCrescita: string;
+  statoIo: string;
+}> = {
+  1: { nome: "Ossessivo-compulsivo", nomeAlternativo: "Responsabile-stakanovista", tipo: "Performance", portaAperta: "Pensiero", portaBersaglio: "Emozioni", portaTrappola: "Comportamento", spinta: "Sii perfetto", copione: "Finché", copioneMotto: "Non mi posso divertire finché non ho fatto il mio lavoro", dilemma: "Posso essere libero se non perdo la testa e non mi arrendo completamente all'amore", ingiunzioni: "Non essere un bambino, non sentire, non essere intimo, non divertirti", obiettiviCrescita: "Accettare di essere sufficientemente buono; stare bene anche senza fare nulla", statoIo: "Adulto contaminato dal Genitore" },
+  2: { nome: "Istrionico", nomeAlternativo: "Entusiasta-iperreattivo", tipo: "Performance", portaAperta: "Emozioni", portaBersaglio: "Pensiero", portaTrappola: "Comportamento", spinta: "Compiaci", copione: "Dopo", copioneMotto: "Posso divertirmi oggi, ma dovrò pagarlo domani", dilemma: "Se sono indipendente devo rinunciare al calore e al supporto", ingiunzioni: "Non crescere, non pensare, non essere importante, non essere te stesso", obiettiviCrescita: "Sono amato anche senza stare al centro dell'attenzione; so pensare e agire", statoIo: "Adulto contaminato dal Bambino" },
+  3: { nome: "Istrionico (performance)", nomeAlternativo: "Realizzatore performante", tipo: "Performance", portaAperta: "Emozioni", portaBersaglio: "Pensiero", portaTrappola: "Comportamento", spinta: "Compiaci/Sii perfetto", copione: "Dopo", copioneMotto: "Valgo quanto produco", dilemma: "Se smetto di fare, perdo il mio valore", ingiunzioni: "Non essere te stesso, non sentire", obiettiviCrescita: "Riconoscere il proprio valore indipendentemente dai risultati", statoIo: "Adulto contaminato dal Bambino" },
+  4: { nome: "Borderline (adattamento anomalo)", nomeAlternativo: "Emotivo profondo", tipo: "Anomalo", portaAperta: "-", portaBersaglio: "-", portaTrappola: "-", spinta: "-", copione: "-", copioneMotto: "-", dilemma: "Ha perso molto del vero sé nell'infanzia", ingiunzioni: "-", obiettiviCrescita: "Recuperare il contatto con il vero sé", statoIo: "Frammentazione degli stati dell'Io" },
+  5: { nome: "Schizoide", nomeAlternativo: "Creativo-sognatore", tipo: "Sopravvivenza", portaAperta: "Comportamento", portaBersaglio: "Pensiero", portaTrappola: "Emozioni", spinta: "Sii forte", copione: "Mai", copioneMotto: "Non posso avere mai quello che più desidero", dilemma: "Posso esistere sino a che non chiedo troppo", ingiunzioni: "Non farlo, non appartenere, non sentire, non divertirti", obiettiviCrescita: "Prendersi cura di sé; avere diritto a uno spazio nel mondo; avvicinarsi agli altri", statoIo: "Doppia contaminazione dell'Adulto" },
+  6: { nome: "Paranoide", nomeAlternativo: "Brillante-scettico", tipo: "Sopravvivenza", portaAperta: "Pensiero", portaBersaglio: "Emozioni", portaTrappola: "Comportamento", spinta: "Sii perfetto + Sii forte", copione: "Mai + Finché", copioneMotto: "Non posso avere mai quello che più desidero", dilemma: "Posso essere libero se non perdo la testa e non mi arrendo all'amore", ingiunzioni: "Non essere un bambino, non fidarti, non sentire, non appartenere", obiettiviCrescita: "Imparare a confrontarsi; verificare le proprie percezioni con gli altri", statoIo: "Adulto contaminato dal Genitore; Bambino escluso" },
+  7: { nome: "Narcisista (adattamento anomalo)", nomeAlternativo: "Entusiasta visionario", tipo: "Anomalo", portaAperta: "-", portaBersaglio: "-", portaTrappola: "-", spinta: "-", copione: "-", copioneMotto: "-", dilemma: "Ha perso molto del vero sé nell'infanzia", ingiunzioni: "-", obiettiviCrescita: "Recuperare il contatto con il vero sé e con i limiti della realtà", statoIo: "Frammentazione degli stati dell'Io" },
+  8: { nome: "Antisociale", nomeAlternativo: "Affascinante-manipolatore", tipo: "Sopravvivenza", portaAperta: "Comportamento", portaBersaglio: "Emozioni", portaTrappola: "Pensiero", spinta: "Sii forte + Compiaci", copione: "Mai", copioneMotto: "Non posso avere mai quello che più desidero", dilemma: "Posso esserti vicino se mi cedi la tua libertà", ingiunzioni: "Non essere intimo, non sentire tristezza/paura, non pensare a lungo termine", obiettiviCrescita: "Diventare disponibili per gli altri; non c'è bisogno di fingere", statoIo: "Genitore escluso; Adulto contaminato dal Bambino" },
+  9: { nome: "Passivo-aggressivo", nomeAlternativo: "Scherzoso-oppositivo", tipo: "Performance", portaAperta: "Comportamento", portaBersaglio: "Emozioni", portaTrappola: "Pensiero", spinta: "Sforzati", copione: "Sempre", copioneMotto: "L'hai voluta la bicicletta e ora pedala", dilemma: "Se faccio quel che voglio perdo il tuo amore", ingiunzioni: "Non crescere, non sentire, non farlo, non essere intimo", obiettiviCrescita: "Non si deve sempre combattere; imparare a chiedere; sentirsi liberi e OK", statoIo: "Doppia contaminazione dell'Adulto" },
+};
+
 export async function generateNarrativeProfile(input: ProfileInput): Promise<string> {
   if (!GEMINI_API_KEY) {
     return generateStaticProfile(input);
@@ -85,6 +104,24 @@ ${educativo?.motivazione ? `Motivazione: ${educativo.motivazione}` : ""}
 ${educativo?.paura ? `Paura: ${educativo.paura}` : ""}
 ${personalNotes ? `\nNOTE PERSONALI DELL'UTENTE:\nL'utente ha condiviso queste riflessioni prima del test: "${personalNotes}"\nIntegra queste informazioni nel profilo, facendo riferimento a ciò che ha condiviso.` : ''}
 
+ADATTAMENTO DI PERSONALITÀ (Analisi Transazionale):
+${(() => {
+  const at = atAdaptations[enneatipo];
+  if (!at) return "Dati non disponibili per questo enneatipo.";
+  return `- Adattamento: ${at.nome} (${at.nomeAlternativo})
+- Tipo: Adattamento di ${at.tipo.toLowerCase()}
+- Porta aperta: ${at.portaAperta} (area di contatto iniziale)
+- Porta bersaglio: ${at.portaBersaglio} (area di cambiamento)
+- Porta trappola: ${at.portaTrappola} (area difensiva)
+- Spinta (driver): ${at.spinta}
+- Copione: ${at.copione} — "${at.copioneMotto}"
+- Dilemma: ${at.dilemma}
+- Ingiunzioni: ${at.ingiunzioni}
+- Obiettivi di crescita: ${at.obiettiviCrescita}
+- Stato dell'Io: ${at.statoIo}
+NOTA: La terminologia degli adattamenti serve unicamente a facilitare il riconoscimento degli stili di personalità. Non si tratta di diagnosi cliniche.`;
+})()}
+
 PERCORSO DI INTEGRAZIONE (crescita):
 ${intText}
 
@@ -104,7 +141,9 @@ Scrivi un profilo narrativo completo di circa 2000-3000 parole, organizzato cos�
 
 5. "IL PERCORSO D'OMBRA" - Descrivi il percorso di disintegrazione come la versione ombra di ogni fase. Cosa succede sotto stress? Quali sono le trappole per ogni periodo?
 
-6. "DOVE TI TROVI ORA E IL TUO CAMMINO" - Sintesi della posizione attuale a ${eta} anni. Che cosa sta imparando in questa fase? Quali sono le sfide? Consigli pratici e spirituali.
+6. "IL TUO ADATTAMENTO DI PERSONALITÀ" - Basandoti sui dati dell'Analisi Transazionale, descrivi narrativamente l'adattamento della persona: come si è formato nell'infanzia, quali sono le tre porte (aperta, bersaglio, trappola) e cosa significano nella vita quotidiana, la spinta (driver) che lo muove, il copione di vita con il suo motto, il dilemma esistenziale. Concludi con gli obiettivi di crescita in chiave AT. Usa un tono rispettoso e non clinico. Ricorda: la terminologia degli adattamenti serve unicamente a facilitare il riconoscimento degli stili di personalità, non si tratta di diagnosi cliniche.
+
+7. "DOVE TI TROVI ORA E IL TUO CAMMINO" - Sintesi della posizione attuale a ${eta} anni. Che cosa sta imparando in questa fase? Quali sono le sfide? Consigli pratici e spirituali integrando anche le indicazioni dell'Analisi Transazionale.
 
 TONO: Diretto, empatico, profondo. Usa "tu" per rivolgerti alla persona. Evita genericità. Ogni frase deve sembrare scritta per questa persona specifica. Usa metafore tratte dal mondo della persona (il frutto dell'albero della vita, gli angeli, le muse). NON usare elenchi puntati: scrivi in paragrafi narrativi fluidi.`;
 
@@ -165,6 +204,20 @@ function generateStaticProfile(input: ProfileInput): string {
       profile += `**${fase} anni — "${info.nome}"** (Punto ${info.punto})${isActive ? " ← *Fase attuale*" : ""}\n`;
       profile += `${info.desc}\n\n`;
     }
+  }
+
+  // AT section
+  const at = atAdaptations[enneatipo];
+  if (at && at.portaAperta !== "-") {
+    profile += `## Il tuo adattamento di personalità\n\n`;
+    profile += `Secondo l'Analisi Transazionale, il tuo adattamento è **${at.nome}** (*${at.nomeAlternativo}*), un adattamento di ${at.tipo.toLowerCase()}. `;
+    profile += `La tua **porta aperta** è il **${at.portaAperta.toLowerCase()}** — è l'area attraverso cui le persone possono raggiungerti più facilmente. `;
+    profile += `La **porta bersaglio** è il **${at.portaBersaglio.toLowerCase()}** — l'area su cui lavorare per crescere. `;
+    profile += `La **porta trappola** è il **${at.portaTrappola.toLowerCase()}** — l'area dove concentri più difese.\n\n`;
+    profile += `La tua spinta è *"${at.spinta}"* e il tuo copione di vita è *"${at.copione}"*: «${at.copioneMotto}».\n`;
+    profile += `Il tuo dilemma esistenziale: *${at.dilemma}*.\n\n`;
+    profile += `I tuoi obiettivi di crescita: ${at.obiettiviCrescita}.\n\n`;
+    profile += `*La terminologia degli adattamenti serve unicamente a facilitare il riconoscimento degli stili di personalità. Non si tratta di diagnosi cliniche.*\n\n`;
   }
 
   profile += `## Dove ti trovi ora\n\n`;

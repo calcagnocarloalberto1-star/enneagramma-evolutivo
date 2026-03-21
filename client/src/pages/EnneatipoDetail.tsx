@@ -9,7 +9,9 @@ import {
   Eye, Users, MessageCircle, Briefcase, HeartHandshake, TrendingUp,
   HelpCircle, Lightbulb, Moon, AlertTriangle, ArrowUpRight, ArrowDownRight,
 } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { enneatypesDetailed, type EnneatipoDetailed } from "@/data/enneatypes-detailed";
+import { getATForEnneatipo, enneatipoATMapping, AT_DISCLAIMER } from "@/data/percorsi-eta";
 
 const fruitNames: Record<number, string> = {
   1: "Mela", 2: "Pera", 3: "Ciliegia", 4: "Nespola",
@@ -138,6 +140,7 @@ export default function EnneatipoDetail() {
           { id: "lavoro", label: "Lavoro" },
           { id: "coppia", label: "Coppia" },
           { id: "evoluzione", label: "Evoluzione" },
+          { id: "analisi-transazionale", label: "Analisi Transazionale" },
           { id: "astrologia", label: "Astrologia" },
           { id: "idee-sacre", label: "Idee Sacre" },
         ].map(({ id: sectionId, label }) => (
@@ -378,6 +381,130 @@ export default function EnneatipoDetail() {
               </div>
             </Section>
           )}
+
+          {/* Analisi Transazionale */}
+          {(() => {
+            const at = getATForEnneatipo(num);
+            const mapping = enneatipoATMapping[num];
+            if (!at) return null;
+            return (
+              <Section title="Adattamento di Personalità (Analisi Transazionale)" icon={<Brain className="w-5 h-5 text-primary" />} id="analisi-transazionale">
+                <p className="text-xs text-muted-foreground italic mb-4 p-2 rounded bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+                  {AT_DISCLAIMER}
+                </p>
+
+                {/* Header */}
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <Badge className="bg-primary/10 text-primary">{at.nome}</Badge>
+                  <Badge variant="secondary">{at.nomeAlternativo}</Badge>
+                  <Badge variant="outline">{at.tipo}</Badge>
+                  <Badge variant="outline">{at.eysenck}</Badge>
+                  {mapping?.adattamentoSecondario && (
+                    <Badge variant="secondary">+ {mapping.adattamentoSecondario}</Badge>
+                  )}
+                </div>
+
+                <p className="text-sm text-muted-foreground mb-4">{at.descrizione}</p>
+
+                {/* Le Tre Porte */}
+                <div className="grid sm:grid-cols-3 gap-3 mb-4">
+                  <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-center">
+                    <div className="text-xs font-medium text-green-700 dark:text-green-300 uppercase tracking-wider mb-1">Porta Aperta</div>
+                    <div className="font-semibold text-sm">{at.portaAperta}</div>
+                    <div className="text-xs text-muted-foreground mt-1">Area di contatto iniziale</div>
+                  </div>
+                  <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-center">
+                    <div className="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wider mb-1">Porta Bersaglio</div>
+                    <div className="font-semibold text-sm">{at.portaBersaglio}</div>
+                    <div className="text-xs text-muted-foreground mt-1">Area di cambiamento</div>
+                  </div>
+                  <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-center">
+                    <div className="text-xs font-medium text-red-700 dark:text-red-300 uppercase tracking-wider mb-1">Porta Trappola</div>
+                    <div className="font-semibold text-sm">{at.portaTrappola}</div>
+                    <div className="text-xs text-muted-foreground mt-1">Area difensiva</div>
+                  </div>
+                </div>
+
+                <Accordion type="multiple" className="w-full">
+                  {/* Spinta e Copione */}
+                  <AccordionItem value="spinta-copione">
+                    <AccordionTrigger className="text-sm font-medium">Spinta, Copione e Dilemma</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-3 text-sm">
+                        <div><span className="font-medium text-foreground">Spinta (Driver):</span> <span className="text-muted-foreground">{at.spinta}</span></div>
+                        <div>
+                          <span className="font-medium text-foreground">Copione:</span> <span className="text-muted-foreground">{at.copione}</span>
+                          <p className="text-xs text-muted-foreground italic mt-1">«{at.copioneMotto}»</p>
+                          <p className="text-xs text-muted-foreground mt-1">{at.copioneDescrizione}</p>
+                        </div>
+                        <div><span className="font-medium text-foreground">Dilemma:</span> <span className="text-muted-foreground italic">{at.dilemma}</span></div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Ingiunzioni */}
+                  <AccordionItem value="ingiunzioni">
+                    <AccordionTrigger className="text-sm font-medium">Ingiunzioni</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex flex-wrap gap-1.5">
+                        {at.ingiunzioni.map((ing, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">{ing}</Badge>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Stile sociale e comunicazione */}
+                  <AccordionItem value="stile">
+                    <AccordionTrigger className="text-sm font-medium">Stile Sociale e Comunicazione</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-3 text-sm">
+                        <div><span className="font-medium text-foreground">Stile sociale:</span> <span className="text-muted-foreground">{at.stileSociale}</span></div>
+                        <div><span className="font-medium text-foreground">Comunicazione:</span> <span className="text-muted-foreground">{at.stileComunicazione}</span></div>
+                        <div><span className="font-medium text-foreground">Come creare rapport:</span> <span className="text-muted-foreground">{at.rapport}</span></div>
+                        <div><span className="font-medium text-foreground">Struttura del tempo preferita:</span> <span className="text-muted-foreground">{at.strutturaTempoPreferita}</span></div>
+                        <div><span className="font-medium text-foreground">Struttura del tempo evitata:</span> <span className="text-muted-foreground">{at.strutturaTempoEvitata}</span></div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Comportamento */}
+                  <AccordionItem value="comportamento">
+                    <AccordionTrigger className="text-sm font-medium">Reazione e Comportamento</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-3 text-sm">
+                        <div><span className="font-medium text-foreground">Di fronte a una minaccia:</span> <span className="text-muted-foreground">{at.diFronteAMinaccia}</span></div>
+                        <div><span className="font-medium text-foreground">Andatura:</span> <span className="text-muted-foreground">{at.andatura}</span></div>
+                        <div><span className="font-medium text-foreground">Gioco psicologico preferito:</span> <span className="text-muted-foreground">{at.giocoPsicologico}</span></div>
+                        <div><span className="font-medium text-foreground">Domanda di conferma:</span> <span className="text-muted-foreground italic">{at.domandaConferma}</span></div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Stato dell'Io e Terapia */}
+                  <AccordionItem value="terapia">
+                    <AccordionTrigger className="text-sm font-medium">Stato dell'Io e Obiettivi di Crescita</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-3 text-sm">
+                        <div><span className="font-medium text-foreground">Stato dell'Io:</span> <span className="text-muted-foreground">{at.statoIo}</span></div>
+                        <div><span className="font-medium text-foreground">Contaminazione:</span> <span className="text-muted-foreground">{at.contaminazioneAdulto}</span></div>
+                        <div>
+                          <span className="font-medium text-foreground">Obiettivi di crescita:</span>
+                          <ul className="mt-1.5 space-y-1">
+                            {at.obiettiviTerapia.map((obj, i) => (
+                              <li key={i} className="text-muted-foreground flex items-start gap-1.5">
+                                <span className="text-primary mt-0.5">•</span> {obj}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </Section>
+            );
+          })()}
 
           {/* Astrologia */}
           <Section title="Astrologia e Corrispondenze" icon={<Moon className="w-5 h-5 text-primary" />} id="astrologia">

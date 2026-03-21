@@ -15,6 +15,9 @@ import {
   getCurrentPhaseIndex,
   findSharedAttributes,
   findDifferentAttributes,
+  getATForEnneatipo,
+  getATInterazione,
+  AT_DISCLAIMER,
   typeNames,
   fruitEmoji,
   type Journey,
@@ -770,6 +773,81 @@ function BaseCompatibilitySection({ compat, type1, type2, wing1, wing2, percenta
           </p>
         </CardContent>
       </Card>
+
+      {/* AT Dynamics */}
+      {(() => {
+        const t1 = parseInt(type1);
+        const t2 = parseInt(type2);
+        const at1 = getATForEnneatipo(t1);
+        const at2 = getATForEnneatipo(t2);
+        const interazione = getATInterazione(t1, t2);
+        if (!at1 || !at2) return null;
+        return (
+          <Card className="border-primary/20">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-serif flex items-center gap-2">
+                <Heart className="w-4 h-4 text-rose-500" /> Dinamiche degli Adattamenti (AT)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-xs text-muted-foreground italic p-2 rounded bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+                {AT_DISCLAIMER}
+              </p>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="p-3 rounded-lg border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">{fruitEmoji[t1]}</span>
+                    <div>
+                      <div className="font-semibold text-sm">{at1.nome} ({at1.nomeAlternativo})</div>
+                      <div className="text-xs text-muted-foreground">{at1.tipo} — {at1.eysenck}</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1 text-center text-xs">
+                    <div className="p-1 rounded bg-green-50 dark:bg-green-900/20"><div className="font-medium text-green-700 dark:text-green-300">{at1.portaAperta}</div><div className="text-[10px] text-muted-foreground">Aperta</div></div>
+                    <div className="p-1 rounded bg-blue-50 dark:bg-blue-900/20"><div className="font-medium text-blue-700 dark:text-blue-300">{at1.portaBersaglio}</div><div className="text-[10px] text-muted-foreground">Bersaglio</div></div>
+                    <div className="p-1 rounded bg-red-50 dark:bg-red-900/20"><div className="font-medium text-red-700 dark:text-red-300">{at1.portaTrappola}</div><div className="text-[10px] text-muted-foreground">Trappola</div></div>
+                  </div>
+                  <div className="mt-2 text-xs text-muted-foreground">Sequenza porte: <span className="font-medium">{at1.sequenzaPorte}</span></div>
+                </div>
+                <div className="p-3 rounded-lg border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">{fruitEmoji[t2]}</span>
+                    <div>
+                      <div className="font-semibold text-sm">{at2.nome} ({at2.nomeAlternativo})</div>
+                      <div className="text-xs text-muted-foreground">{at2.tipo} — {at2.eysenck}</div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1 text-center text-xs">
+                    <div className="p-1 rounded bg-green-50 dark:bg-green-900/20"><div className="font-medium text-green-700 dark:text-green-300">{at2.portaAperta}</div><div className="text-[10px] text-muted-foreground">Aperta</div></div>
+                    <div className="p-1 rounded bg-blue-50 dark:bg-blue-900/20"><div className="font-medium text-blue-700 dark:text-blue-300">{at2.portaBersaglio}</div><div className="text-[10px] text-muted-foreground">Bersaglio</div></div>
+                    <div className="p-1 rounded bg-red-50 dark:bg-red-900/20"><div className="font-medium text-red-700 dark:text-red-300">{at2.portaTrappola}</div><div className="text-[10px] text-muted-foreground">Trappola</div></div>
+                  </div>
+                  <div className="mt-2 text-xs text-muted-foreground">Sequenza porte: <span className="font-medium">{at2.sequenzaPorte}</span></div>
+                </div>
+              </div>
+              {interazione && (
+                <div className={`p-4 rounded-lg border ${
+                  interazione.tipo === "attrazione" ? "border-rose-200 dark:border-rose-800 bg-rose-50/50 dark:bg-rose-900/10" :
+                  interazione.tipo === "problematica" ? "border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/10" :
+                  "border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10"
+                }`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    {interazione.tipo === "attrazione" && <Heart className="w-4 h-4 text-rose-500" />}
+                    {interazione.tipo === "problematica" && <AlertTriangle className="w-4 h-4 text-amber-500" />}
+                    {interazione.tipo === "amicizia" && <ThumbsUp className="w-4 h-4 text-green-500" />}
+                    <span className="font-semibold text-sm capitalize">{interazione.tipo === "attrazione" ? "Dinamica di attrazione" : interazione.tipo === "problematica" ? "Attenzione: combinazione delicata" : "Buona sintonia"}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-2">{interazione.descrizione}</p>
+                  <div className="flex items-start gap-1.5">
+                    <Lightbulb className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
+                    <p className="text-xs text-muted-foreground">{interazione.consiglio}</p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        );
+      })()}
 
       {/* Summary Comment */}
       {(() => {

@@ -42,7 +42,9 @@ export interface Journey {
 
 export interface ATAdaptation {
   nome: string;
+  nomeAlternativo: string;
   enneatipo: number;
+  enneatipiSecondari?: number[];
   eysenck: string;
   tipo: string;
   descrizione: string;
@@ -50,17 +52,60 @@ export interface ATAdaptation {
   portaAperta: string;
   portaBersaglio: string;
   portaTrappola: string;
+  sequenzaPorte: string;
   spinta: string;
-  ingiunzioni: string;
+  ingiunzioni: string[];
   giocoPsicologico: string;
   copione: string;
+  copioneMotto: string;
+  copioneDescrizione: string;
   dilemma: string;
   andatura: string;
   diFronteAMinaccia: string;
+  domandaConferma: string;
   stileComunicazione: string;
+  rapport: string;
   obiettiviTerapia: string[];
   statoIo: string;
+  contaminazioneAdulto: string;
+  strutturaTempoPreferita: string;
+  strutturaTempoEvitata: string;
 }
+
+// Mapping enneatipo → adattamento principale
+export const enneatipoATMapping: Record<number, { adattamento: string; adattamentoSecondario?: string }> = {
+  1: { adattamento: "Ossessivo-compulsivo" },
+  2: { adattamento: "Istrionico", adattamentoSecondario: "Passivo-aggressivo" },
+  3: { adattamento: "Istrionico" }, // Isteria → simile a Istrionico nella performance
+  4: { adattamento: "Borderline" }, // Adattamento anomalo
+  5: { adattamento: "Schizoide" },
+  6: { adattamento: "Paranoide" },
+  7: { adattamento: "Narcisista" }, // Adattamento anomalo
+  8: { adattamento: "Antisociale", adattamentoSecondario: "Narcisista" },
+  9: { adattamento: "Passivo-aggressivo" },
+};
+
+// Helper: trova l'adattamento AT per un enneatipo
+export function getATForEnneatipo(enneatipo: number): ATAdaptation | undefined {
+  const mapping = enneatipoATMapping[enneatipo];
+  if (!mapping) return undefined;
+  return adattamentiAT.find(a => a.nome === mapping.adattamento)
+    || adattamentiAT.find(a => a.enneatipo === enneatipo);
+}
+
+// Helper: trova tutti gli adattamenti rilevanti per un enneatipo
+export function getATListForEnneatipo(enneatipo: number): ATAdaptation[] {
+  const mapping = enneatipoATMapping[enneatipo];
+  if (!mapping) return [];
+  const primary = adattamentiAT.find(a => a.nome === mapping.adattamento);
+  const secondary = mapping.adattamentoSecondario
+    ? adattamentiAT.find(a => a.nome === mapping.adattamentoSecondario)
+    : undefined;
+  return [primary, secondary].filter(Boolean) as ATAdaptation[];
+}
+
+// Disclaimer AT obbligatorio
+export const AT_DISCLAIMER = "La terminologia degli adattamenti serve unicamente a facilitare il riconoscimento degli stili di personalità. Non si tratta di diagnosi cliniche.";
 
 export interface EtaVita {
   numero: number;
@@ -81,101 +126,136 @@ export const etaVita: EtaVita[] = [
   { numero: 6, eta: "60+", nome: "Senectutes (Vecchiaia)", enneatipo: 0, descrizione: "Integrità opposta a disperazione (Erikson). Riflessione e bilancio sulla vita; disperazione se si pensa a ciò che non si è potuto realizzare." },
 ];
 
-// Adattamenti dell'Analisi Transazionale
+// Adattamenti dell'Analisi Transazionale (dati completi dal Prontuario)
 export const adattamentiAT: ATAdaptation[] = [
   {
     nome: "Istrionico",
+    nomeAlternativo: "Entusiasta-iperreattivo",
     enneatipo: 2,
+    enneatipiSecondari: [3, 7],
     eysenck: "Estroverso",
     tipo: "Adattamento di performance",
-    descrizione: "I genitori enfatizzano il fatto di far felici gli altri; il bambino cerca di mettersi al centro dell'attenzione",
-    stileSociale: "Attivo socievole; attraente per gli altri",
+    descrizione: "I genitori enfatizzano il fatto di far felici gli altri: il bambino cerca di mettersi al centro dell'attenzione e di intrattenere gli altri, ma non cresce nel pensiero. Tende ad equiparare amore e attenzione. È iperreattivo.",
+    stileSociale: "Attivo socievole — è attraente per gli altri («l'anima della festa»)",
     portaAperta: "Emozioni",
     portaBersaglio: "Pensiero",
     portaTrappola: "Comportamento",
-    spinta: "Sono ok se compiaccio gli altri — Compiaci",
-    ingiunzioni: "Non crescere, non pensare, non essere importante, non essere te stesso",
+    sequenzaPorte: "e.p.c.",
+    spinta: "Compiaci",
+    ingiunzioni: ["Non crescere", "Non pensare", "Non essere importante", "Non essere te stesso"],
     giocoPsicologico: "Tutta colpa tua",
     copione: "Dopo",
+    copioneMotto: "Posso divertirmi oggi, ma dovrò pagarlo domani",
+    copioneDescrizione: "Si concede qualcosa di buono, ma poi si punisce con qualcosa di spiacevole. Può essere anche «Quasi tipo I» (inizia un progetto ma poi non riesce a finire) e «Quasi tipo II» (finisce un progetto e ne inizia subito un altro).",
     dilemma: "Se sono indipendente devo rinunciare al calore e al supporto",
     andatura: "Lievemente oscillante o con lieve rimbalzo ad ogni passo",
     diFronteAMinaccia: "Intensifica le emozioni",
-    stileComunicazione: "Affettivo unitamente a emotivo",
+    domandaConferma: "Si impegna a fare in modo che le persone che la circondano siano felici e serene?",
+    stileComunicazione: "Lo stile affettivo unitamente a quello emotivo è indicato per comunicare con l'Istrionico",
+    rapport: "Premura ed essere divertenti",
     obiettiviTerapia: [
       "Sono amato anche se non sto al centro dell'attenzione",
       "Non è vero ciò che sento vero",
       "So agire e so pensare",
     ],
     statoIo: "Adulto contaminato dal Bambino",
+    contaminazioneAdulto: "L'Adulto è contaminato dal Bambino: le emozioni distorcono il pensiero razionale",
+    strutturaTempoPreferita: "Passatempi, giochi e intimità",
+    strutturaTempoEvitata: "Rituali",
   },
   {
     nome: "Ossessivo-compulsivo",
+    nomeAlternativo: "Responsabile-stakanovista",
     enneatipo: 1,
+    enneatipiSecondari: [3],
     eysenck: "Introverso",
     tipo: "Adattamento di performance",
-    descrizione: "Il genitore enfatizza il risultato; il bambino cerca di essere bravo per evitare vergogna e colpa",
-    stileSociale: "Attivo ritirato; introverso nelle relazioni ma prende iniziativa per risolvere problemi",
+    descrizione: "Il genitore enfatizza il risultato: il bambino cerca di essere bravo per evitare di vergognarsi e di sentirsi in colpa. Mantiene la parola data ed è considerato un pilastro sociale. Non sa porre limite alla sua responsabilità.",
+    stileSociale: "Attivo ritirato — introverso nelle relazioni, ma prende iniziativa per risolvere i problemi e per relazionarsi con pochi",
     portaAperta: "Pensiero",
     portaBersaglio: "Emozioni",
     portaTrappola: "Comportamento",
-    spinta: "Sono ok se sono perfetto",
-    ingiunzioni: "Non essere un bambino, non sentire, non essere intimo, non essere importante, non divertirti",
+    sequenzaPorte: "p.e.c.",
+    spinta: "Sii perfetto",
+    ingiunzioni: ["Non essere un bambino", "Non sentire", "Non essere intimo", "Non essere importante", "Non divertirti"],
     giocoPsicologico: "Tutta colpa tua",
-    copione: "Finché + Quasi tipo 2 + Finale aperto",
+    copione: "Finché",
+    copioneMotto: "Non mi posso divertire finché non ho fatto il mio lavoro",
+    copioneDescrizione: "Si trattiene dal provare piacere sino a che qualcosa di spiacevole non è stato completato. Può essere anche «Quasi tipo 2» (finisce un progetto e ne inizia subito un altro, senza darsi tregua) e «Finale aperto» (raggiunge un certo punto nella vita, dopo di che trova il vuoto).",
     dilemma: "Posso essere libero se non perdo la testa e non mi arrendo completamente all'amore",
     andatura: "Tiene sotto controllo i movimenti eccessivi",
     diFronteAMinaccia: "Diventa iper-razionale",
-    stileComunicazione: "Esplorativo e direttivo",
+    domandaConferma: "Fa del suo meglio per essere bravo a fare ogni cosa nel modo giusto?",
+    stileComunicazione: "L'esplorativo e il direttivo sono stili utili per comunicare con questo adattamento",
+    rapport: "Aggancio a livello cognitivo e aiuto a liberare emozioni (premura e gioco)",
     obiettiviTerapia: [
       "Accetto di essere sufficientemente buono anche se non sono perfetto",
       "Devo stare bene anche se non faccio niente",
       "Non devo vivere nella paura che qualcuno mi faccia notare un difetto",
     ],
-    statoIo: "Adulto contaminato dal Genitore",
+    statoIo: "Adulto contaminato dal Genitore (dai pregiudizi)",
+    contaminazioneAdulto: "L'Adulto è contaminato dal Genitore: i pregiudizi e le regole interiorizzate distorcono la percezione della realtà",
+    strutturaTempoPreferita: "Attività, giochi, intimità",
+    strutturaTempoEvitata: "Rituali",
   },
   {
     nome: "Paranoide",
+    nomeAlternativo: "Brillante-scettico",
     enneatipo: 6,
     eysenck: "Introverso",
     tipo: "Adattamento di sopravvivenza",
-    descrizione: "Non sapendo che cosa aspettarsi, vigilerà e controllerà tutta la vita",
-    stileSociale: "A cavallo tra attivo e passivo ritirato",
+    descrizione: "Genitori inconsistenti che reagiscono in modo imprevedibile: non sapendo che cosa aspettarsi, vigilerà e controllerà tutta la vita. Devono recuperare le sicurezze perdute da piccoli. Brillanti pensatori, giuristi, organizzatori, controllori; svalutano a torto.",
+    stileSociale: "A cavallo tra attivo e passivo ritirato — prima di assumere una posizione attiva o passiva si ritira e valuta la situazione",
     portaAperta: "Pensiero",
     portaBersaglio: "Emozioni",
     portaTrappola: "Comportamento",
-    spinta: "Sono ok se sono forte e perfetto",
-    ingiunzioni: "Non essere un bambino, non essere intimo, non fidarti, non sentire, non divertirti, non appartenere",
+    sequenzaPorte: "p.e.c.",
+    spinta: "Sii perfetto + Sii forte",
+    ingiunzioni: ["Non essere un bambino", "Non essere intimo", "Non fidarti", "Non sentire", "Non divertirti", "Non appartenere"],
     giocoPsicologico: "Ti ho beccato figlio di puttana",
     copione: "Mai + Finché",
+    copioneMotto: "Non posso avere mai quello che più desidero",
+    copioneDescrizione: "Non parte e non andrà mai da nessuna parte; si trattiene dal provare piacere sino a che qualcosa di spiacevole non è stato completato. Svaluta la realtà.",
     dilemma: "Posso essere libero se non perdo la testa e non mi arrendo completamente all'amore",
     andatura: "In modo rigido come se avesse un palo d'acciaio nella schiena",
     diFronteAMinaccia: "Attacca con ragionamenti logici molto acuti",
-    stileComunicazione: "Esplorativo insieme a direttivo",
+    domandaConferma: "Prima valuta accuratamente e poi si attiva con decisione per risolvere i problemi?",
+    stileComunicazione: "L'esplorativo insieme allo stile direttivo è opportuno per comunicare col Paranoide",
+    rapport: "Essere razionali e coerenti, dimostrare affidabilità nel tempo",
     obiettiviTerapia: [
       "Anche se non controllo le cose non per questo vanno fuori controllo",
       "Devo imparare a confrontarmi con gli altri",
       "Devo imparare a verificare le mie percezioni con quelle degli altri",
     ],
     statoIo: "Adulto contaminato dal Genitore; Bambino escluso",
+    contaminazioneAdulto: "Lo stato dell'Io Adulto è contaminato dal Genitore ed il Bambino è escluso: prevale la sospettosità e manca la spontaneità",
+    strutturaTempoPreferita: "Rituali, passatempi e giochi",
+    strutturaTempoEvitata: "Intimità",
   },
   {
     nome: "Schizoide",
+    nomeAlternativo: "Creativo-sognatore",
     enneatipo: 5,
     eysenck: "Introverso",
     tipo: "Adattamento di sopravvivenza",
-    descrizione: "Ha genitori esitanti; si impone di non aver bisogno di loro e di farcela da solo",
-    stileSociale: "Passivo ritirato",
+    descrizione: "Ha genitori esitanti su come interagire (si sentono sopraffatti): il bambino cerca di aiutarli, ma se fallisce decide di farcela da solo. Carattere comune a pensatori, artisti e scrittori. È gentile e rispettoso, si perde nei suoi sogni e talvolta non sa agire.",
+    stileSociale: "Passivo ritirato — preferisce non fare e star da solo",
     portaAperta: "Comportamento",
     portaBersaglio: "Pensiero",
     portaTrappola: "Emozioni",
-    spinta: "Sono ok se sono forte e non sento",
-    ingiunzioni: "Non farlo, non appartenere, non essere sano, non sentire, non divertirti, non crescere, non pensare",
+    sequenzaPorte: "c.p.e.",
+    spinta: "Sii forte",
+    ingiunzioni: ["Non farlo", "Non appartenere", "Non essere sano", "Non sentire (gioia, sessualità, rabbia)", "Non divertirti", "Non crescere", "Non pensare"],
     giocoPsicologico: "Tutta colpa tua",
-    copione: "Mai + Sempre",
+    copione: "Mai",
+    copioneMotto: "Non posso avere mai quello che più desidero",
+    copioneDescrizione: "Non parte e non andrà da nessuna parte. Può essere anche «Sempre»: rimane nelle situazioni in cui si trova anche se sono negative.",
     dilemma: "Posso esistere sino a che non chiedo troppo",
     andatura: "Fiacco e poco coordinato nei movimenti",
     diFronteAMinaccia: "Tiene un basso profilo",
-    stileComunicazione: "Direttivo",
+    domandaConferma: "Si tira indietro e aspetta che le cose tornino alla normalità?",
+    stileComunicazione: "Lo stile direttivo è particolarmente congeniale per lo Schizoide",
+    rapport: "Prendere iniziativa ed incoraggiare ad esprimere i pensieri e ad agire",
     obiettiviTerapia: [
       "Devo prendermi cura di me come faccio con tutti gli altri",
       "Ho diritto come tutti ad avere uno spazio nel mondo",
@@ -183,50 +263,69 @@ export const adattamentiAT: ATAdaptation[] = [
       "Posso avvicinarmi agli altri senza rinunciare a me stesso",
     ],
     statoIo: "Doppia contaminazione dell'Adulto (Bambino e Genitore)",
+    contaminazioneAdulto: "Si assiste ad una doppia contaminazione dell'Adulto ad opera del Bambino e del Genitore: paure infantili e regole rigide offuscano la razionalità",
+    strutturaTempoPreferita: "Isolamento, attività, intimità",
+    strutturaTempoEvitata: "Giochi e passatempi",
   },
   {
     nome: "Passivo-aggressivo",
+    nomeAlternativo: "Scherzoso-oppositivo",
     enneatipo: 9,
+    enneatipiSecondari: [2],
     eysenck: "Estroverso",
     tipo: "Adattamento di performance",
-    descrizione: "Genitori ipercontrollanti; reazione: se non posso ottenere ciò che voglio posso impedire che lo ottieni tu",
-    stileSociale: "Passivo socievole; ama appartenere al gruppo ma passivo davanti al problema",
+    descrizione: "Genitori ipercontrollanti che dicono «Devi fare le cose come dico io!»: la vita diventa una lotta. I bambini divengono tenaci e se non raggiungono lo scopo cercano di impedire agli altri di raggiungerlo. Combatte il controllo anche quando nessuno tenta di controllarlo.",
+    stileSociale: "Passivo socievole — ama appartenere al gruppo ma è passivo davanti al problema",
     portaAperta: "Comportamento",
     portaBersaglio: "Emozioni",
     portaTrappola: "Pensiero",
-    spinta: "Sei ok se ti sforzi, ma non devi riuscire",
-    ingiunzioni: "Non crescere, non sentire, non farlo, non essere intimo, non divertirti",
-    giocoPsicologico: "Perché non... sì ma",
-    copione: "Sempre + Quasi tipo 2",
+    sequenzaPorte: "c.e.p.",
+    spinta: "Sforzati",
+    ingiunzioni: ["Non crescere", "Non sentire", "Non farlo", "Non essere intimo", "Non divertirti"],
+    giocoPsicologico: "Perché non… sì ma",
+    copione: "Sempre",
+    copioneMotto: "L'hai voluta la bicicletta e ora pedala",
+    copioneDescrizione: "Rimane nelle situazioni in cui si trova anche se negative. Può essere anche «Quasi tipo 2»: finisce un progetto e ne continua subito un altro senza darsi tregua.",
     dilemma: "Se faccio quel che voglio perdo il tuo amore. Per avere il tuo amore devo rinunciare a me stesso",
     andatura: "A scatti",
     diFronteAMinaccia: "Si lamenta, protesta, oppone resistenza",
-    stileComunicazione: "Emotivo (ironia e battute)",
+    domandaConferma: "Contrasta costantemente le aspettative degli altri per fare le cose alla sua maniera?",
+    stileComunicazione: "Stile emotivo che si può tradurre in ironia e nel fare battute",
+    rapport: "Essere scherzosi, favorire l'emozione e chiedere quel che vuole. Non farlo pensare.",
     obiettiviTerapia: [
       "Non si deve sempre combattere per sopravvivere",
       "Devo imparare a chiedere: gli altri mi daranno; posso essere cooperativo",
       "Devo sperimentare la libertà di sentirmi diverso e sentirmi OK",
     ],
     statoIo: "Doppia contaminazione dell'Adulto (Bambino e Genitore)",
+    contaminazioneAdulto: "Si assiste ad una doppia contaminazione dell'Adulto ad opera del Bambino e del Genitore: resistenza passiva e regole rigide si sovrappongono",
+    strutturaTempoPreferita: "Passatempi e giochi",
+    strutturaTempoEvitata: "Rituali, attività e intimità",
   },
   {
     nome: "Antisociale",
+    nomeAlternativo: "Affascinante-manipolatore",
     enneatipo: 8,
     eysenck: "Estroverso",
     tipo: "Adattamento di sopravvivenza",
-    descrizione: "Ha subito atteggiamento anticipatorio dei genitori; sono ok se sono più furbo degli altri",
-    stileSociale: "Sta in centro; oscilla tra agire/stare con altri e non fare/star da solo",
+    descrizione: "Ha subito un atteggiamento anticipatorio dei genitori (che fanno qualcosa prima che il bambino ne abbia bisogno). Quando sono stanchi il bambino si sente abbandonato; se fallisce nella richiesta di attenzione pretende ciò che gli era stato dato. Aggredisce, intimidisce e seduce (venditore, politico, imprenditore).",
+    stileSociale: "Sta in centro — oscilla tra agire e stare con gli altri e non fare e stare da solo",
     portaAperta: "Comportamento",
     portaBersaglio: "Emozioni",
     portaTrappola: "Pensiero",
-    spinta: "Sono ok se sono più furbo degli altri",
-    ingiunzioni: "Non essere intimo, non sentire, non farlo, non pensare",
+    sequenzaPorte: "c.e.p.",
+    spinta: "Sii forte + Compiaci",
+    ingiunzioni: ["Non essere intimo", "Non sentire (tristezza, paura)", "Non farlo", "Non pensare (alle soluzioni a lungo termine)"],
     giocoPsicologico: "Prova a riscuotere",
-    copione: "Mai (Sempre, Quasi)",
+    copione: "Mai",
+    copioneMotto: "Non posso avere mai quello che più desidero",
+    copioneDescrizione: "Non parte e non andrà da nessuna parte. Può essere anche «Sempre» (rimane nelle situazioni negative) o «Quasi tipo 1» (inizia un progetto ma poi non riesce a finire).",
     dilemma: "Posso esserti vicino se mi cedi la tua libertà e lasci che io ti usi o ti controlli",
     andatura: "Con il bacino in avanti pavoneggiandosi",
     diFronteAMinaccia: "Cerca di intimidire e sedurre per ottenere un vantaggio",
-    stileComunicazione: "Direttivo, emotivo e affettivo a seconda dell'opportunità",
+    domandaConferma: "Prima valuta la situazione e poi prova a sfruttarla in modo da trarne un vantaggio personale?",
+    stileComunicazione: "Il direttivo, l'emotivo e l'affettivo a seconda dell'opportunità",
+    rapport: "Prendere in giro scherzosamente il suo tentativo di raggirare gli altri",
     obiettiviTerapia: [
       "Che cosa realmente vorresti che non puoi ottenere (e quindi inganni)?",
       "Troverai sempre qualcuno: non resterai solo e abbandonato",
@@ -234,8 +333,118 @@ export const adattamentiAT: ATAdaptation[] = [
       "Ora è il momento di diventare disponibili per gli altri e cooperare",
     ],
     statoIo: "Genitore escluso; Adulto contaminato dal Bambino",
+    contaminazioneAdulto: "Il Genitore è escluso e l'Adulto è contaminato dal Bambino: prevale l'impulsività senza il filtro delle norme interiorizzate",
+    strutturaTempoPreferita: "Passatempi e giochi",
+    strutturaTempoEvitata: "Rituali, attività e intimità",
   },
 ];
+
+// Dinamiche di interazione tra adattamenti (dal Prontuario sezione 6.4)
+export interface ATInterazione {
+  tipo: "amicizia" | "attrazione" | "problematica";
+  descrizione: string;
+  consiglio: string;
+}
+
+export function getATInterazione(enneatipo1: number, enneatipo2: number): ATInterazione | null {
+  const a1 = getATForEnneatipo(enneatipo1);
+  const a2 = getATForEnneatipo(enneatipo2);
+  if (!a1 || !a2) return null;
+
+  // Stessa sequenza porte → buoni amici
+  if (a1.sequenzaPorte === a2.sequenzaPorte) {
+    return {
+      tipo: "amicizia",
+      descrizione: `${a1.nome} e ${a2.nome} condividono la stessa sequenza di porte (${a1.sequenzaPorte}): tendono ad andare d'accordo e a scegliersi come amici o colleghi, perché si trovano a proprio agio.`,
+      consiglio: "Valorizzate la naturale sintonia. Attenzione a non rinforzarvi a vicenda le stesse aree cieche.",
+    };
+  }
+
+  // Coppie di attrazione note (porte opposte con adattamento in comune)
+  const attrazioni: Array<{ nomi: [string, string]; desc: string; consiglio: string }> = [
+    {
+      nomi: ["Istrionico", "Ossessivo-compulsivo"],
+      desc: "L'Istrionico (e.p.c.) e l'Ossessivo-compulsivo (p.e.c.) si attraggono: il primo ha bisogno di imparare a pensare e a non iperreagire, il secondo a mettersi in contatto con le proprie emozioni.",
+      consiglio: "La porta bersaglio in comune è il «pensiero»: la relazione migliora quando entrambi imparano a riflettere prima di reagire.",
+    },
+    {
+      nomi: ["Ossessivo-compulsivo", "Passivo-aggressivo"],
+      desc: "L'Ossessivo-compulsivo (p.e.c.) e il Passivo-aggressivo (c.e.p.) si attraggono: il primo è premuroso e il secondo vuole essere accudito.",
+      consiglio: "Porta bersaglio comune «emozioni»: finiranno di litigare quando si metteranno in contatto con le proprie emozioni.",
+    },
+    {
+      nomi: ["Paranoide", "Antisociale"],
+      desc: "Il Paranoide (p.e.c.) cerca l'Antisociale (c.e.p.): il primo vorrebbe più eccitazione e il secondo più controllo.",
+      consiglio: "Porta bersaglio comune «emozioni»: la relazione migliora quando entrambi accedono alle proprie emozioni autentiche.",
+    },
+    {
+      nomi: ["Istrionico", "Schizoide"],
+      desc: "L'Istrionico (e.p.c.) e lo Schizoide (c.p.e.) si attraggono: il primo dà energia ed il secondo tende a calmare.",
+      consiglio: "Porta bersaglio comune «pensiero»: la relazione migliora quando iniziano a riflettere insieme, privilegiando il dialogo razionale.",
+    },
+  ];
+
+  // Coppie problematiche note
+  const problematiche: Array<{ nomi: [string, string]; desc: string; consiglio: string }> = [
+    {
+      nomi: ["Paranoide", "Istrionico"],
+      desc: "Uomo Paranoide e donna Istrionica: il primo è geloso e tenderà ad equivocare l'atteggiamento seduttivo della seconda, andando in collera. Questa combinazione può generare dinamiche molto conflittuali.",
+      consiglio: "È fondamentale che il Paranoide impari a verificare le proprie percezioni e che l'Istrionico chiarisca le proprie intenzioni.",
+    },
+    {
+      nomi: ["Antisociale", "Paranoide"],
+      desc: "Antisociale e Paranoide: il primo si lamenta di quanto il secondo lo controlli, e il secondo si lamenta di quanto il primo sia inaffidabile.",
+      consiglio: "Lavorare sulla fiducia reciproca e accettare che il controllo non porta sicurezza.",
+    },
+    {
+      nomi: ["Antisociale", "Schizoide"],
+      desc: "Antisociale e Schizoide: lo Schizoide crede di ottenere attenzioni compiacendo l'altro, ma l'Antisociale lo usa soltanto.",
+      consiglio: "Lo Schizoide deve imparare a riconoscere i propri bisogni e a stabilire confini chiari.",
+    },
+    {
+      nomi: ["Ossessivo-compulsivo", "Passivo-aggressivo"],
+      desc: "Ossessivo-compulsivo e Passivo-aggressivo: il primo cercherà di essere perfetto e il secondo noterà sempre che ci sono dei difetti.",
+      consiglio: "Entrambi devono lavorare sulle emozioni: l'Ossessivo-compulsivo su quelle proprie, il Passivo-aggressivo sull'esprimerle direttamente.",
+    },
+  ];
+
+  // Cerca match nelle attrazioni
+  for (const attr of attrazioni) {
+    if ((a1.nome === attr.nomi[0] && a2.nome === attr.nomi[1]) ||
+        (a1.nome === attr.nomi[1] && a2.nome === attr.nomi[0])) {
+      return { tipo: "attrazione", descrizione: attr.desc, consiglio: attr.consiglio };
+    }
+  }
+
+  // Cerca match nelle problematiche
+  for (const prob of problematiche) {
+    if ((a1.nome === prob.nomi[0] && a2.nome === prob.nomi[1]) ||
+        (a1.nome === prob.nomi[1] && a2.nome === prob.nomi[0])) {
+      return { tipo: "problematica", descrizione: prob.desc, consiglio: prob.consiglio };
+    }
+  }
+
+  // Caso generico: sequenze opposte senza match specifico
+  const opposte = (a1.sequenzaPorte === "p.e.c." && a2.sequenzaPorte === "c.e.p.")
+    || (a1.sequenzaPorte === "c.e.p." && a2.sequenzaPorte === "p.e.c.")
+    || (a1.sequenzaPorte === "e.p.c." && a2.sequenzaPorte === "c.p.e.")
+    || (a1.sequenzaPorte === "c.p.e." && a2.sequenzaPorte === "e.p.c.");
+
+  if (opposte) {
+    return {
+      tipo: "attrazione",
+      descrizione: `${a1.nome} (${a1.sequenzaPorte}) e ${a2.nome} (${a2.sequenzaPorte}) hanno sequenze di porte opposte: cercano nell'altro ciò che non sanno fare con naturalezza.`,
+      consiglio: "Valorizzate la porta bersaglio in comune per risolvere i conflitti e trovare un terreno di comprensione reciproca.",
+    };
+  }
+
+  // Default
+  return {
+    tipo: "amicizia",
+    descrizione: `${a1.nome} e ${a2.nome} possono costruire una relazione equilibrata rispettando le reciproche porte di accesso.`,
+    consiglio: `Per comunicare meglio: contatta ${a1.nomeAlternativo} attraverso la porta aperta (${a1.portaAperta.toLowerCase()}) e ${a2.nomeAlternativo} attraverso la propria (${a2.portaAperta.toLowerCase()}).`,
+  };
+}
 
 // Helper: attributi base per ogni enneatipo (necessari per costruire le fasi)
 const attrBase: Record<number, { dignita: string; virtu: string; vizio: string; gerarchia: string; musa: string; facolta: string; melodia: string; topica: string; meccanismoDifesa: string; chakra: string; pianeta: string; correlazioneCerebrale: string; ideaSacra: string }> = {
