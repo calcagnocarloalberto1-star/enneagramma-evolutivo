@@ -55,22 +55,24 @@ export default function TestPage() {
   const currentFruit = sortedFruits[currentFruitIndex];
   const currentAnswers = currentFruit ? (answers[currentFruit.nome] || new Array(20).fill(undefined)) : [];
 
+  // Use a ref-style approach: capture the fruit name at click time, not callback creation time
   const handleAnswer = useCallback((questionIndex: number, value: boolean) => {
-    if (!currentFruit) return;
+    const fruitName = sortedFruits[currentFruitIndex]?.nome;
+    if (!fruitName) return;
     setAnswers(prev => {
-      const fruitName = currentFruit.nome;
-      const arr = [...(prev[fruitName] || new Array(20).fill(undefined))];
+      const arr = prev[fruitName] ? [...prev[fruitName]] : Array.from({length: 20}, () => undefined as boolean | undefined);
       arr[questionIndex] = value;
       return { ...prev, [fruitName]: arr };
     });
-  }, [currentFruit]);
+  }, [sortedFruits, currentFruitIndex]);
 
-  const isCurrentFruitComplete = currentAnswers.every(a => a !== undefined);
+  const isCurrentFruitComplete = currentAnswers.every(a => a === true || a === false);
 
   // Check if ALL 9 fruits have all 20 questions answered
+  // Use explicit true/false check, not just !== undefined, to avoid edge cases
   const isTestComplete = sortedFruits.length === 9 && sortedFruits.every(fruit => {
     const arr = answers[fruit.nome];
-    return arr && arr.length === 20 && arr.every(a => a !== undefined);
+    return arr && arr.length >= 20 && arr.slice(0, 20).every(a => a === true || a === false);
   });
 
   const submitMutation = useMutation({
@@ -229,7 +231,7 @@ export default function TestPage() {
       <div className="flex gap-1.5 justify-center mb-6">
         {sortedFruits.map((fruit, idx) => {
           const fruitAnswers = answers[fruit.nome] || [];
-          const isComplete = fruitAnswers.length === 20 && fruitAnswers.every(a => a !== undefined);
+          const isComplete = fruitAnswers.length >= 20 && fruitAnswers.slice(0, 20).every(a => a === true || a === false);
           const isCurrent = idx === currentFruitIndex;
           return (
             <button
@@ -256,7 +258,7 @@ export default function TestPage() {
         {currentFruit.domande.map((question, qIdx) => (
           <Card
             key={qIdx}
-            className={`transition-all ${currentAnswers[qIdx] !== undefined ? "border-green-200 dark:border-green-800/50 bg-green-50/30 dark:bg-green-900/10" : ""}`}
+            className={`transition-all ${(currentAnswers[qIdx] === true || currentAnswers[qIdx] === false) ? "border-green-200 dark:border-green-800/50 bg-green-50/30 dark:bg-green-900/10" : ""}`}
           >
             <CardContent className="p-4">
               <div className="flex gap-4 items-start">
