@@ -67,6 +67,12 @@ export default function TestPage() {
 
   const isCurrentFruitComplete = currentAnswers.every(a => a !== undefined);
 
+  // Check if ALL 9 fruits have all 20 questions answered
+  const isTestComplete = sortedFruits.length === 9 && sortedFruits.every(fruit => {
+    const arr = answers[fruit.nome];
+    return arr && arr.length === 20 && arr.every(a => a !== undefined);
+  });
+
   const submitMutation = useMutation({
     mutationFn: async (payload: any) => {
       const res = await apiRequest("POST", "/api/test/submit", payload);
@@ -311,7 +317,7 @@ export default function TestPage() {
           <Button
             onClick={() => setPhase("age")}
             className="bg-green-600 hover:bg-green-700 text-white"
-            disabled={!Object.values(answers).every(arr => arr.length === 20 && arr.every(a => a !== undefined))}
+            disabled={!isTestComplete}
             data-testid="button-finish-test"
           >
             Completa il Test <CheckCircle2 className="ml-2 w-4 h-4" />
