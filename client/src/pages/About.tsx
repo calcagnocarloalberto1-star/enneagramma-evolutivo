@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, BookOpen, Users, Compass, Star, Scale, GraduationCap, Pen, Globe, Heart, HandHeart, Sparkles, UserCheck } from "lucide-react";
 import ruotaLullo from "@assets/ruota-lullo.webp";
 import chakraSymbols from "@assets/chakra-symbols.webp";
-import carloPhoto from "@assets/carlo-alberto-calcagno.png";
+import carloPhoto from "@assets/carlo-alberto-calcagno.jpg";
 
 export default function About() {
   return (
