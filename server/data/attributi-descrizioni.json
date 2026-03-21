@@ -1,0 +1,198 @@
+{
+  "dignita": {
+    "Volontà": "La capacità di dirigere la propria vita con determinazione e scopo. Per il Tipo 1, la Volontà rappresenta il potere interiore di agire secondo principi morali elevati, trasformando il desiderio di perfezione in azione costruttiva.",
+    "Eternità": "La connessione con ciò che trascende il tempo. Per il Tipo 2, l'Eternità riflette la natura infinita dell'amore autentico — quello che si dona senza aspettarsi nulla in cambio.",
+    "Sapienza": "La conoscenza profonda che va oltre l'intelletto. Per il Tipo 3, la Sapienza è la capacità di riconoscere il vero valore al di là delle apparenze e del successo esteriore.",
+    "Bontà": "La qualità dell'anima che riconosce il bene in ogni cosa. Per il Tipo 4, la Bontà è la capacità di vedere la bellezza anche nell'imperfezione e nell'ordinario.",
+    "Verità": "La ricerca instancabile di ciò che è reale. Per il Tipo 5, la Verità rappresenta la comprensione profonda della realtà, al di là delle teorie e delle analisi.",
+    "Grandezza": "L'ampiezza di spirito che abbraccia la complessità. Per il Tipo 6, la Grandezza è il coraggio di fidarsi — di sé stessi, degli altri, della vita.",
+    "Gloria": "Lo splendore che nasce dalla gioia autentica. Per il Tipo 7, la Gloria è la capacità di trovare la felicità nel momento presente, senza fuggire verso il prossimo piacere.",
+    "Potenza": "La forza interiore che protegge e trasforma. Per il Tipo 8, la Potenza è l'energia vitale che, quando incanalata con saggezza, diventa strumento di giustizia e protezione dei più deboli.",
+    "Perfezione": "La completezza che nasce dall'accettazione. Per il Tipo 9, la Perfezione non è l'assenza di difetti, ma l'armonia che emerge quando si abbraccia la totalità dell'esperienza."
+  },
+  "virtu": {
+    "Pazienza": "La capacità di accettare il ritmo naturale delle cose senza forzarle. Per il Tipo 1, la Pazienza è l'antidoto alla rabbia repressa: permette di riconoscere che il mondo non deve essere perfetto adesso.",
+    "Perseveranza": "La costanza nel cammino dell'amore autentico. Per il Tipo 2, la Perseveranza è la forza di continuare a donare senza dipendere dall'approvazione altrui.",
+    "Fede": "La fiducia profonda nel proprio valore intrinseco. Per il Tipo 3, la Fede è la capacità di credere in sé stessi al di là dei risultati e dei riconoscimenti esterni.",
+    "Fortezza": "Il coraggio di affrontare le proprie emozioni senza fuggire. Per il Tipo 4, la Fortezza è la forza interiore che permette di attraversare la tristezza senza identificarsi con essa.",
+    "Giustizia": "L'equilibrio tra dare e ricevere, tra ritiro e partecipazione. Per il Tipo 5, la Giustizia è la capacità di condividere le proprie risorse (tempo, energia, conoscenza) con generosità.",
+    "Carità": "L'amore che si dona senza paura. Per il Tipo 6, la Carità è la fiducia nel bene — la capacità di aprirsi agli altri senza il filtro costante del sospetto.",
+    "Temperanza": "La misura e l'equilibrio nel vivere le esperienze. Per il Tipo 7, la Temperanza è l'arte di gustare profondamente un'esperienza anziché saltare freneticamente alla successiva.",
+    "Prudenza": "La saggezza nell'uso della propria forza. Per il Tipo 8, la Prudenza è la capacità di dosare la propria energia, scegliendo quando agire con potenza e quando con delicatezza.",
+    "Speranza": "La fiducia che il proprio contributo ha valore. Per il Tipo 9, la Speranza è la motivazione interiore che li spinge ad agire, a esprimere i propri desideri, a contare."
+  },
+  "vizio": {
+    "Menzogna": "Nel sistema dell'Enneagramma Evolutivo, il vizio del Tipo 1 non è la bugia intenzionale, ma l'autoinganno: la convinzione che reprimendo la rabbia e seguendo regole rigide si raggiunga la perfezione. È la menzogna che si racconta chi crede di poter controllare tutto.",
+    "Lussuria": "Per il Tipo 2, la Lussuria non è solo sessuale: è il desiderio insaziabile di essere necessari, di essere amati, di occupare uno spazio privilegiato nella vita degli altri. È la fame emotiva mascherata da generosità.",
+    "Accidia": "Per il Tipo 3, l'Accidia è la pigrizia spirituale — l'incapacità di fermarsi a sentire chi si è veramente, nascondendosi dietro maschere di successo e produttività frenetica.",
+    "Invidia": "Per il Tipo 4, l'Invidia è la percezione costante che qualcosa manchi — che gli altri abbiano ciò che a loro è negato. Non è semplice gelosia, ma una ferita identitaria profonda.",
+    "Avarizia": "Per il Tipo 5, l'Avarizia è la tendenza a trattenere — tempo, energia, conoscenza, emozioni — per paura che il mondo esterno li esaurisca. È la convinzione che le risorse interiori siano limitate.",
+    "Ira": "Per il Tipo 6, l'Ira è la frustrazione che nasce dall'ansia costante — la rabbia verso un mondo percepito come minaccioso e inaffidabile, spesso rivolta verso le autorità.",
+    "Superbia": "Per il Tipo 7, la Superbia è la convinzione di meritare sempre il meglio, di essere al di sopra del dolore e delle limitazioni. È il rifiuto di accettare che la sofferenza fa parte della vita.",
+    "Gola": "Per il Tipo 8, la Gola è l'eccesso in tutto: mangiare, lavorare, combattere, amare. È l'intensità che non conosce misura, la vita vissuta sempre al massimo volume.",
+    "Pigrizia": "Per il Tipo 9, la Pigrizia non è solo fisica: è l'addormentamento della coscienza, il narcotizzarsi per evitare il conflitto, il dimenticarsi di sé per mantenere una pace apparente."
+  },
+  "gerarchia_angelica": {
+    "Serafini": {
+      "descrizione": "Gli angeli più vicini a Dio, ardenti d'amore divino. Nella tradizione di Dionigi l'Areopagita, i Serafini occupano il grado più alto della gerarchia celeste.",
+      "sfera": "Prima Gerarchia — Consiglieri Celesti",
+      "significato": "Per il Tipo 1, i Serafini rappresentano l'aspirazione alla perfezione divina — il fuoco purificatore che trasforma l'imperfezione in bellezza."
+    },
+    "Cherubini": {
+      "descrizione": "Custodi della sapienza e della conoscenza divina. I Cherubini incarnano la contemplazione pura e la visione spirituale.",
+      "sfera": "Prima Gerarchia — Consiglieri Celesti",
+      "significato": "Per il Tipo 2, i Cherubini riflettono la saggezza del cuore — la conoscenza che nasce dall'amore autentico, non dal bisogno di approvazione."
+    },
+    "Troni": {
+      "descrizione": "Portatori della giustizia e del giudizio divino. I Troni rappresentano la stabilità e l'equilibrio cosmico.",
+      "sfera": "Prima Gerarchia — Consiglieri Celesti",
+      "significato": "Per il Tipo 3, i Troni incarnano la vera autorità — quella che deriva dall'essere, non dall'apparire."
+    },
+    "Dominazioni": {
+      "descrizione": "Regolatori dell'ordine cosmico e delle gerarchie inferiori. Le Dominazioni governano con autorità benevola.",
+      "sfera": "Seconda Gerarchia — Governatori Celesti",
+      "significato": "Per il Tipo 4, le Dominazioni rappresentano l'ordine che emerge dal caos emotivo — la struttura che dà forma alla creatività."
+    },
+    "Potestà": {
+      "descrizione": "Guerrieri cosmici contro le forze del male. Le Potestà proteggono l'ordine divino e combattono l'oscurità.",
+      "sfera": "Seconda Gerarchia — Governatori Celesti",
+      "significato": "Per il Tipo 5, le Potestà incarnano la forza che nasce dalla conoscenza — il potere di agire nel mondo anziché solo osservarlo."
+    },
+    "Virtù": {
+      "descrizione": "Dispensatori di grazia e miracoli. Le Virtù sono gli angeli della natura e del cosmo visibile.",
+      "sfera": "Seconda Gerarchia — Governatori Celesti",
+      "significato": "Per il Tipo 6, le Virtù rappresentano il coraggio — la grazia che trasforma la paura in fede."
+    },
+    "Principati": {
+      "descrizione": "Guardiani delle nazioni e delle comunità umane. I Principati vegliano sulle collettività.",
+      "sfera": "Terza Gerarchia — Messaggeri Celesti",
+      "significato": "Per il Tipo 7, i Principati incarnano la gioia che nasce dalla responsabilità — il piacere di contribuire al bene comune."
+    },
+    "Arcangeli": {
+      "descrizione": "Messaggeri divini incaricati di missioni importanti. Gli Arcangeli sono intermediari tra il cielo e la terra.",
+      "sfera": "Terza Gerarchia — Messaggeri Celesti",
+      "significato": "Per il Tipo 8, gli Arcangeli rappresentano la forza al servizio della giustizia — il potere che protegge anziché dominare."
+    },
+    "Angeli": {
+      "descrizione": "Custodi e guide personali degli esseri umani. Gli Angeli sono i più vicini all'umanità nella gerarchia celeste.",
+      "sfera": "Terza Gerarchia — Messaggeri Celesti",
+      "significato": "Per il Tipo 9, gli Angeli incarnano la presenza amorevole — la capacità di esserci per gli altri senza perdersi."
+    }
+  },
+  "musa": {
+    "Urania": {
+      "descrizione": "Musa dell'astronomia e della geometria sacra",
+      "attributi": ["Conoscenza celeste", "Ordine cosmico", "Scienza"],
+      "significato": "Per il Tipo 1, Urania rappresenta l'aspirazione a comprendere le leggi universali — il desiderio di trovare l'ordine perfetto nella struttura del cosmo."
+    },
+    "Polimnia": {
+      "descrizione": "Musa degli inni sacri, della retorica e della memoria",
+      "attributi": ["Sacralità", "Meditazione", "Eloquenza"],
+      "significato": "Per il Tipo 2, Polimnia riflette il linguaggio del cuore — la capacità di esprimere l'amore attraverso parole sacre e gesti di devozione."
+    },
+    "Erato": {
+      "descrizione": "Musa della poesia lirica e amorosa",
+      "attributi": ["Amore", "Passione", "Bellezza"],
+      "significato": "Per il Tipo 3, Erato incarna la bellezza della realizzazione — l'arte di trasformare il desiderio in creazione."
+    },
+    "Euterpe": {
+      "descrizione": "Musa della musica e della poesia lirica",
+      "attributi": ["Armonia", "Gioia", "Creatività musicale"],
+      "significato": "Per il Tipo 4, Euterpe rappresenta la capacità di trasformare le emozioni in arte — la musica che nasce dalla profondità dell'anima."
+    },
+    "Melpomene": {
+      "descrizione": "Musa della tragedia",
+      "attributi": ["Profondità emotiva", "Catarsi", "Trasformazione"],
+      "significato": "Per il Tipo 5, Melpomene incarna la comprensione del dolore umano — la saggezza che nasce dall'attraversare la sofferenza con gli occhi aperti."
+    },
+    "Tersicore": {
+      "descrizione": "Musa della danza e del canto corale",
+      "attributi": ["Movimento", "Ritmo", "Espressione corporea"],
+      "significato": "Per il Tipo 6, Tersicore rappresenta il coraggio di muoversi — di lasciarsi portare dal ritmo della vita anziché restare paralizzati dalla paura."
+    },
+    "Talia": {
+      "descrizione": "Musa della commedia e della poesia bucolica",
+      "attributi": ["Gioia", "Leggerezza", "Umorismo"],
+      "significato": "Per il Tipo 7, Talia incarna la gioia autentica — non la fuga dal dolore, ma la capacità di trovare la leggerezza anche nella profondità."
+    },
+    "Calliope": {
+      "descrizione": "Musa della poesia epica e dell'eloquenza",
+      "attributi": ["Ispirazione", "Narrazione", "Memoria storica"],
+      "significato": "Per il Tipo 8, Calliope rappresenta il potere della parola — la voce che si alza per difendere la verità e raccontare le grandi imprese."
+    },
+    "Clio": {
+      "descrizione": "Musa della storia",
+      "attributi": ["Conoscenza", "Documentazione", "Verità storica"],
+      "significato": "Per il Tipo 9, Clio incarna la memoria — la capacità di ricordare chi si è, la propria storia, i propri desideri, senza dimenticarli nell'oblio della pace apparente."
+    }
+  },
+  "meccanismo_difesa": {
+    "Formazione reattiva": "Meccanismo con cui si esprime l'opposto di ciò che si sente. Il Tipo 1 trasforma la rabbia in cortesia eccessiva, l'impulso in rigido autocontrollo. Sorridi quando vorresti urlare, ti mostri calmo quando ribolli dentro.",
+    "Rimozione": "Meccanismo che spinge a 'dimenticare' i propri bisogni. Il Tipo 2 rimuove dalla coscienza i propri desideri per concentrarsi su quelli degli altri, convincendosi di non aver bisogno di nulla.",
+    "Identificazione": "Meccanismo con cui si assume l'identità di un ruolo o un'immagine. Il Tipo 3 si identifica talmente con il proprio ruolo sociale che perde il contatto con chi è veramente al di sotto della maschera.",
+    "Introiezione": "Meccanismo con cui si assorbono le qualità altrui per sentirsi completi. Il Tipo 4 incorpora tratti delle persone ammirate, cercando di colmare il senso di mancanza interiore.",
+    "Isolamento": "Meccanismo con cui si separano le emozioni dai pensieri. Il Tipo 5 si ritira nel mondo della mente, disconnettendosi dai sentimenti e dalle relazioni per proteggersi dall'invasione.",
+    "Proiezione": "Meccanismo con cui si attribuiscono agli altri le proprie paure. Il Tipo 6 vede negli altri le minacce che teme in sé stesso, proiettando la propria insicurezza sul mondo esterno.",
+    "Razionalizzazione": "Meccanismo con cui si giustifica qualsiasi comportamento. Il Tipo 7 trova sempre una spiegazione logica per la fuga dal dolore, trasformando l'evitamento in 'scelta positiva'.",
+    "Acting out": "Meccanismo con cui si agisce impulsivamente anziché riflettere. Il Tipo 8 scarica le emozioni attraverso l'azione immediata — confronto, sfida, presa di controllo — evitando la vulnerabilità.",
+    "Narcotizzazione": "Meccanismo con cui si 'anestetizza' la coscienza. Il Tipo 9 si immerge in attività routinarie, comfort e distrazioni per evitare di sentire i propri desideri e la propria rabbia."
+  },
+  "chakra": {
+    "1° Chakra (base)": "Muladhara — Il chakra della radice, collegato alla sopravvivenza, alla sicurezza e al radicamento. Rappresenta il nostro legame con la terra e il senso di appartenenza.",
+    "2° Chakra (sacrale)": "Svadhisthana — Il chakra sacrale, sede delle emozioni, della creatività e della sessualità. Governa il piacere, le relazioni e la capacità di fluire con la vita.",
+    "3° Chakra (ombelico)": "Manipura — Il chakra del plesso solare, centro del potere personale, della volontà e dell'autostima. Governa la capacità di agire nel mondo e di affermarsi.",
+    "4° Chakra (cuore)": "Anahata — Il chakra del cuore, ponte tra il mondo materiale e spirituale. Governa l'amore incondizionato, la compassione e la capacità di perdonare.",
+    "5° Chakra (gola)": "Vishuddha — Il chakra della gola, centro della comunicazione autentica e dell'espressione di sé. Governa la verità, la creatività verbale e l'ascolto.",
+    "6° Chakra (terzo occhio)": "Ajna — Il chakra del terzo occhio, sede dell'intuizione, della visione interiore e della saggezza. Governa la percezione oltre le apparenze.",
+    "7° Chakra (corona)": "Sahasrara — Il chakra della corona, collegamento con il divino e la coscienza universale. Rappresenta l'illuminazione, la trascendenza e l'unità con il tutto."
+  },
+  "pianeta": {
+    "Marte": "Pianeta dell'azione, della determinazione e dell'energia guerriera. Per il Tipo 1, Marte rappresenta la forza della volontà nel perseguire la perfezione e il dovere.",
+    "Sole": "L'astro della vitalità, dell'identità e dello splendore. Per il Tipo 2, il Sole riflette il calore che donano agli altri e la luce che cercano nel riconoscimento.",
+    "Saturno": "Pianeta della struttura, della disciplina e del tempo. Per il Tipo 3, Saturno rappresenta l'ambizione, la costruzione metodica del successo e la prova della maturità.",
+    "Luna": "L'astro delle emozioni, dell'intuizione e dei cicli. Per il Tipo 4, la Luna riflette la profondità emotiva, le fasi di espansione e ritiro, il legame con l'inconscio.",
+    "Mercurio": "Pianeta della comunicazione, dell'intelletto e dello scambio. Per il Tipo 5, Mercurio rappresenta la mente analitica, la sete di conoscenza e la capacità di connettere le idee.",
+    "Venere": "Pianeta dell'amore, dell'armonia e della bellezza. Per il Tipo 6, Venere rappresenta la ricerca di relazioni sicure e la capacità di creare legami di fiducia.",
+    "Giove": "Pianeta dell'espansione, dell'ottimismo e dell'abbondanza. Per il Tipo 7, Giove incarna l'entusiasmo, la visione ampia e il desiderio di esperienze sempre nuove.",
+    "Plutone": "Pianeta della trasformazione, del potere e della rinascita. Per il Tipo 8, Plutone rappresenta la forza rigenerativa, la capacità di attraversare la distruzione per ricostruire.",
+    "Nettuno": "Pianeta della spiritualità, dell'immaginazione e della dissoluzione dei confini. Per il Tipo 9, Nettuno riflette la tendenza a fondersi con l'altro e la ricerca di unità universale."
+  },
+  "melodia": {
+    "Re": "La nota Re nella tradizione musicale sacra è associata all'ordine e alla struttura. Per il Tipo 1, rappresenta la ricerca di armonia attraverso la disciplina — la melodia che emerge quando tutto è al suo posto.",
+    "Mi": "La nota Mi è collegata alla dolcezza e all'espressione emotiva. Per il Tipo 2, rappresenta il canto dell'anima che si dona — la melodia dell'amore che vuole essere ascoltato.",
+    "Fa": "La nota Fa è associata alla realizzazione e al compimento. Per il Tipo 3, rappresenta il ritmo dell'azione — la melodia del successo che prende forma nel mondo.",
+    "Sol": "La nota Sol è collegata alla luce interiore e alla visione. Per il Tipo 4, rappresenta la melodia dell'unicità — il canto che nasce dalla profondità emotiva.",
+    "La": "La nota La è la frequenza di riferimento universale (440 Hz). Per il Tipo 5, rappresenta la ricerca della verità fondamentale — il punto fermo attorno a cui ruota tutta la conoscenza.",
+    "Si": "La nota Si è associata alla tensione che cerca risoluzione. Per il Tipo 6, rappresenta l'inquietudine che precede la fiducia — la melodia della vigilanza che anela alla pace.",
+    "Do": "La nota Do è il fondamento della scala musicale. Per il Tipo 7, rappresenta il nuovo inizio, l'entusiasmo della prima nota — la melodia dell'ottimismo che apre ogni possibilità.",
+    "Re#": "La nota Re diesis è una tensione creativa tra due toni. Per il Tipo 8, rappresenta la forza che non si piega — la melodia del potere che sfida le convenzioni.",
+    "Mi#": "Per il Tipo 9, questa nota rappresenta la dissoluzione armoniosa dei confini — la melodia della pace che abbraccia ogni suono in un'unica sinfonia."
+  },
+  "topica": {
+    "Super-Io": "Nella psicologia freudiana, il Super-Io è l'istanza morale — la voce interiore che giudica, critica e impone regole. Per il Tipo 1, il Super-Io è particolarmente dominante: è il 'critico interiore' che detta standard impossibili.",
+    "Io": "L'Io è l'istanza che media tra desideri, realtà e morale. Per il Tipo 2, l'Io si manifesta nella capacità di adattarsi alle esigenze degli altri, spesso a scapito dei propri bisogni autentici.",
+    "Es": "L'Es è la sede delle pulsioni primarie e dei desideri inconsci. Per il Tipo corrispondente, l'Es rappresenta l'energia grezza che, se non integrata, può manifestarsi come impulsività o evitamento."
+  },
+  "facolta": {
+    "Mente": "La facoltà della ragione, dell'analisi e del giudizio morale. Per il Tipo 1, la Mente è lo strumento primario con cui valuta il mondo — classificando in giusto/sbagliato, buono/cattivo.",
+    "Intelletto": "La facoltà della comprensione profonda e dell'intuizione. Rappresenta la capacità di vedere oltre le apparenze e cogliere le connessioni nascoste tra le cose.",
+    "Ragione": "La facoltà del pensiero logico e sistematico. Rappresenta la capacità di analizzare, dedurre e costruire strutture di significato.",
+    "Immaginazione": "La facoltà creativa che trasforma le esperienze in visioni. Rappresenta la capacità di vedere ciò che non è ancora, di creare possibilità dal nulla.",
+    "Memoria": "La facoltà che conserva e riconnette le esperienze. Rappresenta il filo che lega passato e presente, dando continuità all'identità.",
+    "Vista": "La facoltà della percezione diretta e dell'osservazione. Rappresenta la capacità di vedere le cose come sono, senza filtri.",
+    "Udito": "La facoltà dell'ascolto profondo — di sé, degli altri, del mondo. Rappresenta la ricettività e l'apertura a ciò che non si vede.",
+    "Gusto": "La facoltà del discernimento e del piacere. Rappresenta la capacità di apprezzare le sfumature e le qualità sottili dell'esperienza.",
+    "Senso comune": "La facoltà che integra tutte le percezioni in una comprensione unitaria. Rappresenta la saggezza pratica e l'equilibrio."
+  },
+  "idea_sacra": {
+    "Perfezione": "L'Idea Sacra del Tipo 1 è che la realtà È già perfetta — non nel senso morale, ma ontologico. Quando il Tipo 1 realizza che il mondo non ha bisogno di essere corretto per essere sacro, la rabbia si dissolve.",
+    "Volontà": "L'Idea Sacra del Tipo 2 è la Volontà Divina — la comprensione che l'amore fluisce naturalmente senza bisogno di forzarlo o meritarlo.",
+    "Speranza": "L'Idea Sacra del Tipo 3 è la Speranza — la fiducia che il proprio valore è intrinseco, non dipende dai risultati.",
+    "Origine": "L'Idea Sacra del Tipo 4 è l'Origine — la comprensione che la propria identità non è separata dalla totalità, che non manca nulla.",
+    "Onniscienza": "L'Idea Sacra del Tipo 5 è l'Onniscienza — la comprensione che la vera conoscenza viene dalla partecipazione alla vita, non dal ritiro.",
+    "Fede": "L'Idea Sacra del Tipo 6 è la Fede — la fiducia nell'ordine dell'universo, che rende superflua l'ansia costante.",
+    "Progetto": "L'Idea Sacra del Tipo 7 è il Progetto divino — la comprensione che ogni esperienza, anche dolorosa, ha un senso nel disegno più ampio.",
+    "Verità": "L'Idea Sacra del Tipo 8 è la Verità — la comprensione che la vera forza risiede nella vulnerabilità e nell'apertura.",
+    "Amore": "L'Idea Sacra del Tipo 9 è l'Amore — la comprensione che il proprio essere è importante e che agire nel mondo è un atto d'amore."
+  }
+}

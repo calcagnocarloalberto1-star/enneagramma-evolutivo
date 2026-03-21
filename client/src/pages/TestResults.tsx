@@ -58,8 +58,27 @@ export default function TestResults() {
 
   const scores = result.punteggiFrutti;
   const attrs = result.attributi;
+  const desc = result.descrizioni || {};
   const enneatipo = result.enneatipo;
   const ala = result.ala;
+
+  // Helper to get description for an attribute
+  const getDesc = (category: string, value: string): string | null => {
+    if (!desc[category]) return null;
+    const cat = desc[category];
+    // For objects with nested structure (gerarchia_angelica, musa)
+    if (cat[value] && typeof cat[value] === 'object') {
+      return cat[value].descrizione || cat[value].significato || null;
+    }
+    // For simple string descriptions
+    if (typeof cat[value] === 'string') return cat[value];
+    return null;
+  };
+
+  const getFullDesc = (category: string, value: string): any => {
+    if (!desc[category]) return null;
+    return desc[category][value] || null;
+  };
 
   // Radar chart data
   const radarData = Object.entries(scores).map(([key, value]) => ({
@@ -90,6 +109,38 @@ export default function TestResults() {
               <strong>Nota:</strong> Il test suggerisce la necessità di un genogramma per una determinazione più precisa 
               dell'enneatipo e/o dell'ala. Ti consigliamo di consultare un professionista.
             </p>
+          </div>
+        )}
+        {/* Descrizione e motivazione dal contenuto educativo */}
+        {result.educativo && (
+          <div className="mt-6 max-w-2xl mx-auto text-left">
+            <p className="text-sm text-muted-foreground leading-relaxed mb-3">{result.educativo.descrizione}</p>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {result.educativo.motivazione && (
+                <div className="px-3 py-1.5 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+                  <span className="text-xs text-green-600 dark:text-green-400 font-medium">Motivazione: </span>
+                  <span className="text-xs text-green-800 dark:text-green-200">{result.educativo.motivazione}</span>
+                </div>
+              )}
+              {result.educativo.paura && (
+                <div className="px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                  <span className="text-xs text-red-600 dark:text-red-400 font-medium">Paura: </span>
+                  <span className="text-xs text-red-800 dark:text-red-200">{result.educativo.paura}</span>
+                </div>
+              )}
+            </div>
+            {result.educativo.consigli && result.educativo.consigli.length > 0 && (
+              <div className="mt-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                <h4 className="text-sm font-semibold text-purple-800 dark:text-purple-200 mb-2">Consigli per la crescita</h4>
+                <ul className="space-y-1.5">
+                  {result.educativo.consigli.map((c: string, i: number) => (
+                    <li key={i} className="text-xs text-purple-700 dark:text-purple-300 flex gap-2">
+                      <span className="text-purple-400 shrink-0">•</span> {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -138,60 +189,137 @@ export default function TestResults() {
         </CardContent>
       </Card>
 
-      {/* Attributes Grid */}
+      {/* Attributes Grid — with explanations */}
       {attrs && (
-        <div className="grid sm:grid-cols-2 gap-4 mb-8">
+        <div className="space-y-4 mb-8">
+          {/* Spiritual Attributes */}
           <Card>
             <CardContent className="p-5">
-              <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
+              <h3 className="font-serif font-semibold text-base mb-4 flex items-center gap-2">
                 <Star className="w-4 h-4 text-primary" /> Attributi Spirituali
               </h3>
-              <dl className="space-y-2 text-sm">
-                <div className="flex justify-between"><dt className="text-muted-foreground">Dignità</dt><dd className="font-medium">{attrs.dignita}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Virtù</dt><dd className="font-medium">{attrs.virtu}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Vizio</dt><dd className="font-medium">{attrs.vizio}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Idea Sacra</dt><dd className="font-medium">{attrs.idea_sacra}</dd></div>
-              </dl>
+              <div className="space-y-4">
+                {[
+                  { label: "Dignità", value: attrs.dignita, cat: "dignita" },
+                  { label: "Virtù", value: attrs.virtu, cat: "virtu" },
+                  { label: "Vizio", value: attrs.vizio, cat: "vizio" },
+                  { label: "Idea Sacra", value: attrs.idea_sacra, cat: "idea_sacra" },
+                ].map(({ label, value, cat }) => (
+                  <div key={label} className="border-b border-border/50 last:border-0 pb-3 last:pb-0">
+                    <div className="flex justify-between items-baseline mb-1">
+                      <dt className="text-sm text-muted-foreground">{label}</dt>
+                      <dd className="font-semibold text-sm text-foreground">{value}</dd>
+                    </div>
+                    {getDesc(cat, value) && (
+                      <p className="text-xs text-muted-foreground leading-relaxed mt-1">{getDesc(cat, value)}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardContent className="p-5">
-              <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
-                <Shield className="w-4 h-4 text-primary" /> Gerarchia e Musa
-              </h3>
-              <dl className="space-y-2 text-sm">
-                <div className="flex justify-between"><dt className="text-muted-foreground">Gerarchia Angelica</dt><dd className="font-medium">{attrs.gerarchia_angelica}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Musa</dt><dd className="font-medium text-right">{attrs.musa}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Facoltà</dt><dd className="font-medium">{attrs.facolta}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Topica</dt><dd className="font-medium">{attrs.topica}</dd></div>
-              </dl>
-            </CardContent>
-          </Card>
+          {/* Gerarchia Angelica & Musa */}
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Card>
+              <CardContent className="p-5">
+                <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-primary" /> Gerarchia Angelica
+                </h3>
+                <p className="font-semibold text-sm mb-1">{attrs.gerarchia_angelica}</p>
+                {(() => {
+                  const info = getFullDesc("gerarchia_angelica", attrs.gerarchia_angelica);
+                  if (!info) return null;
+                  return (
+                    <div className="space-y-2 mt-2">
+                      <p className="text-xs text-muted-foreground leading-relaxed">{info.descrizione}</p>
+                      {info.sfera && <p className="text-[11px] text-primary/70 font-medium">{info.sfera}</p>}
+                      {info.significato && <p className="text-xs text-muted-foreground leading-relaxed italic">{info.significato}</p>}
+                    </div>
+                  );
+                })()}
+              </CardContent>
+            </Card>
 
+            <Card>
+              <CardContent className="p-5">
+                <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-500" /> Musa Ispiratrice
+                </h3>
+                <p className="font-semibold text-sm mb-1">{attrs.musa}</p>
+                {(() => {
+                  const musaName = attrs.musa?.split(" (")[0];
+                  const info = getFullDesc("musa", musaName);
+                  if (!info) return null;
+                  return (
+                    <div className="space-y-2 mt-2">
+                      <p className="text-xs text-muted-foreground leading-relaxed">{info.descrizione}</p>
+                      {info.attributi && (
+                        <div className="flex flex-wrap gap-1">
+                          {info.attributi.map((a: string) => (
+                            <span key={a} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">{a}</span>
+                          ))}
+                        </div>
+                      )}
+                      {info.significato && <p className="text-xs text-muted-foreground leading-relaxed italic">{info.significato}</p>}
+                    </div>
+                  );
+                })()}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Psychology */}
           <Card>
             <CardContent className="p-5">
-              <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
+              <h3 className="font-serif font-semibold text-base mb-4 flex items-center gap-2">
                 <Brain className="w-4 h-4 text-primary" /> Psicologia
               </h3>
-              <dl className="space-y-2 text-sm">
-                <div className="flex justify-between"><dt className="text-muted-foreground">Meccanismo di Difesa</dt><dd className="font-medium">{attrs.meccanismo_difesa}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Adattamento</dt><dd className="font-medium">{attrs.adattamento}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Correlazione Cerebrale</dt><dd className="font-medium">{attrs.correlazione_cerebrale}</dd></div>
-              </dl>
+              <div className="space-y-4">
+                {[
+                  { label: "Meccanismo di Difesa", value: attrs.meccanismo_difesa, cat: "meccanismo_difesa" },
+                  { label: "Topica (Freud)", value: attrs.topica, cat: "topica" },
+                  { label: "Adattamento", value: attrs.adattamento, cat: null },
+                  { label: "Correlazione Cerebrale", value: attrs.correlazione_cerebrale, cat: null },
+                ].map(({ label, value, cat }) => (
+                  <div key={label} className="border-b border-border/50 last:border-0 pb-3 last:pb-0">
+                    <div className="flex justify-between items-baseline mb-1">
+                      <dt className="text-sm text-muted-foreground">{label}</dt>
+                      <dd className="font-semibold text-sm text-foreground">{value}</dd>
+                    </div>
+                    {cat && getDesc(cat, value) && (
+                      <p className="text-xs text-muted-foreground leading-relaxed mt-1">{getDesc(cat, value)}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
 
+          {/* Correlations */}
           <Card>
             <CardContent className="p-5">
-              <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
-                <Music className="w-4 h-4 text-primary" /> Correlazioni
+              <h3 className="font-serif font-semibold text-base mb-4 flex items-center gap-2">
+                <Music className="w-4 h-4 text-primary" /> Correlazioni Cosmiche
               </h3>
-              <dl className="space-y-2 text-sm">
-                <div className="flex justify-between"><dt className="text-muted-foreground">Melodia</dt><dd className="font-medium">{attrs.melodia}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Chakra</dt><dd className="font-medium text-right">{attrs.chakra}</dd></div>
-                <div className="flex justify-between"><dt className="text-muted-foreground">Pianeta</dt><dd className="font-medium">{attrs.pianeta}</dd></div>
-              </dl>
+              <div className="space-y-4">
+                {[
+                  { label: "Chakra", value: attrs.chakra, cat: "chakra" },
+                  { label: "Pianeta", value: attrs.pianeta, cat: "pianeta" },
+                  { label: "Melodia", value: attrs.melodia, cat: "melodia" },
+                  { label: "Facoltà", value: attrs.facolta, cat: "facolta" },
+                ].map(({ label, value, cat }) => (
+                  <div key={label} className="border-b border-border/50 last:border-0 pb-3 last:pb-0">
+                    <div className="flex justify-between items-baseline mb-1">
+                      <dt className="text-sm text-muted-foreground">{label}</dt>
+                      <dd className="font-semibold text-sm text-foreground">{value}</dd>
+                    </div>
+                    {getDesc(cat, value) && (
+                      <p className="text-xs text-muted-foreground leading-relaxed mt-1">{getDesc(cat, value)}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </div>

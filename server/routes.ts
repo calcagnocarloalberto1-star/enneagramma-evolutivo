@@ -20,6 +20,7 @@ const percorsi = loadJSON("percorsi.json");
 const sistemaEta = loadJSON("sistema-eta-completo.json");
 const percorsiEnneatipi = loadJSON("percorsi-enneatipi.json");
 const educationalContent = loadJSON("educational-content.json");
+const attributiDescrizioni = loadJSON("attributi-descrizioni.json");
 
 // Fruit to enneatipo mapping
 const fruitToEnneatipo: Record<string, number> = {
@@ -135,11 +136,14 @@ export async function registerRoutes(
       const attrs = attributiEnneatipi.enneatipi[String(enneatipo)];
       const percorso = percorsi.percorsi[String(enneatipo)];
       const etaInfo = percorsi.etaEnneatipi;
+      const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === enneatipo || String(e.numero) === String(enneatipo));
 
       res.json({
         ...result,
         punteggiFrutti: scores,
         attributi: attrs,
+        descrizioni: attributiDescrizioni,
+        educativo: eduInfo || null,
         percorso,
         etaInfo,
         needsGenogram,
@@ -160,11 +164,14 @@ export async function registerRoutes(
     const attrs = attributiEnneatipi.enneatipi[String(result.enneatipo)];
     const percorso = percorsi.percorsi[String(result.enneatipo)];
     const etaInfo = percorsi.etaEnneatipi;
+    const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === result.enneatipo || String(e.numero) === String(result.enneatipo));
     
     res.json({
       ...result,
       punteggiFrutti: JSON.parse(result.punteggiFrutti),
       attributi: attrs,
+      descrizioni: attributiDescrizioni,
+      educativo: eduInfo || null,
       percorso,
       etaInfo,
     });
