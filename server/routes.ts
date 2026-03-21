@@ -149,6 +149,33 @@ function determineAla(mainType: number, scores: Record<number, number>) {
   return { ala: leftScore > rightScore ? leftWing : rightWing, needsGenogram: false };
 }
 
+function validateResults(scores: Record<number, number>, enneatipo: number) {
+  const maxScore = Math.max(...Object.values(scores));
+
+  // Rule 1: Two or more types tied for highest score
+  const maxTypes = Object.entries(scores).filter(([, v]) => v === maxScore);
+  const tiedMaxScores = maxTypes.length > 1;
+
+  // Rule 3: Max score too low (< 10)
+  const maxScoreTooLow = maxScore < 10;
+
+  // Rule 2: Wing scores tied
+  const leftWing = enneatipo === 1 ? 9 : enneatipo - 1;
+  const rightWing = enneatipo === 9 ? 1 : enneatipo + 1;
+  const tiedWingScores = !tiedMaxScores && !maxScoreTooLow && scores[leftWing] === scores[rightWing];
+
+  const valid = !tiedMaxScores && !tiedWingScores && !maxScoreTooLow;
+
+  return {
+    valid,
+    validationIssues: {
+      tiedMaxScores,
+      tiedWingScores,
+      maxScoreTooLow,
+    },
+  };
+}
+
 // Load blog articles
 function loadBlogArticles() {
   const files = fs.readdirSync(blogDir).filter(f => f.endsWith(".md")).sort();
@@ -193,6 +220,7 @@ export async function registerRoutes(
       const { enneatipo, needsGenogram: ngFromType } = determineEnneatipo(scores);
       const { ala, needsGenogram: ngFromWing } = determineAla(enneatipo, scores);
       const needsGenogram = ngFromType || ngFromWing;
+      const validation = validateResults(scores, enneatipo);
 
       const result = storage.createTestResult({
         visitorId,
@@ -222,6 +250,7 @@ export async function registerRoutes(
         glossario,
         etaInfo,
         needsGenogram,
+        ...validation,
       });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -236,21 +265,24 @@ export async function registerRoutes(
       return res.status(404).json({ error: "Risultato non trovato" });
     }
     
+    const scores = JSON.parse(result.punteggiFrutti);
+    const validation = validateResults(scores, result.enneatipo);
     const attrs = attributiEnneatipi.enneatipi[String(result.enneatipo)];
     const percorso = percorsi.percorsi[String(result.enneatipo)];
     const etaInfo = percorsi.etaEnneatipi;
     const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === result.enneatipo || String(e.numero) === String(result.enneatipo));
     const percorsoPersonalizzato = getPercorsoPersonalizzato(result.enneatipo, result.eta);
-    
+
     res.json({
       ...result,
-      punteggiFrutti: JSON.parse(result.punteggiFrutti),
+      punteggiFrutti: scores,
       attributi: attrs,
       descrizioni: attributiDescrizioni,
       educativo: eduInfo || null,
       percorso,
       percorsoPersonalizzato,
       etaInfo,
+      ...validation,
     });
   });
 
@@ -275,7 +307,6 @@ export async function registerRoutes(
         punteggiFrutti: JSON.parse(result.punteggiFrutti),
         attrs,
         percorsoPersonalizzato,
-        glossario,
         educativo: eduInfo,
         descrizioni: attributiDescrizioni,
       });

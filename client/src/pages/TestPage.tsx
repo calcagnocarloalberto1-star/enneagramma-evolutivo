@@ -60,7 +60,7 @@ export default function TestPage() {
     const fruitName = sortedFruits[currentFruitIndex]?.nome;
     if (!fruitName) return;
     setAnswers(prev => {
-      const arr = prev[fruitName] ? [...prev[fruitName]] : Array.from({length: 20}, () => undefined as boolean | undefined);
+      const arr = prev[fruitName] ? [...prev[fruitName]] : new Array(20).fill(false) as boolean[];
       arr[questionIndex] = value;
       return { ...prev, [fruitName]: arr };
     });

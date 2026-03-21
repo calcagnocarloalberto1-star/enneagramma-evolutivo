@@ -7,7 +7,9 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/test", label: "Fai il Test" },
   { href: "/enneatipi", label: "I 9 Enneatipi" },
-  { href: "/compatibilita/coppia", label: "Compatibilità" },
+  { href: "/percorsi", label: "Percorsi di Vita" },
+  { href: "/compatibilita/coppia", label: "Coppia" },
+  { href: "/compatibilita/famiglia", label: "Famiglia" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "Chi Siamo" },
 ];

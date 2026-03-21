@@ -9,6 +9,8 @@ import Home from "@/pages/Home";
 import TestPage from "@/pages/TestPage";
 import TestResults from "@/pages/TestResults";
 import CoupleCompatibility from "@/pages/CoupleCompatibility";
+import FamilyCompatibility from "@/pages/FamilyCompatibility";
+import PercorsiVita from "@/pages/PercorsiVita";
 import EnneatipiList from "@/pages/EnneatipiList";
 import EnneatipoDetail from "@/pages/EnneatipoDetail";
 import BlogList from "@/pages/BlogList";
@@ -32,6 +34,8 @@ function AppRouter() {
           <Route path="/test" component={TestPage} />
           <Route path="/test/results/:id" component={TestResults} />
           <Route path="/compatibilita/coppia" component={CoupleCompatibility} />
+          <Route path="/compatibilita/famiglia" component={FamilyCompatibility} />
+          <Route path="/percorsi" component={PercorsiVita} />
           <Route path="/enneatipi" component={EnneatipiList} />
           <Route path="/enneatipi/:id" component={EnneatipoDetail} />
           <Route path="/blog" component={BlogList} />

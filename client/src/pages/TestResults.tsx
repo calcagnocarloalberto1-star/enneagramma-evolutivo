@@ -5,9 +5,19 @@ import { useRoute, Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
-import { ArrowRight, ArrowUpRight, ArrowDownRight, Star, Gem, Music, Brain, Shield, Sparkles, Heart, FileText, Download, Loader2, BookOpen, Eye } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ArrowDownRight, Star, Gem, Music, Brain, Shield, Sparkles, Heart, FileText, Download, Loader2, BookOpen, Eye, AlertTriangle, Info, Check, Compass } from "lucide-react";
 import { enneatypesDetailed, calculateArrowPercentages } from "@/data/enneatypes-detailed";
+import {
+  getJourney,
+  getCurrentPhase,
+  getCurrentPhaseIndex,
+  typeNames as journeyTypeNames,
+  fruitEmoji as journeyFruitEmoji,
+  type Journey,
+  type JourneyPhase,
+} from "@/data/percorsi-eta";
 
 const fruitNames: Record<number, string> = {
   1: "Mela", 2: "Pera", 3: "Ciliegia", 4: "Nespola",
@@ -27,6 +37,144 @@ const typeColors: Record<number, string> = {
   9: "bg-green-100 text-green-700",
 };
 
+const typeNames: Record<number, string> = {
+  1: "Il Perfezionista", 2: "L'Altruista", 3: "Il Realizzatore",
+  4: "L'Individualista", 5: "L'Investigatore", 6: "Il Leale",
+  7: "L'Entusiasta", 8: "Il Challenger", 9: "Il Pacificatore",
+};
+
+// Wing descriptions for each enneatipo + wing combination
+const wingDescriptions: Record<string, string> = {
+  "1w9": "L'Enneatipo 1 con ala 9 (Il Perfezionista Idealista) tende a essere più pacato, riflessivo e orientato verso ideali elevati. Combina il desiderio di perfezione con la serenità interiore del Pacificatore, risultando più tollerante e meno critico rispetto al 1w2.",
+  "1w2": "L'Enneatipo 1 con ala 2 (Il Perfezionista Altruista) è più orientato verso gli altri e più emotivamente coinvolto. Combina il senso del dovere con il desiderio di aiutare, diventando spesso un riformatore appassionato che si dedica a cause sociali.",
+  "2w1": "L'Enneatipo 2 con ala 1 (L'Altruista Principiato) è più strutturato e orientato al dovere nel suo aiutare. Combina la generosità con un forte senso etico, offrendo aiuto in modo più organizzato e con standard elevati.",
+  "2w3": "L'Enneatipo 2 con ala 3 (L'Altruista Ambizioso) è più orientato al successo e all'immagine. Combina il desiderio di aiutare con l'ambizione, risultando più socievole, carismatico e visibile nel proprio contributo.",
+  "3w2": "L'Enneatipo 3 con ala 2 (Il Realizzatore Affascinante) è più orientato alle relazioni e al calore umano. Combina l'ambizione con il desiderio di piacere agli altri, risultando particolarmente carismatico e persuasivo.",
+  "3w4": "L'Enneatipo 3 con ala 4 (Il Realizzatore Artista) è più introspettivo e orientato all'autenticità. Combina il desiderio di successo con una ricerca più profonda di significato personale e originalità.",
+  "4w3": "L'Enneatipo 4 con ala 3 (L'Individualista Performer) è più orientato all'azione e alla presentazione di sé. Combina la sensibilità emotiva con l'ambizione, risultando più energico e determinato nel realizzare la propria visione creativa.",
+  "4w5": "L'Enneatipo 4 con ala 5 (L'Individualista Pensatore) è più riservato e intellettuale. Combina la profondità emotiva con la curiosità analitica, risultando più introverso e originale nel proprio pensiero.",
+  "5w4": "L'Enneatipo 5 con ala 4 (L'Investigatore Creativo) è più emotivamente ricco e orientato all'espressione artistica. Combina l'intelletto con la sensibilità, producendo spesso visioni originali e innovative.",
+  "5w6": "L'Enneatipo 5 con ala 6 (L'Investigatore Leale) è più orientato alla sicurezza e alla collaborazione. Combina la ricerca intellettuale con un senso pratico di lealtà, risultando più socialmente integrato e affidabile.",
+  "6w5": "L'Enneatipo 6 con ala 5 (Il Leale Investigatore) è più indipendente e intellettuale. Combina la ricerca di sicurezza con l'analisi profonda, risultando più riservato e auto-sufficiente nelle proprie valutazioni.",
+  "6w7": "L'Enneatipo 6 con ala 7 (Il Leale Entusiasta) è più ottimista e socievole. Combina la prudenza con l'energia positiva, risultando più avventuroso e giocoso, pur mantenendo un occhio attento ai potenziali rischi.",
+  "7w6": "L'Enneatipo 7 con ala 6 (L'Entusiasta Leale) è più responsabile e orientato alle relazioni. Combina la ricerca del piacere con la lealtà, risultando più affidabile e attento agli altri rispetto al 7w8.",
+  "7w8": "L'Enneatipo 7 con ala 8 (L'Entusiasta Assertivo) è più determinato e orientato al potere. Combina l'entusiasmo con la forza, risultando più audace, diretto e capace di realizzare i propri progetti.",
+  "8w7": "L'Enneatipo 8 con ala 7 (Il Challenger Entusiasta) è più energico e orientato al piacere. Combina la forza con l'entusiasmo, risultando più estroverso, imprenditoriale e aperto a nuove esperienze.",
+  "8w9": "L'Enneatipo 8 con ala 9 (Il Challenger Pacificatore) è più calmo e contenuto. Combina la forza con la stabilità interiore, risultando più paziente, diplomatico e capace di esercitare il proprio potere in modo più misurato.",
+  "9w8": "L'Enneatipo 9 con ala 8 (Il Pacificatore Assertivo) è più determinato e capace di agire. Combina la ricerca di pace con la forza interiore, risultando più deciso e capace di prendere posizione quando necessario.",
+  "9w1": "L'Enneatipo 9 con ala 1 (Il Pacificatore Principiato) è più strutturato e orientato ai principi. Combina la serenità con il senso del dovere, risultando più metodico e impegnato nel miglioramento personale e sociale.",
+};
+
+// Subtype descriptions for each enneatipo
+const subtypeDescriptions: Record<number, { conservativo: string; sociale: string; sessuale: string; personaggiConservativo: string[]; personaggiSociale: string[]; personaggiSessuale: string[] }> = {
+  1: {
+    conservativo: "Il Tipo 1 conservativo è particolarmente focalizzato sull'ordine personale, la salute e la gestione delle risorse. La sua ricerca di perfezione si concentra sulla vita quotidiana: alimentazione corretta, ambiente ordinato, routine ben strutturate. È il più ansioso dei tre sottotipi, preoccupato che tutto sia fatto nel modo giusto per garantire sicurezza e benessere.",
+    sociale: "Il Tipo 1 sociale è il riformatore per eccellenza: canalizza la propria energia verso il miglioramento della società e delle istituzioni. Si sente chiamato a insegnare e a essere un modello di rettitudine. È il più visibile dei tre sottotipi, spesso coinvolto in cause sociali, politica o educazione.",
+    sessuale: "Il Tipo 1 sessuale dirige la propria passione verso la trasformazione del partner e delle relazioni intime. Ha standard elevati per sé e per l'altro, desiderando una relazione che incarni i propri ideali. È il più intenso e appassionato dei tre sottotipi, con una forte carica di zelo riformatore nelle relazioni.",
+    personaggiConservativo: ["Mahatma Gandhi", "Martha Stewart"],
+    personaggiSociale: ["Martin Luther King Jr.", "Greta Thunberg"],
+    personaggiSessuale: ["Giovanna d'Arco", "Martin Lutero"],
+  },
+  2: {
+    conservativo: "Il Tipo 2 conservativo esprime il proprio aiuto attraverso la cura pratica e materiale: cucinare, accudire, creare un ambiente confortevole. È il più materno/paterno dei tre sottotipi, con un'attenzione particolare al benessere fisico delle persone care. Può avere difficoltà a riconoscere i propri bisogni.",
+    sociale: "Il Tipo 2 sociale è un leader naturale che aiuta attraverso l'influenza e le connessioni. Si distingue per la capacità di creare reti sociali e facilitare le relazioni tra le persone. È il più ambizioso dei tre sottotipi, spesso attratto da posizioni di potere da cui può dispensare aiuto e supporto.",
+    sessuale: "Il Tipo 2 sessuale è il più seducente e magnetico: cerca di essere irresistibile per la persona amata, offrendo un'attenzione esclusiva e intensa. Vive le relazioni con grande passione e può diventare possessivo. È il sottotipo che più confonde l'amore con il bisogno di essere necessario.",
+    personaggiConservativo: ["Madre Teresa di Calcutta", "Mia Martini"],
+    personaggiSociale: ["Eleanor Roosevelt", "Oprah Winfrey"],
+    personaggiSessuale: ["Marilyn Monroe", "Casanova"],
+  },
+  3: {
+    conservativo: "Il Tipo 3 conservativo ricerca il successo attraverso l'efficienza materiale e la sicurezza economica. È il più laborioso e meno appariscente dei tre sottotipi, concentrato sul raggiungere risultati concreti e tangibili. Lavora instancabilmente per garantire stabilità e benessere a sé e alla propria famiglia.",
+    sociale: "Il Tipo 3 sociale è la star del gruppo: cerca il successo attraverso il riconoscimento pubblico, lo status e l'influenza sociale. È il più competitivo e orientato all'immagine dei tre sottotipi, abile nel networking e nella costruzione di una reputazione brillante.",
+    sessuale: "Il Tipo 3 sessuale vuole essere attraente e desiderabile, concentrando la propria immagine di successo sulle relazioni intime. È il più sensibile dei tre sottotipi al fascino personale e alla chimica relazionale, cercando un partner che rifletta il proprio valore.",
+    personaggiConservativo: ["Angela Merkel", "Warren Buffett"],
+    personaggiSociale: ["Madonna", "Cristiano Ronaldo"],
+    personaggiSessuale: ["John F. Kennedy", "Beyoncé"],
+  },
+  4: {
+    conservativo: "Il Tipo 4 conservativo interiorizza le proprie emozioni e soffre in silenzio, cercando di resistere alla sofferenza con forza d'animo. È il più stoico dei tre sottotipi, capace di sopportare molto senza lamentarsi. Spesso si nega ciò che desidera, vivendo un conflitto tra bisogno e rinuncia.",
+    sociale: "Il Tipo 4 sociale esprime la propria unicità attraverso il confronto con il gruppo: può sentirsi inferiore ma anche orgogliosamente diverso. È il più visibile nella sua sofferenza, usando la propria esperienza emotiva per connettersi con gli altri a un livello profondo.",
+    sessuale: "Il Tipo 4 sessuale è il più intenso e competitivo: esprime le proprie emozioni con forza e pretende di essere visto nella propria unicità dall'altro. È il sottotipo più assertivo, capace di grande passione ma anche di gelosia e drammaticità nelle relazioni.",
+    personaggiConservativo: ["Franz Kafka", "Virginia Woolf"],
+    personaggiSociale: ["Frida Kahlo", "Amy Winehouse"],
+    personaggiSessuale: ["Jim Morrison", "Edith Piaf"],
+  },
+  5: {
+    conservativo: "Il Tipo 5 conservativo è il più ritirato e autosufficiente: minimizza i propri bisogni materiali per mantenere l'indipendenza. Vive con poco, creando confini chiari tra sé e il mondo esterno. La sua privacy e il suo spazio personale sono sacri.",
+    sociale: "Il Tipo 5 sociale è il più intellettualmente orientato al gruppo: ricerca la conoscenza per contribuire alla comunità degli esperti. È il più socievole dei tre sottotipi, attratto da circoli intellettuali, accademie e gruppi di ricerca dove condividere il sapere.",
+    sessuale: "Il Tipo 5 sessuale è il più emotivamente intenso: cerca una connessione profonda e totale con una persona speciale, a cui rivela il proprio mondo interiore. È il sottotipo che più oscilla tra il desiderio di intimità e il bisogno di ritiro.",
+    personaggiConservativo: ["Emily Dickinson", "Isaac Newton"],
+    personaggiSociale: ["Albert Einstein", "Bill Gates"],
+    personaggiSessuale: ["Friedrich Nietzsche", "Tim Burton"],
+  },
+  6: {
+    conservativo: "Il Tipo 6 conservativo è il più ansioso e orientato alla sicurezza personale: cerca protezione attraverso alleanze affidabili, routine stabili e preparazione ai rischi. È caloroso e affettuoso con chi si fida, ma sempre vigile verso i potenziali pericoli.",
+    sociale: "Il Tipo 6 sociale cerca sicurezza attraverso l'appartenenza al gruppo e il rispetto delle regole condivise. È il più orientato al dovere dei tre sottotipi, leale verso le istituzioni e le autorità che considera affidabili. Può oscillare tra conformismo e ribellione.",
+    sessuale: "Il Tipo 6 sessuale affronta la paura attraverso la forza e l'intimidazione (controfobico): è il più coraggioso e apparentemente sicuro di sé dei tre sottotipi. Cerca relazioni intense dove mettere alla prova la propria forza e la lealtà dell'altro.",
+    personaggiConservativo: ["Papa Giovanni XXIII", "Angela Merkel"],
+    personaggiSociale: ["Robert F. Kennedy", "J.R.R. Tolkien"],
+    personaggiSessuale: ["Bruce Lee", "Che Guevara"],
+  },
+  7: {
+    conservativo: "Il Tipo 7 conservativo è il più pratico e terreno: cerca il piacere attraverso il comfort fisico, il buon cibo, i viaggi e le esperienze sensoriali. È il più materialista dei tre sottotipi, abile nel creare reti di supporto e opportunità per il proprio benessere.",
+    sociale: "Il Tipo 7 sociale è il più altruista e idealista: dirige la propria energia entusiastica verso cause collettive e visioni utopiche. È il meno egoista dei tre sottotipi, capace di sacrificare il piacere personale per il bene comune.",
+    sessuale: "Il Tipo 7 sessuale è il più sognatore e romantico: cerca l'incanto e la meraviglia nelle relazioni intime, idealizzando il partner e l'amore. È il sottotipo più emotivamente coinvolto, con una tendenza a vivere le relazioni come avventure fantastiche.",
+    personaggiConservativo: ["Epicuro", "Federico Fellini"],
+    personaggiSociale: ["Robin Williams", "Dalai Lama"],
+    personaggiSessuale: ["Casanova", "Amelia Earhart"],
+  },
+  8: {
+    conservativo: "Il Tipo 8 conservativo è il più protettivo e territoriale: usa la propria forza per garantire la sopravvivenza e la sicurezza del proprio nucleo. È il sottotipo più intenso fisicamente, con un'energia che si esprime nella concretezza dell'azione e nella difesa dei più deboli.",
+    sociale: "Il Tipo 8 sociale è il leader naturale del gruppo: usa la propria forza per proteggere la comunità e combattere le ingiustizie. È il più socialmente impegnato dei tre sottotipi, spesso in prima linea nelle battaglie per i diritti e la giustizia.",
+    sessuale: "Il Tipo 8 sessuale è il più possessivo e magnetico: vive le relazioni con grande intensità e passione, cercando un legame totale e esclusivo. È il sottotipo più carismatico e provocatorio, capace di grande tenerezza ma anche di grande dominazione.",
+    personaggiConservativo: ["Winston Churchill", "Indira Gandhi"],
+    personaggiSociale: ["Martin Luther King Jr.", "Fidel Castro"],
+    personaggiSessuale: ["Marlon Brando", "Cleopatra"],
+  },
+  9: {
+    conservativo: "Il Tipo 9 conservativo cerca la pace attraverso le abitudini confortevoli, le attività ripetitive e i piccoli piaceri quotidiani. È il più passivo dei tre sottotipi, con una tendenza a narcotizzarsi attraverso il cibo, la televisione o altre attività routinarie che placano l'ansia.",
+    sociale: "Il Tipo 9 sociale è il mediatore del gruppo: cerca l'armonia attraverso l'appartenenza e la fusione con la comunità. È il più attivo socialmente dei tre sottotipi, spesso coinvolto in gruppi dove può contribuire alla pace collettiva senza dover emergere individualmente.",
+    sessuale: "Il Tipo 9 sessuale cerca la pace attraverso la fusione con il partner: si fonde emotivamente con l'altro, assumendone i desideri e le priorità. È il più dipendente dei tre sottotipi nelle relazioni, con una tendenza a perdere la propria identità nell'amore.",
+    personaggiConservativo: ["Walt Disney", "Audrey Hepburn"],
+    personaggiSociale: ["Abraham Lincoln", "Papa Francesco"],
+    personaggiSessuale: ["John Lennon", "Grace Kelly"],
+  },
+};
+
+function GenogrammaExplanation() {
+  return (
+    <Accordion type="single" collapsible className="w-full">
+      <AccordionItem value="genogramma-info" className="border-amber-200 dark:border-amber-800">
+        <AccordionTrigger className="text-amber-800 dark:text-amber-200 hover:no-underline">
+          <span className="flex items-center gap-2">
+            <Info className="w-4 h-4" />
+            Cos'è il Genogramma?
+          </span>
+        </AccordionTrigger>
+        <AccordionContent className="text-sm text-amber-900/80 dark:text-amber-100/80 leading-relaxed">
+          <p className="mb-3">
+            Il genogramma è uno strumento grafico utilizzato per rappresentare le relazioni familiari e le dinamiche
+            intergenerazionali. Simile a un albero genealogico, ma molto più ricco di informazioni, il genogramma mappa
+            non solo i legami di parentela, ma anche i pattern emotivi, i conflitti, le alleanze e i modelli
+            comportamentali che si ripetono attraverso le generazioni.
+          </p>
+          <p className="mb-2 font-medium">Nell'ambito dell'Enneagramma Evolutivo, il genogramma viene utilizzato per:</p>
+          <ul className="list-disc list-inside space-y-1 mb-3 ml-2">
+            <li>Comprendere come il tuo enneatipo si è formato nel contesto familiare</li>
+            <li>Identificare i pattern relazionali ereditati che influenzano il tuo tipo</li>
+            <li>Chiarire l'enneatipo quando il test non fornisce un risultato univoco</li>
+            <li>Esplorare le dinamiche tra i diversi enneatipi presenti nella tua famiglia</li>
+          </ul>
+          <p>
+            Un genogramma personalizzato, condotto da un professionista, permette di ottenere una comprensione più
+            profonda e accurata del tuo profilo enneagrammatico rispetto al solo test.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+
 export default function TestResults() {
   const [, params] = useRoute("/test/results/:id");
   const id = params?.id;
@@ -35,6 +183,9 @@ export default function TestResults() {
     queryKey: ["/api/test/result", id],
     enabled: !!id,
   });
+
+  const [selectedWing, setSelectedWing] = useState<number | null>(null);
+  const [selectedSubtype, setSelectedSubtype] = useState<"conservativo" | "sociale" | "sessuale" | null>(null);
 
   if (isLoading) {
     return (
@@ -64,16 +215,15 @@ export default function TestResults() {
   const desc = result.descrizioni || {};
   const enneatipo = result.enneatipo;
   const ala = result.ala;
+  const validationIssues = result.validationIssues;
 
   // Helper to get description for an attribute
   const getDesc = (category: string, value: string): string | null => {
     if (!desc[category]) return null;
     const cat = desc[category];
-    // For objects with nested structure (gerarchia_angelica, musa)
     if (cat[value] && typeof cat[value] === 'object') {
       return cat[value].descrizione || cat[value].significato || null;
     }
-    // For simple string descriptions
     if (typeof cat[value] === 'string') return cat[value];
     return null;
   };
@@ -83,12 +233,127 @@ export default function TestResults() {
     return desc[category][value] || null;
   };
 
+  // Client-side validation (mirrors server logic)
+  const maxScore = Math.max(...Object.values(scores).map(Number));
+  const tiedMaxScores = validationIssues?.tiedMaxScores ?? Object.values(scores).filter((v) => Number(v) === maxScore).length > 1;
+  const maxScoreTooLow = validationIssues?.maxScoreTooLow ?? maxScore < 10;
+  const showBlockingWarning = tiedMaxScores || maxScoreTooLow;
+
+  // Wing calculation
+  const leftWing = enneatipo === 1 ? 9 : enneatipo - 1;
+  const rightWing = enneatipo === 9 ? 1 : enneatipo + 1;
+  const tiedWingScores = validationIssues?.tiedWingScores ?? (!showBlockingWarning && scores[leftWing] === scores[rightWing]);
+
+  // Determine which wing is currently active (user-selected or auto-suggested)
+  const suggestedWing = tiedWingScores ? null : ala;
+  const activeWing = selectedWing ?? suggestedWing;
+
+  // Wing description for the active wing
+  const activeWingKey = activeWing ? `${enneatipo}w${activeWing}` : null;
+  const activeWingDescription = activeWingKey ? wingDescriptions[activeWingKey] : null;
+
+  // Subtype data for this enneatipo
+  const subtypeData = subtypeDescriptions[enneatipo];
+
   // Radar chart data
   const radarData = Object.entries(scores).map(([key, value]) => ({
     type: `${fruitEmoji[parseInt(key)]} ${parseInt(key)}`,
     score: value as number,
     fullMark: 20,
   }));
+
+  // Shared radar chart component
+  const scoreChart = (
+    <Card className="mb-8">
+      <CardHeader>
+        <CardTitle className="text-lg font-serif">Punteggi dei 9 Frutti</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="h-[350px]" data-testid="chart-radar">
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart data={radarData}>
+              <PolarGrid stroke="hsl(270, 20%, 85%)" />
+              <PolarAngleAxis dataKey="type" tick={{ fontSize: 12 }} />
+              <PolarRadiusAxis angle={90} domain={[0, 20]} tick={{ fontSize: 10 }} />
+              <Radar
+                name="Punteggio"
+                dataKey="score"
+                stroke="hsl(271, 76%, 53%)"
+                fill="hsl(271, 76%, 53%)"
+                fillOpacity={0.3}
+                strokeWidth={2}
+              />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
+        {/* Score details */}
+        <div className="grid grid-cols-3 sm:grid-cols-9 gap-2 mt-4">
+          {Object.entries(scores).map(([key, value]) => {
+            const num = parseInt(key);
+            const isMain = num === enneatipo;
+            return (
+              <div
+                key={key}
+                className={`text-center p-2 rounded-lg ${isMain && !showBlockingWarning ? "bg-primary/10 ring-2 ring-primary" : "bg-muted/50"}`}
+                data-testid={`score-type-${num}`}
+              >
+                <div className="text-lg">{fruitEmoji[num]}</div>
+                <div className="text-xs text-muted-foreground">{fruitNames[num]}</div>
+                <div className={`text-sm font-bold ${isMain && !showBlockingWarning ? "text-primary" : ""}`}>{value as number}/20</div>
+              </div>
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  // Rule 1 or Rule 3: blocking validation — show warning instead of profile
+  if (showBlockingWarning) {
+    const warningMessage = tiedMaxScores
+      ? "Non è stato possibile identificare con certezza il tuo enneatipo perché due o più tipi hanno ottenuto lo stesso punteggio massimo. Ti consigliamo di effettuare un genogramma personalizzato."
+      : "Il punteggio massimo ottenuto è inferiore a 10/20, il che non consente un'identificazione affidabile. Ti consigliamo di effettuare un genogramma personalizzato.";
+
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-serif font-bold mb-2">
+            Risultati del Test
+          </h1>
+        </div>
+
+        {/* Warning Card */}
+        <Card className="mb-8 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/30" data-testid="validation-warning-card">
+          <CardContent className="p-6 flex flex-col items-center text-center gap-4">
+            <AlertTriangle className="w-10 h-10 text-amber-600 dark:text-amber-400" />
+            <p className="text-amber-800 dark:text-amber-200 text-base leading-relaxed max-w-xl" data-testid="validation-warning-message">
+              {warningMessage}
+            </p>
+            <Link href="/about">
+              <Button className="bg-amber-600 hover:bg-amber-700 text-white mt-2" data-testid="button-contact-cta">
+                Contatta per un genogramma personalizzato
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Genogramma explanation */}
+        <div className="mb-8 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+          <GenogrammaExplanation />
+        </div>
+
+        {/* Still show the score chart */}
+        {scoreChart}
+
+        {/* Actions */}
+        <div className="flex flex-wrap gap-3 justify-center pb-8">
+          <Link href="/test">
+            <Button variant="outline" data-testid="button-retake">Rifai il Test</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
@@ -101,19 +366,6 @@ export default function TestResults() {
         <p className="text-lg text-muted-foreground font-serif italic" data-testid="text-result-motto">
           "{attrs?.motto}"
         </p>
-        {ala && (
-          <Badge className={`mt-3 ${typeColors[ala] || "bg-muted"}`} data-testid="badge-wing">
-            Ala {ala} — {fruitNames[ala]}
-          </Badge>
-        )}
-        {result.needsGenogram && (
-          <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg max-w-lg mx-auto">
-            <p className="text-sm text-amber-800 dark:text-amber-200" data-testid="text-genogram-notice">
-              <strong>Nota:</strong> Il test suggerisce la necessità di un genogramma per una determinazione più precisa 
-              dell'enneatipo e/o dell'ala. Ti consigliamo di consultare un professionista.
-            </p>
-          </div>
-        )}
         {/* Descrizione e motivazione dal contenuto educativo */}
         {result.educativo && (
           <div className="mt-6 max-w-2xl mx-auto text-left">
@@ -148,51 +400,172 @@ export default function TestResults() {
         )}
       </div>
 
-      {/* Radar Chart */}
-      <Card className="mb-8">
+      {/* Wing Selector (from master) */}
+      <Card className="mb-8" data-testid="wing-selector">
         <CardHeader>
-          <CardTitle className="text-lg font-serif">Punteggi dei 9 Frutti</CardTitle>
+          <CardTitle className="text-lg font-serif">Scegli la tua ala</CardTitle>
+          <p className="text-sm text-muted-foreground mt-1">
+            L'ala è il tipo adiacente che influenza maggiormente il tuo enneatipo.
+            Il sistema suggerisce l'ala in base ai punteggi, ma puoi selezionare quella in cui ti riconosci di più.
+          </p>
         </CardHeader>
         <CardContent>
-          <div className="h-[350px]" data-testid="chart-radar">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart data={radarData}>
-                <PolarGrid stroke="hsl(270, 20%, 85%)" />
-                <PolarAngleAxis dataKey="type" tick={{ fontSize: 12 }} />
-                <PolarRadiusAxis angle={90} domain={[0, 20]} tick={{ fontSize: 10 }} />
-                <Radar
-                  name="Punteggio"
-                  dataKey="score"
-                  stroke="hsl(271, 76%, 53%)"
-                  fill="hsl(271, 76%, 53%)"
-                  fillOpacity={0.3}
-                  strokeWidth={2}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-          {/* Score details */}
-          <div className="grid grid-cols-3 sm:grid-cols-9 gap-2 mt-4">
-            {Object.entries(scores).map(([key, value]) => {
-              const num = parseInt(key);
-              const isMain = num === enneatipo;
+          {tiedWingScores && (
+            <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg" data-testid="wing-warning">
+              <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
+                L'enneatipo è stato identificato, ma non è stato possibile determinare l'ala perché i tipi adiacenti hanno lo stesso punteggio.
+                Ti consigliamo di effettuare un genogramma per chiarire questo aspetto, oppure scegli l'ala in cui ti riconosci di più.
+              </p>
+              <GenogrammaExplanation />
+              <Link href="/about">
+                <Button variant="outline" size="sm" className="mt-3 border-amber-400 text-amber-800 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900/40" data-testid="button-wing-contact-cta">
+                  Contatta per un genogramma personalizzato
+                </Button>
+              </Link>
+            </div>
+          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[leftWing, rightWing].map((wing) => {
+              const isSelected = activeWing === wing;
+              const isSuggested = suggestedWing === wing;
+              const wingKey = `${enneatipo}w${wing}`;
               return (
-                <div
-                  key={key}
-                  className={`text-center p-2 rounded-lg ${isMain ? "bg-primary/10 ring-2 ring-primary" : "bg-muted/50"}`}
-                  data-testid={`score-type-${num}`}
+                <button
+                  key={wing}
+                  onClick={() => setSelectedWing(wing)}
+                  className={`relative text-left p-4 rounded-lg border-2 transition-all ${
+                    isSelected
+                      ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+                      : "border-border hover:border-primary/50 hover:bg-muted/50"
+                  }`}
+                  data-testid={`wing-option-${wing}`}
                 >
-                  <div className="text-lg">{fruitEmoji[num]}</div>
-                  <div className="text-xs text-muted-foreground">{fruitNames[num]}</div>
-                  <div className={`text-sm font-bold ${isMain ? "text-primary" : ""}`}>{value as number}/20</div>
-                </div>
+                  {isSelected && (
+                    <div className="absolute top-3 right-3">
+                      <Check className="w-5 h-5 text-primary" />
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">{fruitEmoji[wing]}</span>
+                    <div>
+                      <div className="font-semibold">
+                        Ala {wing}: {typeNames[wing]}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {fruitNames[wing]} — Punteggio: {scores[wing]}/20
+                        {isSuggested && <Badge className="ml-2 bg-primary/10 text-primary text-[10px]">Suggerita</Badge>}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {wingDescriptions[wingKey]}
+                  </p>
+                </button>
               );
             })}
           </div>
+          {activeWing && activeWingDescription && (
+            <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20" data-testid="wing-description">
+              <Badge className={`mb-2 ${typeColors[activeWing] || "bg-muted"}`}>
+                Ala {activeWing} — {fruitNames[activeWing]}
+              </Badge>
+              <p className="text-sm leading-relaxed">{activeWingDescription}</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
-      {/* Integration/Disintegration Percentages */}
+      {/* Subtype Selector (from master) */}
+      <Card className="mb-8" data-testid="subtype-selector">
+        <CardHeader>
+          <CardTitle className="text-lg font-serif">Scegli il tuo sottotipo</CardTitle>
+          <p className="text-sm text-muted-foreground mt-1">
+            Il sottotipo descrive come il tuo enneatipo si esprime nella vita quotidiana.
+            Leggi le descrizioni e scegli quella in cui ti riconosci di più.
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 gap-4">
+            {([
+              {
+                key: "conservativo" as const,
+                label: "Conservativo (Autoconservazione)",
+                brief: "Focalizzato sulla sicurezza personale, il comfort fisico, la salute e le risorse materiali.",
+              },
+              {
+                key: "sociale" as const,
+                label: "Sociale",
+                brief: "Focalizzato sull'appartenenza al gruppo, il ruolo sociale, la comunità e il riconoscimento.",
+              },
+              {
+                key: "sessuale" as const,
+                label: "Sessuale (Uno a uno)",
+                brief: "Focalizzato sulle relazioni intime, l'intensità, l'attrazione e il legame profondo con l'altro.",
+              },
+            ]).map(({ key, label, brief }) => {
+              const isSelected = selectedSubtype === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedSubtype(key)}
+                  className={`relative text-left p-4 rounded-lg border-2 transition-all ${
+                    isSelected
+                      ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+                      : "border-border hover:border-primary/50 hover:bg-muted/50"
+                  }`}
+                  data-testid={`subtype-option-${key}`}
+                >
+                  {isSelected && (
+                    <div className="absolute top-3 right-3">
+                      <Check className="w-5 h-5 text-primary" />
+                    </div>
+                  )}
+                  <div className="font-semibold mb-1">{label}</div>
+                  <p className="text-sm text-muted-foreground">{brief}</p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Subtype detail when selected */}
+          {selectedSubtype && subtypeData && (
+            <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20" data-testid="subtype-description">
+              <h4 className="font-semibold text-sm mb-2">
+                Enneatipo {enneatipo} — Sottotipo{" "}
+                {selectedSubtype === "conservativo"
+                  ? "Conservativo"
+                  : selectedSubtype === "sociale"
+                    ? "Sociale"
+                    : "Sessuale"}
+              </h4>
+              <p className="text-sm leading-relaxed mb-3">{subtypeData[selectedSubtype]}</p>
+              {(() => {
+                const personaggiKey = selectedSubtype === "conservativo"
+                  ? "personaggiConservativo"
+                  : selectedSubtype === "sociale"
+                    ? "personaggiSociale"
+                    : "personaggiSessuale";
+                const personaggi = subtypeData[personaggiKey];
+                return personaggi && personaggi.length > 0 ? (
+                  <div>
+                    <h5 className="text-xs font-semibold text-muted-foreground mb-1">Personalità famose:</h5>
+                    <div className="flex flex-wrap gap-1.5">
+                      {personaggi.map((p: string) => (
+                        <Badge key={p} variant="secondary" className="text-xs">{p}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Radar Chart */}
+      {scoreChart}
+
+      {/* Integration/Disintegration Percentages (from main) */}
       {scores && (() => {
         const arrowData = calculateArrowPercentages(enneatipo, scores);
         const detailed = enneatypesDetailed[enneatipo];
@@ -250,7 +623,7 @@ export default function TestResults() {
         );
       })()}
 
-      {/* PNL & Subtypes Summary */}
+      {/* PNL & Subtypes Summary (from main) */}
       {enneatypesDetailed[enneatipo] && (() => {
         const detailed = enneatypesDetailed[enneatipo];
         return (
@@ -283,7 +656,7 @@ export default function TestResults() {
         );
       })()}
 
-      {/* Attributes Grid — with explanations */}
+      {/* Attributes Grid — with explanations (from main) */}
       {attrs && (
         <div className="space-y-4 mb-8">
           <div className="flex items-center justify-between">
@@ -427,7 +800,7 @@ export default function TestResults() {
         </div>
       )}
 
-      {/* Wellness */}
+      {/* Wellness (from main) */}
       {attrs && (
         <Card className="mb-8">
           <CardHeader>
@@ -469,12 +842,80 @@ export default function TestResults() {
         </Card>
       )}
 
-      {/* Personalized Evolutionary Paths */}
+      {/* Journey Phase Info (from master - percorsi-eta) */}
+      {result.eta && enneatipo && (
+        <Card className="mb-8" data-testid="journey-phase-section">
+          <CardHeader>
+            <CardTitle className="text-lg font-serif flex items-center gap-2">
+              <Compass className="w-5 h-5 text-primary" /> I tuoi Percorsi di Vita
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              In base alla tua età ({result.eta} anni), ecco cosa stai vivendo nei due possibili percorsi evolutivi.
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {[1, 2].map((percorsoNum) => {
+                const journey = getJourney(enneatipo, percorsoNum);
+                if (!journey) return null;
+                const currentPhase = getCurrentPhase(journey, result.eta);
+                const currentIdx = getCurrentPhaseIndex(journey, result.eta);
+                if (!currentPhase) return null;
+                const etaLabels = journey.tipo === "triangolo"
+                  ? ["0-30", "25-60", "60+"]
+                  : ["0-3", "3-12", "12-19", "20-30", "25-60", "60+"];
+                return (
+                  <div key={percorsoNum} className="p-4 bg-muted/30 rounded-lg border">
+                    <h4 className="font-semibold text-sm mb-2">
+                      Percorso {percorsoNum}: {journey.sequenza.join("→")}
+                    </h4>
+                    {/* Sequence with current highlighted */}
+                    <div className="flex items-center gap-1 flex-wrap mb-3">
+                      {journey.sequenza.map((e, i) => (
+                        <div key={i} className="flex items-center gap-0.5">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            i === currentIdx ? "bg-primary text-white" : "bg-muted text-muted-foreground"
+                          }`}>
+                            {journeyFruitEmoji[e]} {e}
+                          </span>
+                          {i < journey.sequenza.length - 1 && <span className="text-muted-foreground text-xs">→</span>}
+                        </div>
+                      ))}
+                    </div>
+                    <Badge className="bg-green-500 text-white text-[10px] mb-2">
+                      Fase attuale: {etaLabels[currentIdx]} anni
+                    </Badge>
+                    <div className="grid grid-cols-2 gap-1.5 text-xs mt-2">
+                      <div><span className="text-muted-foreground">Enneatipo attivo:</span> {currentPhase.enneatipo}</div>
+                      <div><span className="text-muted-foreground">Dignità:</span> {currentPhase.dignita}</div>
+                      <div><span className="text-muted-foreground">Virtù:</span> {currentPhase.virtu}</div>
+                      <div><span className="text-muted-foreground">Vizio:</span> {currentPhase.vizio}</div>
+                      <div><span className="text-muted-foreground">Gerarchia:</span> {currentPhase.gerarchia}</div>
+                      <div><span className="text-muted-foreground">Musa:</span> {currentPhase.musa}</div>
+                      <div><span className="text-muted-foreground">Topica:</span> {currentPhase.topica}</div>
+                      <div><span className="text-muted-foreground">Difesa:</span> {currentPhase.meccanismoDifesa}</div>
+                      <div><span className="text-muted-foreground">Idea sacra:</span> {currentPhase.ideaSacra}</div>
+                      <div><span className="text-muted-foreground">Chakra:</span> {currentPhase.chakra}</div>
+                    </div>
+                    <Link href="/percorsi" className="inline-block mt-3">
+                      <Badge variant="outline" className="cursor-pointer hover:bg-primary/10 text-xs">
+                        Esplora percorso completo →
+                      </Badge>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Personalized Evolutionary Paths (from main) */}
       {result.percorsoPersonalizzato && (
         <div className="space-y-4 mb-8">
           <h2 className="text-2xl font-serif font-bold text-center">I Tuoi Percorsi Evolutivi</h2>
           <p className="text-center text-sm text-muted-foreground max-w-2xl mx-auto mb-4">
-            A {result.eta} anni, ti trovi nella fase <strong className="text-foreground">{result.percorsoPersonalizzato.faseCorrente}</strong>. 
+            A {result.eta} anni, ti trovi nella fase <strong className="text-foreground">{result.percorsoPersonalizzato.faseCorrente}</strong>.
             Ogni enneatipo attraversa due percorsi nella vita: Integrazione (crescita) e Disintegrazione (stress).
           </p>
 
@@ -486,12 +927,11 @@ export default function TestResults() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {/* Sequence */}
               <div className="flex items-center gap-1 flex-wrap mb-4">
                 {result.percorsoPersonalizzato.integrazione.sequenza.map((t: number, i: number) => (
                   <span key={i} className="flex items-center gap-1">
                     <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
-                      Object.values(result.percorsoPersonalizzato.integrazione.faseAttuale || {}).includes(t) 
+                      Object.values(result.percorsoPersonalizzato.integrazione.faseAttuale || {}).includes(t)
                         ? "bg-green-600 text-white ring-2 ring-green-400"
                         : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
                     }`}>{t}</span>
@@ -502,14 +942,13 @@ export default function TestResults() {
                 ))}
               </div>
 
-              {/* Life phases */}
               <div className="space-y-3">
                 {Object.entries(result.percorsoPersonalizzato.integrazione.fasi).map(([fase, info]: [string, any]) => {
                   const isActive = fase === result.percorsoPersonalizzato.faseCorrente;
                   return (
                     <div key={fase} className={`p-3 rounded-lg border transition-all ${
-                      isActive 
-                        ? "bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700 ring-1 ring-green-400" 
+                      isActive
+                        ? "bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700 ring-1 ring-green-400"
                         : "border-border/50 opacity-75"
                     }`}>
                       <div className="flex items-center gap-2 mb-1">
@@ -526,7 +965,6 @@ export default function TestResults() {
                 })}
               </div>
 
-              {/* Crossings */}
               <div className="mt-4 pt-3 border-t border-green-200 dark:border-green-800">
                 <h4 className="text-xs font-semibold text-green-600 mb-2">Incroci evolutivi</h4>
                 <div className="grid sm:grid-cols-2 gap-1.5">
@@ -549,7 +987,6 @@ export default function TestResults() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {/* Sequence */}
               <div className="flex items-center gap-1 flex-wrap mb-4">
                 {result.percorsoPersonalizzato.disintegrazione.sequenza.map((t: number, i: number) => (
                   <span key={i} className="flex items-center gap-1">
@@ -565,14 +1002,13 @@ export default function TestResults() {
                 ))}
               </div>
 
-              {/* Life phases */}
               <div className="space-y-3">
                 {Object.entries(result.percorsoPersonalizzato.disintegrazione.fasi).map(([fase, info]: [string, any]) => {
                   const isActive = fase === result.percorsoPersonalizzato.faseCorrente;
                   return (
                     <div key={fase} className={`p-3 rounded-lg border transition-all ${
-                      isActive 
-                        ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 ring-1 ring-red-400" 
+                      isActive
+                        ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 ring-1 ring-red-400"
                         : "border-border/50 opacity-75"
                     }`}>
                       <div className="flex items-center gap-2 mb-1">
@@ -589,7 +1025,6 @@ export default function TestResults() {
                 })}
               </div>
 
-              {/* Crossings */}
               <div className="mt-4 pt-3 border-t border-red-200 dark:border-red-800">
                 <h4 className="text-xs font-semibold text-red-600 mb-2">Incroci di stress</h4>
                 <div className="grid sm:grid-cols-2 gap-1.5">
@@ -606,7 +1041,7 @@ export default function TestResults() {
         </div>
       )}
 
-      {/* Punti Caldi - crossing points */}
+      {/* Punti Caldi (from main) */}
       {result.percorsoPersonalizzato?.puntiCaldi && result.percorsoPersonalizzato.puntiCaldi.length > 0 && (
         <Card className="mb-8 border-purple-200 dark:border-purple-800">
           <CardHeader>
@@ -614,7 +1049,7 @@ export default function TestResults() {
               <span className="text-xl">🔥</span> Punti Caldi — Incroci tra Percorsi
             </CardTitle>
             <p className="text-xs text-muted-foreground mt-1">
-              I punti dove i percorsi di integrazione e disintegrazione di tipi diversi si incontrano. 
+              I punti dove i percorsi di integrazione e disintegrazione di tipi diversi si incontrano.
               Questi sono i momenti di massima intensità evolutiva.
             </p>
           </CardHeader>
@@ -648,7 +1083,7 @@ export default function TestResults() {
             {result.percorsoPersonalizzato.statistiche && (
               <div className="mt-4 pt-3 border-t border-purple-200 dark:border-purple-800 text-center">
                 <p className="text-[11px] text-muted-foreground">
-                  Totale incroci nel sistema: <strong>{result.percorsoPersonalizzato.statistiche.totaleComplessivo}</strong> 
+                  Totale incroci nel sistema: <strong>{result.percorsoPersonalizzato.statistiche.totaleComplessivo}</strong>
                   ({result.percorsoPersonalizzato.statistiche.totaleIncrociCicloLungo} ciclo lungo + {result.percorsoPersonalizzato.statistiche.totaleIncrociCicloBreve} ciclo breve)
                 </p>
               </div>
@@ -705,7 +1140,6 @@ export default function TestResults() {
             <div className="grid sm:grid-cols-3 gap-3">
               {Object.entries(result.etaInfo).map(([key, info]: [string, any]) => {
                 const rangeStr = info.eta;
-                // Determine if the user's age falls in this range
                 let isActive = false;
                 if (rangeStr.includes("+")) {
                   const min = parseInt(rangeStr);
@@ -732,7 +1166,7 @@ export default function TestResults() {
         </Card>
       )}
 
-      {/* IL TUO PROFILO PERSONALE - Synthesis of everything */}
+      {/* IL TUO PROFILO PERSONALE (from main) */}
       {attrs && result.percorsoPersonalizzato && (
         <Card className="mb-8 border-2 border-primary/30 bg-gradient-to-br from-purple-50/50 to-blue-50/50 dark:from-purple-950/20 dark:to-blue-950/20">
           <CardHeader>
@@ -744,19 +1178,17 @@ export default function TestResults() {
             </p>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Chi sei */}
             <div>
               <h4 className="font-serif font-semibold text-base mb-2">Chi sei</h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Sei un <strong className="text-foreground">Enneatipo {enneatipo} — {attrs.nome}</strong>
-                {ala && <>, con <strong className="text-foreground">Ala {ala} ({fruitNames[ala]})</strong></>}. 
+                {activeWing && <>, con <strong className="text-foreground">Ala {activeWing} ({fruitNames[activeWing]})</strong></>}.
                 {result.educativo?.descrizione && <> {result.educativo.descrizione}</>}
                 {result.educativo?.motivazione && <> La tua motivazione profonda è <em>{result.educativo.motivazione.toLowerCase()}</em>.  </>}
                 {result.educativo?.paura && <>La tua paura fondamentale è <em>{result.educativo.paura.toLowerCase()}</em>.</>}
               </p>
             </div>
 
-            {/* La tua struttura interiore */}
             <div>
               <h4 className="font-serif font-semibold text-base mb-2">La tua struttura interiore</h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -769,7 +1201,6 @@ export default function TestResults() {
               </p>
             </div>
 
-            {/* Il tuo mondo spirituale */}
             <div>
               <h4 className="font-serif font-semibold text-base mb-2">Il tuo mondo spirituale</h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -782,7 +1213,6 @@ export default function TestResults() {
               </p>
             </div>
 
-            {/* La tua psicologia */}
             <div>
               <h4 className="font-serif font-semibold text-base mb-2">La tua psicologia</h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -795,7 +1225,6 @@ export default function TestResults() {
               </p>
             </div>
 
-            {/* Le tue risonanze cosmiche */}
             <div>
               <h4 className="font-serif font-semibold text-base mb-2">Le tue risonanze cosmiche</h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -809,25 +1238,23 @@ export default function TestResults() {
               </p>
             </div>
 
-            {/* Dove ti trovi ora */}
             {result.percorsoPersonalizzato.faseCorrente && (
               <div>
                 <h4 className="font-serif font-semibold text-base mb-2">Dove ti trovi ora</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   A <strong className="text-foreground">{result.eta} anni</strong>, ti trovi nella fase <strong className="text-foreground">{result.percorsoPersonalizzato.faseCorrente}</strong> del tuo percorso evolutivo.
                   {result.percorsoPersonalizzato.integrazione.faseAttuale && <>
-                    {' '}Se stai vivendo un percorso di <strong className="text-green-600">integrazione</strong>, sei nella fase 
+                    {' '}Se stai vivendo un percorso di <strong className="text-green-600">integrazione</strong>, sei nella fase
                     "<em className="text-foreground">{result.percorsoPersonalizzato.integrazione.faseAttuale.nome}</em>" — {result.percorsoPersonalizzato.integrazione.faseAttuale.desc?.toLowerCase()}.
                   </>}
                   {result.percorsoPersonalizzato.disintegrazione.faseAttuale && <>
-                    {' '}Se invece stai attraversando un momento di <strong className="text-red-600">stress</strong>, potresti riconoscere la fase 
+                    {' '}Se invece stai attraversando un momento di <strong className="text-red-600">stress</strong>, potresti riconoscere la fase
                     "<em className="text-foreground">{result.percorsoPersonalizzato.disintegrazione.faseAttuale.nome}</em>" — {result.percorsoPersonalizzato.disintegrazione.faseAttuale.desc?.toLowerCase()}.
                   </>}
                 </p>
               </div>
             )}
 
-            {/* Consigli */}
             {result.educativo?.consigli && result.educativo.consigli.length > 0 && (
               <div>
                 <h4 className="font-serif font-semibold text-base mb-2">Il tuo cammino</h4>
@@ -844,9 +1271,9 @@ export default function TestResults() {
         </Card>
       )}
 
-      {/* Narrative Profile Generation */}
+      {/* Narrative Profile Generation (from main) */}
       {id && (
-        <NarrativeProfileSection testResultId={parseInt(id)} enneatipo={enneatipo} attrs={attrs} eta={result.eta} ala={ala} />
+        <NarrativeProfileSection testResultId={parseInt(id)} enneatipo={enneatipo} attrs={attrs} eta={result.eta} ala={activeWing} />
       )}
 
       {/* Actions */}
@@ -864,12 +1291,17 @@ export default function TestResults() {
             Compatibilità di Coppia
           </Button>
         </Link>
+        <Link href="/percorsi">
+          <Button variant="outline" data-testid="button-percorsi">
+            Percorsi di Vita
+          </Button>
+        </Link>
       </div>
     </div>
   );
 }
 
-// Narrative Profile Component
+// Narrative Profile Component (from main)
 function NarrativeProfileSection({ testResultId, enneatipo, attrs, eta, ala }: {
   testResultId: number; enneatipo: number; attrs: any; eta: number; ala: number | null;
 }) {
@@ -897,24 +1329,22 @@ function NarrativeProfileSection({ testResultId, enneatipo, attrs, eta, ala }: {
 
   const handleDownloadPDF = () => {
     if (!narrative) return;
-    // Create a printable HTML and use browser print
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
-    
-    const typeNames: Record<number, string> = {
+
+    const pdfTypeNames: Record<number, string> = {
       1: "Il Perfezionista", 2: "L'Altruista", 3: "Il Realizzatore",
       4: "L'Individualista", 5: "L'Investigatore", 6: "Il Leale",
       7: "L'Entusiasta", 8: "Il Challenger", 9: "Il Pacificatore"
     };
-    
-    // Convert markdown-like text to HTML
+
     const htmlContent = narrative
       .replace(/## (.*)/g, '<h2 style="color:#7C3AED;margin-top:24px;margin-bottom:12px;font-family:Georgia,serif;">$1</h2>')
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
       .replace(/\n\n/g, '</p><p style="margin-bottom:12px;line-height:1.7;">')
       .replace(/\n/g, '<br/>');
-    
+
     printWindow.document.write(`
       <!DOCTYPE html>
       <html><head>
@@ -937,7 +1367,7 @@ function NarrativeProfileSection({ testResultId, enneatipo, attrs, eta, ala }: {
         <div class="subtitle">Profilo Personalizzato</div>
         <div class="header-info">
           <div style="font-size:40px;margin-bottom:8px;">\u{1F34E}</div>
-          <div style="font-size:22px;font-weight:bold;font-family:'Cormorant Garamond',serif;">Enneatipo ${enneatipo}: ${typeNames[enneatipo]}</div>
+          <div style="font-size:22px;font-weight:bold;font-family:'Cormorant Garamond',serif;">Enneatipo ${enneatipo}: ${pdfTypeNames[enneatipo]}</div>
           ${ala ? `<span class="badge">Ala ${ala}</span>` : ''}
           <span class="badge">${eta} anni</span>
         </div>
@@ -960,11 +1390,11 @@ function NarrativeProfileSection({ testResultId, enneatipo, attrs, eta, ala }: {
           <FileText className="w-12 h-12 text-primary/40 mx-auto mb-4" />
           <h3 className="text-lg font-serif font-bold mb-2">Genera il Tuo Profilo Narrativo Completo</h3>
           <p className="text-sm text-muted-foreground mb-4 max-w-lg mx-auto">
-            L'intelligenza artificiale analizzer\u00e0 i tuoi risultati e creer\u00e0 un profilo personalizzato 
+            L'intelligenza artificiale analizzerà i tuoi risultati e creerà un profilo personalizzato
             e dettagliato del tuo percorso evolutivo, nello stile dell'Enneagramma Evolutivo.
           </p>
-          <Button 
-            onClick={handleGenerate} 
+          <Button
+            onClick={handleGenerate}
             disabled={isGenerating}
             className="bg-primary hover:bg-primary/90"
             size="lg"
@@ -991,15 +1421,15 @@ function NarrativeProfileSection({ testResultId, enneatipo, attrs, eta, ala }: {
         </Button>
       </CardHeader>
       <CardContent>
-        <div className="prose prose-sm dark:prose-invert max-w-none" 
-          dangerouslySetInnerHTML={{ 
+        <div className="prose prose-sm dark:prose-invert max-w-none"
+          dangerouslySetInnerHTML={{
             __html: narrative
               .replace(/## (.*)/g, '<h2 class="text-lg font-serif font-bold text-primary mt-6 mb-3 border-b border-primary/20 pb-1">$1</h2>')
               .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>')
               .replace(/\*(.*?)\*/g, '<em>$1</em>')
               .replace(/\n\n/g, '</p><p class="text-sm text-muted-foreground leading-relaxed mb-3">')
               .replace(/\n/g, '<br/>')
-          }} 
+          }}
         />
       </CardContent>
     </Card>

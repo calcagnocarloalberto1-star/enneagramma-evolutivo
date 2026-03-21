@@ -25,6 +25,8 @@ export default function Footer() {
             <ul className="space-y-2">
               <li><Link href="/test" className="text-sm text-muted-foreground hover:text-primary transition-colors">Fai il Test</Link></li>
               <li><Link href="/compatibilita/coppia" className="text-sm text-muted-foreground hover:text-primary transition-colors">Compatibilità Coppia</Link></li>
+              <li><Link href="/compatibilita/famiglia" className="text-sm text-muted-foreground hover:text-primary transition-colors">Compatibilità Famiglia</Link></li>
+              <li><Link href="/percorsi" className="text-sm text-muted-foreground hover:text-primary transition-colors">Percorsi di Vita</Link></li>
               <li><Link href="/enneatipi" className="text-sm text-muted-foreground hover:text-primary transition-colors">I 9 Enneatipi</Link></li>
             </ul>
           </div>
