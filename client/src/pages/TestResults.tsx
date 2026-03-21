@@ -517,17 +517,29 @@ export default function TestResults() {
             </p>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {result.percorsoPersonalizzato.puntiCaldi.map((pc: any) => (
-                <div key={pc.punto} className="p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm font-bold">{pc.punto}</span>
-                    <div>
-                      <div className="text-xs text-green-600 font-medium">Integra: {pc.chi_integra?.join(', ')}</div>
-                      <div className="text-xs text-red-600 font-medium">Disintegra: {pc.chi_disintegra?.join(', ')}</div>
+                <div key={pc.punto} className="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center text-lg font-bold shrink-0">{pc.punto}</span>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-foreground">{pc.significato}</p>
+                      <div className="flex gap-3 mt-1">
+                        <span className="text-[11px] text-green-600">Crescita: {pc.chi_integra?.join(', ')}</span>
+                        <span className="text-[11px] text-red-600">Stress: {pc.chi_disintegra?.join(', ')}</span>
+                      </div>
                     </div>
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{pc.significato}</p>
+                  {pc.esempio && (
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-2">{pc.esempio}</p>
+                  )}
+                  {pc.domanda_chiave && (
+                    <div className="mt-2 p-2 rounded bg-purple-100 dark:bg-purple-800/30">
+                      <p className="text-xs font-semibold text-purple-800 dark:text-purple-200 italic">
+                        Domanda chiave: {pc.domanda_chiave}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -614,6 +626,118 @@ export default function TestResults() {
                 );
               })}
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* IL TUO PROFILO PERSONALE - Synthesis of everything */}
+      {attrs && result.percorsoPersonalizzato && (
+        <Card className="mb-8 border-2 border-primary/30 bg-gradient-to-br from-purple-50/50 to-blue-50/50 dark:from-purple-950/20 dark:to-blue-950/20">
+          <CardHeader>
+            <CardTitle className="text-xl font-serif flex items-center gap-2 text-primary">
+              <span className="text-2xl">👤</span> Il Tuo Profilo Personale
+            </CardTitle>
+            <p className="text-xs text-muted-foreground">
+              Sintesi completa basata su enneatipo, ala, età, attributi e percorso evolutivo.
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Chi sei */}
+            <div>
+              <h4 className="font-serif font-semibold text-base mb-2">Chi sei</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Sei un <strong className="text-foreground">Enneatipo {enneatipo} — {attrs.nome}</strong>
+                {ala && <>, con <strong className="text-foreground">Ala {ala} ({fruitNames[ala]})</strong></>}. 
+                {result.educativo?.descrizione && <> {result.educativo.descrizione}</>}
+                {result.educativo?.motivazione && <> La tua motivazione profonda è <em>{result.educativo.motivazione.toLowerCase()}</em>.  </>}
+                {result.educativo?.paura && <>La tua paura fondamentale è <em>{result.educativo.paura.toLowerCase()}</em>.</>}
+              </p>
+            </div>
+
+            {/* La tua struttura interiore */}
+            <div>
+              <h4 className="font-serif font-semibold text-base mb-2">La tua struttura interiore</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                La tua <strong className="text-foreground">Dignità</strong> è <strong className="text-foreground">{attrs.dignita}</strong>
+                {getDesc('dignita', attrs.dignita) && <> — {getDesc('dignita', attrs.dignita)?.split('.')[0]}.</>}{' '}
+                La tua <strong className="text-foreground">Virtù</strong> da coltivare è <strong className="text-foreground">{attrs.virtu}</strong>
+                {getDesc('virtu', attrs.virtu) && <> — {getDesc('virtu', attrs.virtu)?.split('.')[0]}.</>}{' '}
+                Il <strong className="text-foreground">Vizio</strong> da trasformare è <strong className="text-foreground">{attrs.vizio}</strong>
+                {getDesc('vizio', attrs.vizio) && <> — {getDesc('vizio', attrs.vizio)?.split('.')[0]}.</>}
+              </p>
+            </div>
+
+            {/* Il tuo mondo spirituale */}
+            <div>
+              <h4 className="font-serif font-semibold text-base mb-2">Il tuo mondo spirituale</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                La tua <strong className="text-foreground">Gerarchia Angelica</strong> sono i <strong className="text-foreground">{attrs.gerarchia_angelica}</strong>
+                {(() => { const info = getFullDesc('gerarchia_angelica', attrs.gerarchia_angelica); return info?.descrizione ? <> — {info.descrizione.split('.')[0]}.</> : null; })()}{' '}
+                La tua <strong className="text-foreground">Musa</strong> ispiratrice è <strong className="text-foreground">{attrs.musa}</strong>
+                {(() => { const musaName = attrs.musa?.split(' (')[0]; const info = getFullDesc('musa', musaName); return info?.descrizione ? <> — {info.descrizione}.</> : null; })()}{' '}
+                La tua <strong className="text-foreground">Idea Sacra</strong> è <strong className="text-foreground">{attrs.idea_sacra}</strong>
+                {getDesc('idea_sacra', attrs.idea_sacra) && <> — {getDesc('idea_sacra', attrs.idea_sacra)?.split('.')[0]}.</>}
+              </p>
+            </div>
+
+            {/* La tua psicologia */}
+            <div>
+              <h4 className="font-serif font-semibold text-base mb-2">La tua psicologia</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Il tuo <strong className="text-foreground">Meccanismo di Difesa</strong> principale è la <strong className="text-foreground">{attrs.meccanismo_difesa}</strong>
+                {getDesc('meccanismo_difesa', attrs.meccanismo_difesa) && <> — {getDesc('meccanismo_difesa', attrs.meccanismo_difesa)?.split('.')[0]}.</>}{' '}
+                Nella topica freudiana, la tua istanza dominante è il <strong className="text-foreground">{attrs.topica}</strong>
+                {getDesc('topica', attrs.topica) && <> — {getDesc('topica', attrs.topica)?.split('.')[0]}.</>}{' '}
+                L'adattamento caratteriale è <strong className="text-foreground">{attrs.adattamento}</strong>.
+                La correlazione cerebrale è con l'<strong className="text-foreground">{attrs.correlazione_cerebrale}</strong>.
+              </p>
+            </div>
+
+            {/* Le tue risonanze cosmiche */}
+            <div>
+              <h4 className="font-serif font-semibold text-base mb-2">Le tue risonanze cosmiche</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Il tuo <strong className="text-foreground">Chakra</strong> è il <strong className="text-foreground">{attrs.chakra}</strong>
+                {getDesc('chakra', attrs.chakra) && <> — {getDesc('chakra', attrs.chakra)?.split('.')[0]}.</>}{' '}
+                Il tuo <strong className="text-foreground">Pianeta</strong> è <strong className="text-foreground">{attrs.pianeta}</strong>
+                {getDesc('pianeta', attrs.pianeta) && <> — {getDesc('pianeta', attrs.pianeta)?.split('.')[0]}.</>}{' '}
+                La tua <strong className="text-foreground">Melodia</strong> è <strong className="text-foreground">{attrs.melodia}</strong>.
+                La tua <strong className="text-foreground">Facoltà</strong> è <strong className="text-foreground">{attrs.facolta}</strong>
+                {getDesc('facolta', attrs.facolta) && <> — {getDesc('facolta', attrs.facolta)?.split('.')[0]}.</>}
+              </p>
+            </div>
+
+            {/* Dove ti trovi ora */}
+            {result.percorsoPersonalizzato.faseCorrente && (
+              <div>
+                <h4 className="font-serif font-semibold text-base mb-2">Dove ti trovi ora</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  A <strong className="text-foreground">{result.eta} anni</strong>, ti trovi nella fase <strong className="text-foreground">{result.percorsoPersonalizzato.faseCorrente}</strong> del tuo percorso evolutivo.
+                  {result.percorsoPersonalizzato.integrazione.faseAttuale && <>
+                    {' '}Se stai vivendo un percorso di <strong className="text-green-600">integrazione</strong>, sei nella fase 
+                    "<em className="text-foreground">{result.percorsoPersonalizzato.integrazione.faseAttuale.nome}</em>" — {result.percorsoPersonalizzato.integrazione.faseAttuale.desc?.toLowerCase()}.
+                  </>}
+                  {result.percorsoPersonalizzato.disintegrazione.faseAttuale && <>
+                    {' '}Se invece stai attraversando un momento di <strong className="text-red-600">stress</strong>, potresti riconoscere la fase 
+                    "<em className="text-foreground">{result.percorsoPersonalizzato.disintegrazione.faseAttuale.nome}</em>" — {result.percorsoPersonalizzato.disintegrazione.faseAttuale.desc?.toLowerCase()}.
+                  </>}
+                </p>
+              </div>
+            )}
+
+            {/* Consigli */}
+            {result.educativo?.consigli && result.educativo.consigli.length > 0 && (
+              <div>
+                <h4 className="font-serif font-semibold text-base mb-2">Il tuo cammino</h4>
+                <ul className="space-y-1.5">
+                  {result.educativo.consigli.map((c: string, i: number) => (
+                    <li key={i} className="text-sm text-muted-foreground flex gap-2">
+                      <span className="text-primary shrink-0">→</span> {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
