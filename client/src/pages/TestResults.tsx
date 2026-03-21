@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
-import { ArrowRight, Star, Gem, Music, Brain, Shield, Sparkles, Heart, FileText, Download, Loader2, BookOpen } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ArrowDownRight, Star, Gem, Music, Brain, Shield, Sparkles, Heart, FileText, Download, Loader2, BookOpen, Eye } from "lucide-react";
+import { enneatypesDetailed, calculateArrowPercentages } from "@/data/enneatypes-detailed";
 
 const fruitNames: Record<number, string> = {
   1: "Mela", 2: "Pera", 3: "Ciliegia", 4: "Nespola",
@@ -190,6 +191,97 @@ export default function TestResults() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Integration/Disintegration Percentages */}
+      {scores && (() => {
+        const arrowData = calculateArrowPercentages(enneatipo, scores);
+        const detailed = enneatypesDetailed[enneatipo];
+        return (
+          <div className="grid sm:grid-cols-2 gap-4 mb-8">
+            <Card className="border-red-200 dark:border-red-900/50">
+              <CardContent className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <ArrowDownRight className="w-5 h-5 text-red-500" />
+                  <h3 className="font-serif font-semibold text-base text-red-600 dark:text-red-400">
+                    Stress → Tipo {arrowData.stressType}
+                  </h3>
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-red-500 rounded-full transition-all duration-500"
+                      style={{ width: `${arrowData.stressPercent}%` }}
+                    />
+                  </div>
+                  <span className="text-sm font-bold text-red-600 dark:text-red-400 min-w-[3rem] text-right">
+                    {arrowData.stressPercent}%
+                  </span>
+                </div>
+                {detailed && (
+                  <p className="text-xs text-muted-foreground mt-2">{detailed.frecce.stress.descrizione}</p>
+                )}
+              </CardContent>
+            </Card>
+            <Card className="border-green-200 dark:border-green-900/50">
+              <CardContent className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <ArrowUpRight className="w-5 h-5 text-green-500" />
+                  <h3 className="font-serif font-semibold text-base text-green-600 dark:text-green-400">
+                    Riposo → Tipo {arrowData.riposoType}
+                  </h3>
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-green-500 rounded-full transition-all duration-500"
+                      style={{ width: `${arrowData.riposoPercent}%` }}
+                    />
+                  </div>
+                  <span className="text-sm font-bold text-green-600 dark:text-green-400 min-w-[3rem] text-right">
+                    {arrowData.riposoPercent}%
+                  </span>
+                </div>
+                {detailed && (
+                  <p className="text-xs text-muted-foreground mt-2">{detailed.frecce.riposo.descrizione}</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        );
+      })()}
+
+      {/* PNL & Subtypes Summary */}
+      {enneatypesDetailed[enneatipo] && (() => {
+        const detailed = enneatypesDetailed[enneatipo];
+        return (
+          <div className="grid sm:grid-cols-2 gap-4 mb-8">
+            <Card>
+              <CardContent className="p-5">
+                <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
+                  <Eye className="w-4 h-4 text-primary" /> PNL
+                </h3>
+                <dl className="space-y-2 text-sm">
+                  <div><dt className="text-muted-foreground text-xs uppercase tracking-wider">Accesso</dt><dd className="font-medium mt-0.5">{detailed.pnl.accesso.split(":")[0]}</dd></div>
+                  <div><dt className="text-muted-foreground text-xs uppercase tracking-wider">Elaborazione</dt><dd className="font-medium mt-0.5">{detailed.pnl.elaborazione.split(":")[0]}</dd></div>
+                  <div><dt className="text-muted-foreground text-xs uppercase tracking-wider">Centro</dt><dd className="font-medium mt-0.5">{detailed.centro.tipo} — "{detailed.centro.domanda}"</dd></div>
+                </dl>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <h3 className="font-serif font-semibold text-base mb-3 flex items-center gap-2">
+                  <Brain className="w-4 h-4 text-primary" /> Sottotipi
+                </h3>
+                <dl className="space-y-2 text-sm">
+                  <div><dt className="text-muted-foreground text-xs">Conservativo</dt><dd className="font-medium">{detailed.sottotipi.conservativo.nome}</dd></div>
+                  <div><dt className="text-muted-foreground text-xs">Sociale</dt><dd className="font-medium">{detailed.sottotipi.sociale.nome}</dd></div>
+                  <div><dt className="text-muted-foreground text-xs">Sessuale</dt><dd className="font-medium">{detailed.sottotipi.sessuale.nome}</dd></div>
+                </dl>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      })()}
 
       {/* Attributes Grid — with explanations */}
       {attrs && (
