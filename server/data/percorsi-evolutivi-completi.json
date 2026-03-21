@@ -355,7 +355,74 @@
     "4": { "dignita": "Sapienza", "virtu": "Fede", "vizio": "Accidia", "gerarchia": "Dominazioni", "musa": "Erato", "facolta": "Immaginazione", "melodia": "FA", "topica": "Io", "meccanismo": "Introiezione", "chakra": "5° Chakra (gola)", "pianeta": "Mercurio", "correlazione_cerebrale": "Nucleo subtalamico", "idea_sacra": "Origine" },
     "5": { "dignita": "Volontà", "virtu": "Speranza", "vizio": "Invidia", "gerarchia": "Potestà", "musa": "Melpomene", "facolta": "Udito", "melodia": "SOL", "topica": "Super-Io", "meccanismo": "Isolamento", "chakra": "1° Chakra (base)", "pianeta": "Saturno", "correlazione_cerebrale": "Putamen", "idea_sacra": "Onniscienza" },
     "7": { "dignita": "Verità", "virtu": "Pazienza", "vizio": "Menzogna", "gerarchia": "Principati", "musa": "Calliope", "facolta": "Olfatto", "melodia": "LA", "topica": "Es", "meccanismo": "Razionalizzazione", "chakra": "2° Chakra (sacrale)", "pianeta": "Giove", "correlazione_cerebrale": "Globo pallido", "idea_sacra": "Saggezza" },
-    "8": { "dignita": "Gloria", "virtu": "Pietà", "vizio": "Incostanza", "gerarchia": "Arcangeli", "musa": "Clio", "facolta": "Gusto", "melodia": "SI", "topica": "Es", "meccanismo": "Diniego", "chakra": "4° Chakra (cuore)", "pianeta": "Venere", "correlazione_cerebrale": "Pars Reticularis e Substantia Nigra", "idea_sacra": "Verità" }
+    "8": { "dignita": "Gloria", "virtu": "Pietà", "vizio": "Incostanza", "gerarchia": "Arcangeli", "musa": "Clio", "facolta": "Gusto", "melodia": "SI", "topica": "Es", "meccanismo": "Diniego", "chakra": "4° Chakra (cuore)", "pianeta": "Venere", "correlazione_cerebrale": "Pars Reticularis e Substantia Nigra", "idea_sacra": "Verità" },
+    "3": { "dignita": "Sapienza", "virtu": "Fede", "vizio": "Accidia", "gerarchia": "Troni", "musa": "Euterpe", "facolta": "Ragione", "melodia": "FA", "topica": "Io", "meccanismo": "Identificazione", "chakra": "Testa del nucleo caudato", "pianeta": "Rahu", "correlazione_cerebrale": "Testa del nucleo caudato", "idea_sacra": "Origine" },
+    "6": { "dignita": "Grandezza", "virtu": "Prudenza", "vizio": "Gola", "gerarchia": "Virt\u00f9", "musa": "Tersicore", "facolta": "Vista", "melodia": "LA", "topica": "Es", "meccanismo": "Proiezione", "chakra": "Coda del nucleo caudato", "pianeta": "Ketu", "correlazione_cerebrale": "Coda del nucleo caudato", "idea_sacra": "Saggezza" },
+    "9": { "dignita": "Perfezione", "virtu": "Umilt\u00e0", "vizio": "Ira", "gerarchia": "Angeli", "musa": "Talia", "facolta": "Tatto", "melodia": "DO", "topica": "Io", "meccanismo": "Narcotizzazione", "chakra": "7\u00b0 Chakra (corona)", "pianeta": "Luna", "correlazione_cerebrale": "Ipotalamo", "idea_sacra": "Amore" }
   },
-  "note": "Nella conversazione con Carlo, i punti 3, 6 e 9 non avevano assegnazioni esplicite di attributi perché seguono il ciclo breve. I dati dei punti 1, 2, 4, 5, 7, 8 sono quelli confermati da Carlo nella conversazione."
+  "tabellaIncroci": {
+    "descrizione": "Matrice completa degli incroci tra percorsi evolutivi di tutti i tipi",
+    "cicloLungo": {
+      "integrazione": {
+        "nota": "I 6 tipi del ciclo lungo (1,2,4,5,7,8) percorrono la stessa sequenza di punti ma partendo da posizioni diverse",
+        "sequenza": [1, 7, 5, 8, 2, 4],
+        "etaFasi": ["0-3", "3-12", "12-19", "19-30", "30-60", "60+"],
+        "incrociPerEta": {
+          "0-3": "Ogni tipo \u00e8 nel proprio punto base. Incroci: 1 incontra chi ha 1 nel percorso",
+          "3-12": "Tipo 1\u21927, Tipo 2\u21924, Tipo 4\u21921, Tipo 5\u21928, Tipo 7\u21925, Tipo 8\u21922. Incroci: 4 e 1 si incontrano (Tipo 4 va in 1, Tipo 1 era in 1)",
+          "12-19": "Tipo 1\u21925, Tipo 2\u21921, Tipo 4\u21927, Tipo 5\u21922, Tipo 7\u21928, Tipo 8\u21924. Incroci multipli: 1-5 e 7-5 si incontrano nel punto 5",
+          "19-30": "Tipo 1\u21928, Tipo 2\u21927, Tipo 4\u21925, Tipo 5\u21924, Tipo 7\u21922, Tipo 8\u21921. Incroci: 1-8 e 5-8 nel punto 8; 2-7 e 4-7 nel punto 7",
+          "30-60": "Tipo 1\u21922, Tipo 2\u21925, Tipo 4\u21928, Tipo 5\u21921, Tipo 7\u21924, Tipo 8\u21927. Incroci: 1-2 e 5-2 nel punto 2",
+          "60+": "Tipo 1\u21924, Tipo 2\u21928, Tipo 4\u21922, Tipo 5\u21927, Tipo 7\u21921, Tipo 8\u21925. Sintesi e saggezza per tutti"
+        }
+      },
+      "disintegrazione": {
+        "nota": "Il percorso di disintegrazione \u00e8 l'inverso: ogni tipo segue le frecce opposte",
+        "sequenza": [1, 4, 2, 8, 5, 7],
+        "incrociPerEta": {
+          "0-3": "Punto base sotto stress",
+          "3-12": "Tipo 1\u21924, Tipo 2\u21928, Tipo 4\u21922, Tipo 5\u21927, Tipo 7\u21921, Tipo 8\u21925",
+          "12-19": "Tipo 1\u21922, Tipo 2\u21925, Tipo 4\u21928, Tipo 5\u21921, Tipo 7\u21924, Tipo 8\u21927",
+          "19-30": "Tipo 1\u21928, Tipo 2\u21927, Tipo 4\u21925, Tipo 5\u21924, Tipo 7\u21922, Tipo 8\u21921",
+          "30-60": "Tipo 1\u21925, Tipo 2\u21921, Tipo 4\u21927, Tipo 5\u21922, Tipo 7\u21928, Tipo 8\u21924",
+          "60+": "Tipo 1\u21927, Tipo 2\u21924, Tipo 4\u21921, Tipo 5\u21928, Tipo 7\u21925, Tipo 8\u21922"
+        }
+      }
+    },
+    "cicloBreve": {
+      "nota": "I tipi 3, 6, 9 seguono un ciclo di 3 fasi con et\u00e0 0-30, 30-60, 60+",
+      "integrazione": {
+        "3": "3\u21926\u21929\u21923",
+        "6": "6\u21929\u21923\u21926",
+        "9": "9\u21923\u21926\u21929"
+      },
+      "disintegrazione": {
+        "3": "3\u21929\u21926\u21923",
+        "6": "6\u21923\u21929\u21926",
+        "9": "9\u21926\u21923\u21929"
+      },
+      "incroci": {
+        "punto3": "Tutti e tre i tipi passano per il punto 3: realizzazione, azione, successo",
+        "punto6": "Tutti e tre i tipi passano per il punto 6: lealt\u00e0, sicurezza, fiducia",
+        "punto9": "Tutti e tre i tipi passano per il punto 9: pace, armonia, accettazione"
+      }
+    },
+    "incrociMisti": {
+      "descrizione": "Momenti in cui percorsi di integrazione di un tipo incrociano percorsi di disintegrazione di un altro",
+      "puntiCaldi": [
+        { "punto": 1, "chi_integra": ["Tipo 4", "Tipo 7"], "chi_disintegra": ["Tipo 2", "Tipo 5"], "significato": "Il punto 1 \u00e8 dove la disciplina incontra la critica: chi cresce trova struttura, chi regredisce trova rigidit\u00e0" },
+        { "punto": 2, "chi_integra": ["Tipo 1", "Tipo 8"], "chi_disintegra": ["Tipo 4", "Tipo 7"], "significato": "Il punto 2 \u00e8 dove la generosit\u00e0 incontra il bisogno: chi cresce dona, chi regredisce manipola" },
+        { "punto": 4, "chi_integra": ["Tipo 1", "Tipo 2"], "chi_disintegra": ["Tipo 1", "Tipo 7"], "significato": "Il punto 4 \u00e8 dove l'autenticit\u00e0 incontra il dramma: chi cresce si scopre, chi regredisce si perde" },
+        { "punto": 5, "chi_integra": ["Tipo 1", "Tipo 7"], "chi_disintegra": ["Tipo 2", "Tipo 8"], "significato": "Il punto 5 \u00e8 dove la saggezza incontra l'isolamento: chi cresce contempla, chi regredisce si ritira" },
+        { "punto": 7, "chi_integra": ["Tipo 5", "Tipo 8"], "chi_disintegra": ["Tipo 1", "Tipo 5"], "significato": "Il punto 7 \u00e8 dove la gioia incontra la fuga: chi cresce celebra, chi regredisce scappa" },
+        { "punto": 8, "chi_integra": ["Tipo 2", "Tipo 5"], "chi_disintegra": ["Tipo 1", "Tipo 4"], "significato": "Il punto 8 \u00e8 dove la forza incontra l'aggressivit\u00e0: chi cresce protegge, chi regredisce domina" }
+      ]
+    },
+    "statistiche": {
+      "totaleIncrociCicloLungo": 396,
+      "totaleIncrociCicloBreve": 45,
+      "totaleComplessivo": 441
+    }
+  },
+  "note": "Framework completo dell'Enneagramma Evolutivo basato sulla conversazione di Carlo Alberto Calcagno. I punti 1, 2, 4, 5, 7, 8 seguono il ciclo lungo (6 fasi). I punti 3, 6, 9 seguono il ciclo breve (3 fasi con et\u00e0 0-30, 30-60, 60+)."
 }

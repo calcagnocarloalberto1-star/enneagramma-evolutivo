@@ -58,6 +58,13 @@ function getPercorsoPersonalizzato(enneatipo: number, eta: number) {
   const attrIntegrazione = puntiAttr[String(puntoIntegrazione)] || null;
   const attrDisintegrazione = puntiAttr[String(puntoDisintegrazione)] || null;
   
+  // Get crossing table data relevant to this type
+  const tabellaIncroci = percorsiEvolutiviCompleti.tabellaIncroci;
+  const puntiCaldi = tabellaIncroci?.incrociMisti?.puntiCaldi?.filter((pc: any) => {
+    const puntiPercorso = [...integrazione.sequenza, ...disintegrazione.sequenza];
+    return puntiPercorso.includes(pc.punto);
+  }) || [];
+  
   return {
     nome: tipoData.nome,
     ali: tipoData.ali,
@@ -80,7 +87,9 @@ function getPercorsoPersonalizzato(enneatipo: number, eta: number) {
       faseAttuale: faseDisintegrazione,
       attributiPunto: attrDisintegrazione,
       vizi: disintegrazione.vizi
-    }
+    },
+    puntiCaldi,
+    statistiche: tabellaIncroci?.statistiche
   };
 }
 

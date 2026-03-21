@@ -504,6 +504,45 @@ export default function TestResults() {
         </div>
       )}
 
+      {/* Punti Caldi - crossing points */}
+      {result.percorsoPersonalizzato?.puntiCaldi && result.percorsoPersonalizzato.puntiCaldi.length > 0 && (
+        <Card className="mb-8 border-purple-200 dark:border-purple-800">
+          <CardHeader>
+            <CardTitle className="text-lg font-serif flex items-center gap-2">
+              <span className="text-xl">🔥</span> Punti Caldi — Incroci tra Percorsi
+            </CardTitle>
+            <p className="text-xs text-muted-foreground mt-1">
+              I punti dove i percorsi di integrazione e disintegrazione di tipi diversi si incontrano. 
+              Questi sono i momenti di massima intensità evolutiva.
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {result.percorsoPersonalizzato.puntiCaldi.map((pc: any) => (
+                <div key={pc.punto} className="p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm font-bold">{pc.punto}</span>
+                    <div>
+                      <div className="text-xs text-green-600 font-medium">Integra: {pc.chi_integra?.join(', ')}</div>
+                      <div className="text-xs text-red-600 font-medium">Disintegra: {pc.chi_disintegra?.join(', ')}</div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{pc.significato}</p>
+                </div>
+              ))}
+            </div>
+            {result.percorsoPersonalizzato.statistiche && (
+              <div className="mt-4 pt-3 border-t border-purple-200 dark:border-purple-800 text-center">
+                <p className="text-[11px] text-muted-foreground">
+                  Totale incroci nel sistema: <strong>{result.percorsoPersonalizzato.statistiche.totaleComplessivo}</strong> 
+                  ({result.percorsoPersonalizzato.statistiche.totaleIncrociCicloLungo} ciclo lungo + {result.percorsoPersonalizzato.statistiche.totaleIncrociCicloBreve} ciclo breve)
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Old basic path as fallback */}
       {!result.percorsoPersonalizzato && result.percorso && (
         <Card className="mb-8">
