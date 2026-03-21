@@ -70,17 +70,15 @@ export interface EtaVita {
   descrizione: string;
 }
 
-// Le 9 Età della Vita
+// Le 6 Età della Vita (dal Prontuario — tradizione antica + Freud + Erikson)
+// Queste sono le fasce d'età usate nei percorsi dell'esagramma
 export const etaVita: EtaVita[] = [
-  { numero: 1, eta: "0-7", nome: "Età dell'Innocenza", enneatipo: 9, descrizione: "Periodo in cui si forma l'identità di base e si sperimenta il mondo con curiosità e fiducia" },
-  { numero: 2, eta: "8-14", nome: "Età dell'Esplorazione", enneatipo: 7, descrizione: "Periodo in cui si sviluppa la creatività e si cerca il piacere e la varietà nelle esperienze" },
-  { numero: 3, eta: "15-21", nome: "Età della Formazione", enneatipo: 6, descrizione: "Periodo in cui si affrontano le sfide della pubertà e si cerca la sicurezza e l'appartenenza" },
-  { numero: 4, eta: "22-28", nome: "Età della Ricerca", enneatipo: 5, descrizione: "Periodo in cui si approfondiscono le proprie conoscenze e si cerca la competenza e l'autonomia" },
-  { numero: 5, eta: "29-35", nome: "Età dell'Affermazione", enneatipo: 4, descrizione: "Periodo in cui si esprime la propria individualità e si cerca la bellezza e il significato" },
-  { numero: 6, eta: "36-42", nome: "Età della Responsabilità", enneatipo: 3, descrizione: "Periodo in cui si realizzano i propri obiettivi e si cerca il successo e il riconoscimento" },
-  { numero: 7, eta: "43-49", nome: "Età della Ripresa", enneatipo: 2, descrizione: "Periodo in cui si rivedono le priorità e si cerca l'amore e il servizio verso gli altri" },
-  { numero: 8, eta: "50-56", nome: "Età della Saggezza", enneatipo: 1, descrizione: "Periodo in cui si integra l'esperienza e si cerca la perfezione e l'integrità" },
-  { numero: 9, eta: "57+", nome: "Età della Trascendenza", enneatipo: 8, descrizione: "Periodo in cui si superano i propri limiti e si cerca la forza e la libertà" },
+  { numero: 1, eta: "0-3", nome: "Infantia (Infanzia)", enneatipo: 0, descrizione: "Fase orale di fiducia/sfiducia (Erikson). Si forma il legame primario e l'attaccamento. Primo contatto con il proprio enneatipo di base." },
+  { numero: 2, eta: "3-12", nome: "Pueritia (Puerizia)", enneatipo: 0, descrizione: "Spirito d'iniziativa e operosità opposti a senso di colpa e inferiorità (Erikson). Fase di latenza: il bambino sviluppa competenze e socialità." },
+  { numero: 3, eta: "12-19", nome: "Adolescentia (Adolescenza)", enneatipo: 0, descrizione: "Età dell'identità o della dispersione dei ruoli (Erikson). Si affrontano le sfide della pubertà, si cerca sicurezza e appartenenza." },
+  { numero: 4, eta: "20-30", nome: "Juventus (Gioventù)", enneatipo: 0, descrizione: "Giovane età adulta: intimità e solidarietà oppure isolamento (Erikson). Amore, amicizia e lavoro, o isolamento se fallite le fasi precedenti." },
+  { numero: 5, eta: "25-60", nome: "Virilitas (Virilità)", enneatipo: 0, descrizione: "Generatività opposta a stagnazione e auto-assorbimento (Erikson). Si procrea, si cura, si costruisce — o si regredisce chiudendosi in un ruolo." },
+  { numero: 6, eta: "60+", nome: "Senectutes (Vecchiaia)", enneatipo: 0, descrizione: "Integrità opposta a disperazione (Erikson). Riflessione e bilancio sulla vita; disperazione se si pensa a ciò che non si è potuto realizzare." },
 ];
 
 // Adattamenti dell'Analisi Transazionale

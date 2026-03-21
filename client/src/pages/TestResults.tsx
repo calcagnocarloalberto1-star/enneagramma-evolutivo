@@ -1127,44 +1127,42 @@ export default function TestResults() {
         </Card>
       )}
 
-      {/* Age-based path */}
-      {result.etaInfo && (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-lg font-serif">Le Età dell'Enneagramma</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              La tua età attuale ({result.eta} anni) influenza il tuo percorso evolutivo.
-            </p>
-            <div className="grid sm:grid-cols-3 gap-3">
-              {Object.entries(result.etaInfo).map(([key, info]: [string, any]) => {
-                const rangeStr = info.eta;
-                let isActive = false;
-                if (rangeStr.includes("+")) {
-                  const min = parseInt(rangeStr);
-                  isActive = result.eta >= min;
-                } else if (rangeStr.includes("-")) {
-                  const [min, max] = rangeStr.split("-").map(Number);
-                  isActive = result.eta >= min && result.eta <= max;
-                }
-                return (
-                  <div
-                    key={key}
-                    className={`p-3 rounded-lg border ${isActive ? "border-primary bg-primary/5" : "border-border"}`}
-                    data-testid={`age-period-${key}`}
-                  >
-                    <div className="text-xs text-muted-foreground">{rangeStr}</div>
-                    <div className="font-semibold text-sm">{info.nome}</div>
-                    <div className="text-xs text-muted-foreground mt-1">{info.descrizione}</div>
-                    {isActive && <Badge className="mt-2 bg-primary/10 text-primary text-[10px]">La tua fase attuale</Badge>}
-                  </div>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Le Età della Vita (dal Prontuario) */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="text-lg font-serif">Le Età della Vita</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Le fasi della vita secondo la tradizione antica integrata con Freud ed Erikson. A {result.eta} anni ti trovi nella fase evidenziata.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-3">
+            {[
+              { eta: "0-3", nome: "Infantia (Infanzia)", desc: "Fiducia vs sfiducia. Legame primario e attaccamento." },
+              { eta: "3-12", nome: "Pueritia (Puerizia)", desc: "Iniziativa e operosità vs senso di colpa e inferiorità." },
+              { eta: "12-19", nome: "Adolescentia", desc: "Identità vs dispersione dei ruoli. Sicurezza e appartenenza." },
+              { eta: "20-30", nome: "Juventus (Gioventù)", desc: "Intimità e solidarietà vs isolamento. Amore e lavoro." },
+              { eta: "25-60", nome: "Virilitas (Virilità)", desc: "Generatività vs stagnazione. Si costruisce o si regredisce." },
+              { eta: "60+", nome: "Senectutes (Vecchiaia)", desc: "Integrità vs disperazione. Bilancio e riflessione sulla vita." },
+            ].map((fase) => {
+              const isActive = fase.eta.includes("+")
+                ? result.eta >= parseInt(fase.eta)
+                : (() => { const [min, max] = fase.eta.split("-").map(Number); return result.eta >= min && result.eta <= max; })();
+              return (
+                <div
+                  key={fase.eta}
+                  className={`p-3 rounded-lg border ${isActive ? "border-primary bg-primary/5" : "border-border"}`}
+                >
+                  <div className="text-xs text-muted-foreground">{fase.eta} anni</div>
+                  <div className="font-semibold text-sm">{fase.nome}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{fase.desc}</div>
+                  {isActive && <Badge className="mt-2 bg-primary/10 text-primary text-[10px]">La tua fase attuale</Badge>}
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* IL TUO PROFILO PERSONALE (from main) */}
       {attrs && result.percorsoPersonalizzato && (

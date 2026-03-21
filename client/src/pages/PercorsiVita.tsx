@@ -152,10 +152,10 @@ export default function PercorsiVita() {
   const journey = enneatipo && percorso ? getJourney(enneatipo, percorso) : null;
   const adaptation = enneatipo ? adattamentiAT.find(a => a.enneatipo === enneatipo) : null;
 
-  // Determine current "Età della Vita"
+  // Determine current "Età della Vita" (6 fasi dal Prontuario: 0-3, 3-12, 12-19, 20-30, 25-60, 60+)
   const currentEta = age !== null ? etaVita.find((e, i) => {
     const ranges = [
-      [0, 7], [8, 14], [15, 21], [22, 28], [29, 35], [36, 42], [43, 49], [50, 56], [57, 200],
+      [0, 3], [3, 12], [12, 19], [20, 30], [25, 60], [60, 200],
     ];
     return age >= ranges[i][0] && age <= ranges[i][1];
   }) : null;
@@ -228,15 +228,12 @@ export default function PercorsiVita() {
       {currentEta && (
         <Card className="mb-6 border-primary/20 bg-primary/5">
           <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="text-3xl">{fruitEmoji[currentEta.enneatipo]}</div>
-              <div>
-                <h3 className="font-serif font-bold text-lg">{currentEta.nome}</h3>
-                <p className="text-sm text-muted-foreground">
-                  Età {currentEta.eta} anni — Influenza dell'enneatipo {currentEta.enneatipo} ({typeNames[currentEta.enneatipo]})
-                </p>
-                <p className="text-sm mt-1">{currentEta.descrizione}</p>
-              </div>
+            <div>
+              <h3 className="font-serif font-bold text-lg">{currentEta.nome}</h3>
+              <p className="text-sm text-muted-foreground">
+                Fascia d'età: {currentEta.eta} anni
+              </p>
+              <p className="text-sm mt-1">{currentEta.descrizione}</p>
             </div>
           </CardContent>
         </Card>
@@ -282,18 +279,18 @@ export default function PercorsiVita() {
         </Card>
       )}
 
-      {/* Le 9 Età della Vita section */}
+      {/* Le 6 Età della Vita section (Prontuario) */}
       {!journey && (
         <div className="mt-8">
-          <h2 className="text-xl font-serif font-bold mb-4">Le 9 Età della Vita</h2>
+          <h2 className="text-xl font-serif font-bold mb-4">Le Età della Vita</h2>
           <p className="text-sm text-muted-foreground mb-4">
-            Ogni fase della vita è influenzata da un enneatipo specifico. Scopri quale enneatipo sta influenzando la tua fase attuale.
+            Le fasi della vita secondo la tradizione antica integrata con Freud ed Erikson. Ogni enneatipo attraversa queste fasi vivendo attributi specifici in base al proprio percorso.
           </p>
           <div className="grid gap-3">
             {etaVita.map((eta) => (
               <Card key={eta.numero} className={`${currentEta?.numero === eta.numero ? "ring-2 ring-primary" : ""}`}>
                 <CardContent className="p-4 flex items-center gap-4">
-                  <div className="text-2xl">{fruitEmoji[eta.enneatipo]}</div>
+                  <div className="text-2xl">📅</div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="font-serif font-bold">{eta.nome}</span>
@@ -301,7 +298,7 @@ export default function PercorsiVita() {
                       {currentEta?.numero === eta.numero && <Badge className="bg-green-500 text-white">Fase attuale</Badge>}
                     </div>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Enneatipo {eta.enneatipo} ({typeNames[eta.enneatipo]}) — {eta.descrizione}
+                      {eta.descrizione}
                     </p>
                   </div>
                 </CardContent>
