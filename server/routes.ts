@@ -210,7 +210,7 @@ export async function registerRoutes(
   // POST submit test
   app.post("/api/test/submit", (req, res) => {
     try {
-      const { risposte, eta, visitorId } = req.body;
+      const { risposte, eta, visitorId, intro } = req.body;
       
       if (!risposte || !eta || !visitorId) {
         return res.status(400).json({ error: "Dati mancanti" });
@@ -229,6 +229,7 @@ export async function registerRoutes(
         eta: parseInt(eta),
         punteggiFrutti: JSON.stringify(scores),
         risposte: JSON.stringify(risposte),
+        personalNotes: intro?.trim() || null,
         needsGenogram,
       });
 
@@ -309,6 +310,7 @@ export async function registerRoutes(
         percorsoPersonalizzato,
         educativo: eduInfo,
         descrizioni: attributiDescrizioni,
+        personalNotes: result.personalNotes || null,
       });
       
       res.json({ narrative, testResultId });
@@ -412,6 +414,92 @@ export async function registerRoutes(
   // GET glossario
   app.get("/api/glossario", (_req, res) => {
     res.json(glossario);
+  });
+
+  // GET admin stats
+  app.get("/api/admin/stats", (_req, res) => {
+    try {
+      const allResults = storage.getAllTestResults();
+      const totalTests = allResults.length;
+
+      if (totalTests === 0) {
+        return res.json({
+          totalTests: 0,
+          averageAge: 0,
+          mostCommonType: null,
+          typeDistribution: {},
+          ageByType: {},
+          testsPerDay: [],
+          recentTests: [],
+        });
+      }
+
+      // Average age
+      const averageAge = Math.round(allResults.reduce((sum, r) => sum + r.eta, 0) / totalTests);
+
+      // Type distribution
+      const typeDistribution: Record<number, number> = {};
+      const agesByType: Record<number, number[]> = {};
+      for (let i = 1; i <= 9; i++) {
+        typeDistribution[i] = 0;
+        agesByType[i] = [];
+      }
+      for (const r of allResults) {
+        typeDistribution[r.enneatipo] = (typeDistribution[r.enneatipo] || 0) + 1;
+        if (!agesByType[r.enneatipo]) agesByType[r.enneatipo] = [];
+        agesByType[r.enneatipo].push(r.eta);
+      }
+
+      // Most common type
+      const mostCommonType = Object.entries(typeDistribution)
+        .sort((a, b) => b[1] - a[1])[0]?.[0];
+
+      // Average age by type
+      const ageByType: Record<number, number> = {};
+      for (const [type, ages] of Object.entries(agesByType)) {
+        ageByType[parseInt(type)] = ages.length > 0
+          ? Math.round(ages.reduce((s, a) => s + a, 0) / ages.length)
+          : 0;
+      }
+
+      // Tests per day (last 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      const testsPerDayMap: Record<string, number> = {};
+      for (const r of allResults) {
+        const date = r.createdAt?.substring(0, 10);
+        if (date && new Date(date) >= thirtyDaysAgo) {
+          testsPerDayMap[date] = (testsPerDayMap[date] || 0) + 1;
+        }
+      }
+      const testsPerDay = Object.entries(testsPerDayMap)
+        .map(([date, count]) => ({ date, count }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      // Recent tests (last 20)
+      const recentTests = allResults
+        .sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""))
+        .slice(0, 20)
+        .map(r => ({
+          id: r.id,
+          enneatipo: r.enneatipo,
+          ala: r.ala,
+          eta: r.eta,
+          createdAt: r.createdAt,
+        }));
+
+      res.json({
+        totalTests,
+        averageAge,
+        mostCommonType: mostCommonType ? parseInt(mostCommonType) : null,
+        typeDistribution,
+        ageByType,
+        testsPerDay,
+        recentTests,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
   });
 
   return httpServer;

@@ -10,6 +10,7 @@ export const testResults = sqliteTable("test_results", {
   eta: integer("eta").notNull(),
   punteggiFrutti: text("punteggi_frutti").notNull(), // JSON string of scores
   risposte: text("risposte").notNull(), // JSON string of answers
+  personalNotes: text("personal_notes"),
   needsGenogram: integer("needs_genogram", { mode: "boolean" }).default(false),
   createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
 });

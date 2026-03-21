@@ -22,6 +22,7 @@ import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import CookiePolicy from "@/pages/CookiePolicy";
 import Glossario from "@/pages/Glossario";
+import Admin from "@/pages/Admin";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -45,9 +46,12 @@ function AppRouter() {
           <Route path="/about" component={About} />
           <Route path="/faq" component={FAQ} />
           <Route path="/privacy" component={Privacy} />
+          <Route path="/cookies" component={CookiePolicy} />
+          <Route path="/termini" component={Terms} />
           <Route path="/terms" component={Terms} />
           <Route path="/cookie-policy" component={CookiePolicy} />
           <Route path="/glossario" component={Glossario} />
+          <Route path="/admin" component={Admin} />
           <Route component={NotFound} />
         </Switch>
       </main>

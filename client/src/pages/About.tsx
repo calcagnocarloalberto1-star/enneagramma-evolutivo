@@ -1,9 +1,10 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, BookOpen, Users, Compass, Star, Scale, GraduationCap, Pen, Globe } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Compass, Star, Scale, GraduationCap, Pen, Globe, Heart, HandHeart, Sparkles, UserCheck } from "lucide-react";
 import ruotaLullo from "@assets/ruota-lullo.webp";
 import chakraSymbols from "@assets/chakra-symbols.webp";
+import carloPhoto from "@assets/carlo-alberto-calcagno.png";
 
 export default function About() {
   return (
@@ -22,15 +23,13 @@ export default function About() {
         <Card className="overflow-hidden border-[#c9a227]/20">
           <div className="bg-gradient-to-r from-[#1a1a2e] to-[#0f3460] p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[#c9a227]/20 border-2 border-[#c9a227]/40 flex items-center justify-center shrink-0">
-                <span className="text-4xl sm:text-5xl font-serif font-bold text-[#c9a227]">CA</span>
-              </div>
+              <img src={carloPhoto} alt="Carlo Alberto Calcagno" className="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-2 border-[#c9a227]/40 shrink-0" />
               <div className="text-center sm:text-left">
                 <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#f0e6d3] mb-1">
                   Carlo Alberto Calcagno
                 </h2>
                 <p className="text-[#c9a227] font-medium mb-3">
-                  Mediatore · Formatore · Autore
+                  Mediatore · Formatore · Autore · Counselor · Pranoterapeuta
                 </p>
                 <p className="text-[#f0e6d3]/80 text-sm leading-relaxed max-w-xl">
                   Ideatore dell'Enneagramma Evolutivo, un sistema che integra la sapienza di Raimondo Lullo, 
@@ -66,7 +65,12 @@ export default function About() {
                 Ha ricoperto il ruolo di coach dell'Università di Pavia per la Competizione Italiana di Mediazione (CIM) nel 2016 e 2017.
               </p>
               <p>
-                Esperto di strumenti alternativi al giudizio dal 2003, ha dedicato vent'anni allo studio 
+                È anche <strong className="text-foreground">Counselor olistico</strong> e <strong className="text-foreground">Counselor rogersiano in formazione</strong>,
+                <strong className="text-foreground">Pranoterapeuta</strong> (Operatore in Trattamento Energetico)
+                e <strong className="text-foreground">Formatore A.I.M.e.F.</strong> (Associazione Italiana Mediatori Familiari).
+              </p>
+              <p>
+                Esperto di strumenti alternativi al giudizio dal 2003, ha dedicato vent'anni allo studio
                 dei sistemi comparati di risoluzione dei conflitti. È autore di diversi volumi e articoli scientifici, tra cui:
               </p>
             </div>
@@ -130,6 +134,34 @@ export default function About() {
                 <div>
                   <p className="text-sm font-medium">Blog e divulgazione</p>
                   <p className="text-xs text-muted-foreground">mediaresenzaconfini.org</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#faf8f5]">
+                <Heart className="w-5 h-5 text-[#c9a227] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">Counselor olistico</p>
+                  <p className="text-xs text-muted-foreground">Approccio integrato alla persona</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#faf8f5]">
+                <UserCheck className="w-5 h-5 text-[#c9a227] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">Counselor rogersiano</p>
+                  <p className="text-xs text-muted-foreground">In formazione — approccio centrato sulla persona</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#faf8f5]">
+                <HandHeart className="w-5 h-5 text-[#c9a227] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">Pranoterapeuta</p>
+                  <p className="text-xs text-muted-foreground">Operatore in Trattamento Energetico</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#faf8f5]">
+                <Sparkles className="w-5 h-5 text-[#c9a227] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium">Formatore A.I.M.e.F.</p>
+                  <p className="text-xs text-muted-foreground">Associazione Italiana Mediatori Familiari</p>
                 </div>
               </div>
             </div>

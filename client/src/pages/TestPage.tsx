@@ -98,6 +98,7 @@ export default function TestPage() {
     submitMutation.mutate({
       risposte: cleanAnswers,
       eta: parseInt(eta),
+      intro: intro.trim() || null,
       visitorId: generateVisitorId(),
     });
   };

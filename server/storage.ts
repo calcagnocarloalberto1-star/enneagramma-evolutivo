@@ -16,10 +16,18 @@ sqlite.exec(`
     eta INTEGER NOT NULL,
     punteggi_frutti TEXT NOT NULL,
     risposte TEXT NOT NULL,
+    personal_notes TEXT,
     needs_genogram INTEGER DEFAULT 0,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   )
 `);
+
+// Add personal_notes column if it doesn't exist (migration)
+try {
+  sqlite.exec(`ALTER TABLE test_results ADD COLUMN personal_notes TEXT`);
+} catch (e: any) {
+  // Column already exists, ignore
+}
 
 export const db = drizzle(sqlite);
 
@@ -27,6 +35,7 @@ export interface IStorage {
   createTestResult(result: InsertTestResult): TestResult;
   getTestResult(id: number): TestResult | undefined;
   getTestResultByVisitorId(visitorId: string): TestResult | undefined;
+  getAllTestResults(): TestResult[];
 }
 
 export class DatabaseStorage implements IStorage {
@@ -40,6 +49,10 @@ export class DatabaseStorage implements IStorage {
 
   getTestResultByVisitorId(visitorId: string): TestResult | undefined {
     return db.select().from(testResults).where(eq(testResults.visitorId, visitorId)).get();
+  }
+
+  getAllTestResults(): TestResult[] {
+    return db.select().from(testResults).all();
   }
 }
 

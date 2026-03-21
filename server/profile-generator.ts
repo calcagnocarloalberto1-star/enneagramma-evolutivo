@@ -11,6 +11,7 @@ interface ProfileInput {
   percorsoPersonalizzato: any;
   educativo: any;
   descrizioni: any;
+  personalNotes?: string | null;
 }
 
 const typeNames: Record<number, string> = {
@@ -33,7 +34,7 @@ export async function generateNarrativeProfile(input: ProfileInput): Promise<str
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-    const { enneatipo, ala, eta, punteggiFrutti, attrs, percorsoPersonalizzato, educativo } = input;
+    const { enneatipo, ala, eta, punteggiFrutti, attrs, percorsoPersonalizzato, educativo, personalNotes } = input;
 
     // Build scores summary
     const scoresSorted = Object.entries(punteggiFrutti)
@@ -82,6 +83,7 @@ ATTRIBUTI DELL'ENNEATIPO:
 ${educativo?.descrizione ? `\nDescrizione tipo: ${educativo.descrizione}` : ""}
 ${educativo?.motivazione ? `Motivazione: ${educativo.motivazione}` : ""}
 ${educativo?.paura ? `Paura: ${educativo.paura}` : ""}
+${personalNotes ? `\nNOTE PERSONALI DELL'UTENTE:\nL'utente ha condiviso queste riflessioni prima del test: "${personalNotes}"\nIntegra queste informazioni nel profilo, facendo riferimento a ciò che ha condiviso.` : ''}
 
 PERCORSO DI INTEGRAZIONE (crescita):
 ${intText}
@@ -116,7 +118,7 @@ TONO: Diretto, empatico, profondo. Usa "tu" per rivolgerti alla persona. Evita g
 }
 
 function generateStaticProfile(input: ProfileInput): string {
-  const { enneatipo, ala, eta, punteggiFrutti, attrs, percorsoPersonalizzato, educativo } = input;
+  const { enneatipo, ala, eta, punteggiFrutti, attrs, percorsoPersonalizzato, educativo, personalNotes } = input;
 
   const scoresSorted = Object.entries(punteggiFrutti)
     .map(([k, v]) => ({ tipo: parseInt(k), punteggio: v as number, nome: typeNames[parseInt(k)] }))
@@ -139,6 +141,10 @@ function generateStaticProfile(input: ProfileInput): string {
     profile += `I tuoi punteggi secondari rivelano anime multiple che convivono in te: `;
     profile += topSecondary.map(s => `**Tipo ${s.tipo} — ${s.nome}** (${s.punteggio}/20)`).join(", ");
     profile += `. Queste influenze arricchiscono e complicano il tuo profilo base.\n\n`;
+  }
+
+  if (personalNotes) {
+    profile += `Le tue riflessioni prima del test — *"${personalNotes}"* — rivelano un aspetto importante del tuo percorso attuale.\n\n`;
   }
 
   profile += `## La tua struttura interiore\n\n`;
