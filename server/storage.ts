@@ -6,6 +6,21 @@ import { eq } from "drizzle-orm";
 const sqlite = new Database("data.db");
 sqlite.pragma("journal_mode = WAL");
 
+// Auto-create tables if they don't exist
+sqlite.exec(`
+  CREATE TABLE IF NOT EXISTS test_results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    visitor_id TEXT NOT NULL,
+    enneatipo INTEGER NOT NULL,
+    ala INTEGER,
+    eta INTEGER NOT NULL,
+    punteggi_frutti TEXT NOT NULL,
+    risposte TEXT NOT NULL,
+    needs_genogram INTEGER DEFAULT 0,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  )
+`);
+
 export const db = drizzle(sqlite);
 
 export interface IStorage {
