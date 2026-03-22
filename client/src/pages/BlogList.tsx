@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,6 +14,7 @@ interface BlogArticle {
 }
 
 export default function BlogList() {
+  useEffect(() => { document.title = "Blog | Enneagramma Evolutivo"; }, []);
   const { data: articles, isLoading } = useQuery<BlogArticle[]>({
     queryKey: ["/api/blog"],
   });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -148,6 +148,7 @@ function PairWorkComparison({ m1, m2 }: {
 }
 
 export default function WorkCompatibility() {
+  useEffect(() => { document.title = "Compatibilità Lavorativa | Enneagramma Evolutivo"; }, []);
   const [members, setMembers] = useState<TeamMember[]>([
     { id: 1, nome: "Collega 1", enneatipo: "", ala: "nessuna", ruolo: "" },
     { id: 2, nome: "Collega 2", enneatipo: "", ala: "nessuna", ruolo: "" },

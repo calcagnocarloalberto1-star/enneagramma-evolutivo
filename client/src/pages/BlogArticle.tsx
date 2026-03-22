@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 export default function BlogArticle() {
   const [, params] = useRoute("/blog/:slug");
   const slug = params?.slug;
+  useEffect(() => { document.title = "Blog | Enneagramma Evolutivo"; }, []);
 
   const { data, isLoading, isError } = useQuery<any>({
     queryKey: ["/api/blog", slug],

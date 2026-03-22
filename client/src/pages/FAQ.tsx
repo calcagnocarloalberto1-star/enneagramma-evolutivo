@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -55,6 +56,7 @@ const faqs = [
 ];
 
 export default function FAQ() {
+  useEffect(() => { document.title = "FAQ | Enneagramma Evolutivo"; }, []);
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
       <div className="text-center mb-10">

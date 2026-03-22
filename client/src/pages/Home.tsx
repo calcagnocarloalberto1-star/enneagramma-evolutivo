@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Heart, Users, Briefcase, Sparkles } from "lucide-react";
 import ruotaLullo from "@assets/ruota-lullo.webp";
 import ruotaLulloClassica from "@assets/ruota-lullo-classica.png";
+import { usePageTitle } from "@/hooks/use-page-title";
 
 const features = [
   {
@@ -41,6 +42,7 @@ const features = [
 ];
 
 export default function Home() {
+  usePageTitle("Enneagramma Evolutivo — I 9 Frutti del Tuo Cammino Interiore");
   return (
     <div>
       {/* Hero */}

@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { Link } from "wouter";
 
 export default function Privacy() {
+  useEffect(() => { document.title = "Privacy Policy | Enneagramma Evolutivo"; }, []);
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
       <h1 className="text-3xl font-serif font-bold mb-6" data-testid="text-privacy-title">Informativa sulla Privacy</h1>

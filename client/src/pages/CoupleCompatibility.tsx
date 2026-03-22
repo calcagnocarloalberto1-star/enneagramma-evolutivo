@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -407,6 +407,7 @@ function AgeCompatSection({ type1, type2, age1, age2, percorso1, percorso2 }: {
 }
 
 export default function CoupleCompatibility() {
+  useEffect(() => { document.title = "Compatibilità di Coppia | Enneagramma Evolutivo"; }, []);
   const [type1, setType1] = useState<string>("");
   const [type2, setType2] = useState<string>("");
   const [wing1, setWing1] = useState<string>("nessuna");

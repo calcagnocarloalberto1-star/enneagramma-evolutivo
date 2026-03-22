@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -72,6 +73,16 @@ export default function EnneatipoDetail() {
   const [, params] = useRoute("/enneatipi/:id");
   const id = params?.id;
   const num = parseInt(id || "0");
+  const typeNames: Record<number, string> = {
+    1: "Il Perfezionista", 2: "L'Altruista", 3: "Il Realizzatore",
+    4: "L'Individualista", 5: "L'Osservatore", 6: "Il Leale",
+    7: "L'Entusiasta", 8: "Il Leader", 9: "Il Pacificatore",
+  };
+  useEffect(() => {
+    if (num >= 1 && num <= 9) {
+      document.title = `Enneatipo ${num} — ${typeNames[num]} | Enneagramma Evolutivo`;
+    }
+  }, [num]);
 
   const { data, isLoading, isError } = useQuery<any>({
     queryKey: ["/api/enneatipi", id],

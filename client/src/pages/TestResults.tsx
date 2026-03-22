@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useRoute, Link } from "wouter";
@@ -178,6 +178,7 @@ function GenogrammaExplanation() {
 }
 
 export default function TestResults() {
+  useEffect(() => { document.title = "Risultati del Test | Enneagramma Evolutivo"; }, []);
   const [, params] = useRoute("/test/results/:id");
   const id = params?.id;
 

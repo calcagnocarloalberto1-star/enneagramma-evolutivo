@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import chakraSymbols from "@assets/chakra-symbols.webp";
 import carloPhoto from "@assets/carlo-alberto-calcagno.jpg";
 
 export default function About() {
+  useEffect(() => { document.title = "Chi Siamo — Carlo Alberto Calcagno | Enneagramma Evolutivo"; }, []);
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
       <div className="text-center mb-12">

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -40,6 +41,7 @@ interface AdminStats {
 }
 
 export default function Admin() {
+  useEffect(() => { document.title = "Dashboard | Enneagramma Evolutivo"; }, []);
   const { data: stats, isLoading, error } = useQuery<AdminStats>({
     queryKey: ["/api/admin/stats"],
   });

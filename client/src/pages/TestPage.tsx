@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
@@ -32,6 +32,7 @@ function generateVisitorId(): string {
 }
 
 export default function TestPage() {
+  useEffect(() => { document.title = "Fai il Test | Enneagramma Evolutivo"; }, []);
   const [, navigate] = useLocation();
   const [phase, setPhase] = useState<"welcome" | "test" | "age" | "submitting">("welcome");
   const [currentFruitIndex, setCurrentFruitIndex] = useState(0);

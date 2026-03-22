@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -335,6 +335,7 @@ function generateFamilyPdf(
 }
 
 export default function FamilyCompatibility() {
+  useEffect(() => { document.title = "Compatibilità Familiare | Enneagramma Evolutivo"; }, []);
   const [members, setMembers] = useState<FamilyMember[]>([
     { id: 1, nome: "Genitore 1", enneatipo: "", ala: "nessuna", percorso: "1", eta: "" },
     { id: 2, nome: "Genitore 2", enneatipo: "", ala: "nessuna", percorso: "1", eta: "" },

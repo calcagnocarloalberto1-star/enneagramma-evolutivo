@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,6 +46,7 @@ const levelColors: Record<string, string> = {
 };
 
 export default function CivilMediation() {
+  useEffect(() => { document.title = "Mediazione Civile e Commerciale | Enneagramma Evolutivo"; }, []);
   const [nome1, setNome1] = useState("");
   const [nome2, setNome2] = useState("");
   const [type1, setType1] = useState("");

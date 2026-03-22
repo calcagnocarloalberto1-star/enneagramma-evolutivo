@@ -601,6 +601,52 @@ export async function registerRoutes(
     }
   });
 
+  // GET sitemap.xml
+  app.get("/sitemap.xml", (_req, res) => {
+    const baseUrl = "https://enneagramma-evolutivo.onrender.com";
+    const urls = [
+      { loc: "/", changefreq: "weekly", priority: "1.0" },
+      { loc: "/#/test", changefreq: "monthly", priority: "0.9" },
+      { loc: "/#/enneatipi", changefreq: "monthly", priority: "0.8" },
+      ...Array.from({ length: 9 }, (_, i) => ({
+        loc: `/#/enneatipi/${i + 1}`, changefreq: "monthly", priority: "0.7",
+      })),
+      { loc: "/#/compatibilita/coppia", changefreq: "monthly", priority: "0.8" },
+      { loc: "/#/compatibilita/famiglia", changefreq: "monthly", priority: "0.8" },
+      { loc: "/#/compatibilita/lavoro", changefreq: "monthly", priority: "0.7" },
+      { loc: "/#/percorsi", changefreq: "monthly", priority: "0.7" },
+      { loc: "/#/mediazione/civile", changefreq: "monthly", priority: "0.7" },
+      { loc: "/#/mediazione/familiare", changefreq: "monthly", priority: "0.7" },
+      { loc: "/#/about", changefreq: "monthly", priority: "0.6" },
+      { loc: "/#/blog", changefreq: "weekly", priority: "0.6" },
+      { loc: "/#/glossario", changefreq: "monthly", priority: "0.5" },
+      { loc: "/#/privacy", changefreq: "yearly", priority: "0.3" },
+      { loc: "/#/termini", changefreq: "yearly", priority: "0.3" },
+      { loc: "/#/cookies", changefreq: "yearly", priority: "0.3" },
+    ];
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(u => `  <url>
+    <loc>${baseUrl}${u.loc}</loc>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join("\n")}
+</urlset>`;
+
+    res.set("Content-Type", "application/xml");
+    res.send(xml);
+  });
+
+  // GET robots.txt
+  app.get("/robots.txt", (_req, res) => {
+    res.set("Content-Type", "text/plain");
+    res.send(`User-agent: *
+Allow: /
+Sitemap: https://enneagramma-evolutivo.onrender.com/sitemap.xml
+`);
+  });
+
   // POST generate minuta di accordo
   app.post("/api/mediation/minuta", async (req, res) => {
     try {

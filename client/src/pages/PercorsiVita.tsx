@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -141,6 +141,7 @@ function JourneyTimeline({ journey, age }: { journey: Journey; age: number | nul
 }
 
 export default function PercorsiVita() {
+  useEffect(() => { document.title = "Percorsi di Vita | Enneagramma Evolutivo"; }, []);
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedPercorso, setSelectedPercorso] = useState<string>("");
   const [ageInput, setAgeInput] = useState<string>("");
