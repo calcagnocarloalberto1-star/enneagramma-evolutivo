@@ -149,22 +149,12 @@ export default function CivilMediation() {
     t = t.replace(/[\u2192\u2794\u279C]/g, '->');
     t = t.replace(/[\u2022\u2023\u25CF\u25CB]/g, '-');
     t = t.replace(/[\u00A0]/g, ' ');
-    // Replace accented chars that helvetica can't render
-    t = t.replace(/\u00E0/g, 'a\'');
-    t = t.replace(/\u00E8/g, 'e\'');
-    t = t.replace(/\u00E9/g, 'e\'');
-    t = t.replace(/\u00EC/g, 'i\'');
-    t = t.replace(/\u00ED/g, 'i\'');
-    t = t.replace(/\u00F2/g, 'o\'');
-    t = t.replace(/\u00F3/g, 'o\'');
-    t = t.replace(/\u00F9/g, 'u\'');
-    t = t.replace(/\u00FA/g, 'u\'');
-    t = t.replace(/\u00C0/g, 'A\'');
-    t = t.replace(/\u00C8/g, 'E\'');
-    t = t.replace(/\u00C9/g, 'E\'');
-    t = t.replace(/\u00CC/g, 'I\'');
-    t = t.replace(/\u00D2/g, 'O\'');
-    t = t.replace(/\u00D9/g, 'U\'');
+    // jsPDF 4.x supports Latin-1 accented chars natively (è, à, ù, ò, é, etc.)
+    // Only strip chars outside Latin-1 range that could cause issues
+    t = t.replace(/[^\x00-\xFF]/g, (ch) => {
+      const map: Record<string, string> = { '\u2013': '-', '\u2014': '-', '\u2018': "'", '\u2019': "'", '\u201C': '"', '\u201D': '"', '\u2022': '-', '\u2026': '...', '\u2192': '->', '\u2550': '=' };
+      return map[ch] || '';
+    });
     return t;
   }
 
