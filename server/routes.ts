@@ -94,6 +94,105 @@ function getPercorsoPersonalizzato(enneatipo: number, eta: number) {
   };
 }
 
+// Age-based attribute analysis for parenting plan
+function getAgePhaseAttributes(enneatipo: number, age: number) {
+  const tipoData = percorsiEvolutiviCompleti.percorsiCompleti[String(enneatipo)];
+  if (!tipoData) return null;
+
+  const isCicloBreve = tipoData.cicloBrève === true;
+  const integrazione = tipoData.integrazione;
+  const puntiAttr = percorsiEvolutiviCompleti.puntiAttributi;
+
+  // Determine current phase
+  let faseCorrente = "";
+  if (isCicloBreve) {
+    if (age <= 30) faseCorrente = "0-30";
+    else if (age <= 60) faseCorrente = "30-60";
+    else faseCorrente = "60+";
+  } else {
+    if (age <= 3) faseCorrente = "0-3";
+    else if (age <= 12) faseCorrente = "3-12";
+    else if (age <= 19) faseCorrente = "12-19";
+    else if (age <= 30) faseCorrente = "19-30";
+    else if (age <= 60) faseCorrente = "30-60";
+    else faseCorrente = "60+";
+  }
+
+  const faseIntegrazione = integrazione.fasi[faseCorrente];
+  if (!faseIntegrazione) return null;
+
+  const puntoCorrente = faseIntegrazione.punto;
+  const attrs = puntiAttr[String(puntoCorrente)];
+  if (!attrs) return null;
+
+  return {
+    fase: faseCorrente,
+    faseNome: faseIntegrazione.nome,
+    faseDesc: faseIntegrazione.desc,
+    puntoCorrente,
+    dignita: attrs.dignita,
+    virtu: attrs.virtu,
+    vizio: attrs.vizio,
+    topica: attrs.topica,
+    meccanismo: attrs.meccanismo,
+  };
+}
+
+function buildAttributeAnalysis(nome1: string, e1: number, eta1: number, nome2: string, e2: number, eta2: number): string {
+  const attrs1 = getAgePhaseAttributes(e1, eta1);
+  const attrs2 = getAgePhaseAttributes(e2, eta2);
+
+  if (!attrs1 || !attrs2) return "";
+
+  let analysis = `\nANALISI DEGLI ATTRIBUTI PER ETA (per il piano genitoriale):\n\n`;
+  analysis += `${nome1} (${eta1} anni, Enneatipo ${e1}):\n`;
+  analysis += `- Fase attuale: ${attrs1.fase} - ${attrs1.faseNome}\n`;
+  analysis += `- ${attrs1.faseDesc}\n`;
+  analysis += `- Dignita: ${attrs1.dignita}, Virtu: ${attrs1.virtu}, Vizio: ${attrs1.vizio}\n`;
+  analysis += `- Meccanismo di difesa: ${attrs1.meccanismo}\n`;
+  analysis += `- Topica: ${attrs1.topica}\n\n`;
+
+  analysis += `${nome2} (${eta2} anni, Enneatipo ${e2}):\n`;
+  analysis += `- Fase attuale: ${attrs2.fase} - ${attrs2.faseNome}\n`;
+  analysis += `- ${attrs2.faseDesc}\n`;
+  analysis += `- Dignita: ${attrs2.dignita}, Virtu: ${attrs2.virtu}, Vizio: ${attrs2.vizio}\n`;
+  analysis += `- Meccanismo di difesa: ${attrs2.meccanismo}\n`;
+  analysis += `- Topica: ${attrs2.topica}\n\n`;
+
+  // Find shared and different attributes
+  const shared: string[] = [];
+  const different: string[] = [];
+
+  if (attrs1.dignita === attrs2.dignita) shared.push(`Dignita condivisa: ${attrs1.dignita}`);
+  else different.push(`Dignita: ${attrs1.dignita} (${nome1}) vs ${attrs2.dignita} (${nome2})`);
+
+  if (attrs1.virtu === attrs2.virtu) shared.push(`Virtu condivisa: ${attrs1.virtu}`);
+  else different.push(`Virtu: ${attrs1.virtu} (${nome1}) vs ${attrs2.virtu} (${nome2})`);
+
+  if (attrs1.vizio === attrs2.vizio) shared.push(`Vizio condiviso: ${attrs1.vizio}`);
+  else different.push(`Vizio: ${attrs1.vizio} (${nome1}) vs ${attrs2.vizio} (${nome2})`);
+
+  if (attrs1.topica === attrs2.topica) shared.push(`Topica condivisa: ${attrs1.topica}`);
+  else different.push(`Topica: ${attrs1.topica} (${nome1}) vs ${attrs2.topica} (${nome2})`);
+
+  if (attrs1.meccanismo === attrs2.meccanismo) shared.push(`Meccanismo condiviso: ${attrs1.meccanismo}`);
+  else different.push(`Meccanismo: ${attrs1.meccanismo} (${nome1}) vs ${attrs2.meccanismo} (${nome2})`);
+
+  if (shared.length > 0) {
+    analysis += `ATTRIBUTI CONDIVISI (terreno comune per il piano genitoriale):\n`;
+    for (const s of shared) analysis += `- ${s}\n`;
+    analysis += `\n`;
+  }
+
+  if (different.length > 0) {
+    analysis += `ATTRIBUTI DIVERSI (aree di potenziale attrito):\n`;
+    for (const d of different) analysis += `- ${d}\n`;
+    analysis += `\n`;
+  }
+
+  return analysis;
+}
+
 // Fruit to enneatipo mapping
 const fruitToEnneatipo: Record<string, number> = {
   "Mela": 1, "Pera": 2, "Ciliegia": 3, "Nespola": 4,
@@ -505,7 +604,7 @@ export async function registerRoutes(
   // POST generate minuta di accordo
   app.post("/api/mediation/minuta", async (req, res) => {
     try {
-      const { tipo, parte1, parte2, tipoControversia, livelloConflitto, inquadramento, figliCoinvolti, numFigli, etaFigli } = req.body;
+      const { tipo, parte1, parte2, tipoControversia, livelloConflitto, inquadramento, figliCoinvolti, numFigli, etaFigli, eta1, eta2 } = req.body;
 
       if (!parte1?.enneatipo || !parte2?.enneatipo) {
         return res.status(400).json({ error: "Dati delle parti mancanti" });
@@ -535,6 +634,11 @@ export async function registerRoutes(
       const e1 = parte1.enneatipo;
       const e2 = parte2.enneatipo;
 
+      // Build age-based attribute analysis if ages are provided (family mediation)
+      const ageAnalysis = (eta1 && eta2 && figliCoinvolti)
+        ? buildAttributeAnalysis(nome1, e1, parseInt(eta1), nome2, e2, parseInt(eta2))
+        : "";
+
       const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
       if (GEMINI_API_KEY) {
@@ -557,13 +661,13 @@ ${figliCoinvolti ? `- Figli coinvolti: ${numFigli || "sì"}${etaFigli ? ` (età:
 GUIDA LINGUISTICA PER ENNEATIPO:
 - Per ${nome1} (Tipo ${e1}): ${enneatipoLanguageGuide[e1]}
 - Per ${nome2} (Tipo ${e2}): ${enneatipoLanguageGuide[e2]}
-
+${ageAnalysis ? `\n${ageAnalysis}` : ""}
 ISTRUZIONI:
 1. Struttura il documento come un verbale di accordo di mediazione formale
 2. Includi: INTESTAZIONE, PREMESSE (con fatti del caso), IDENTIFICAZIONE DELLE PARTI, ACCORDI RAGGIUNTI (clausole specifiche adattate al tipo di controversia e ai bisogni delle parti), CLAUSOLA DI REVISIONE, CLAUSOLA DI SALVAGUARDIA, FIRME
 3. Il linguaggio delle clausole deve COMBINARE gli stili comunicativi di entrambi gli enneatipi per risultare accettabile a entrambe le parti
 4. Usa la descrizione del caso per creare clausole specifiche e concrete, non generiche
-${figliCoinvolti ? "5. Includi una sezione dedicata al piano genitoriale con disposizioni per i figli" : ""}
+${figliCoinvolti ? "5. Includi una sezione dedicata al piano genitoriale con disposizioni per i figli. Se presente l'analisi degli attributi per eta, usa gli attributi condivisi come leve per il piano genitoriale e gli attributi diversi come aree di attenzione" : ""}
 6. Includi una sezione su come gestire eventuali controversie relative all'accordo stesso
 7. Termina con le righe per le firme delle parti e del mediatore
 8. Scrivi SOLO il testo dell'accordo, senza commenti o spiegazioni aggiuntive`;
@@ -650,6 +754,12 @@ ${figliCoinvolti ? "5. Includi una sezione dedicata al piano genitoriale con dis
         minuta += `I figli trascorreranno: _______________________________________________\n\n`;
         minuta += `Art. 7 — Contributo al mantenimento\n`;
         minuta += `Il contributo al mantenimento dei figli è fissato in € _______/mese.\n\n`;
+        if (ageAnalysis) {
+          minuta += `═══════════════════════════════════════\n`;
+          minuta += `ANALISI DEGLI ATTRIBUTI PER ETA\n`;
+          minuta += `═══════════════════════════════════════\n\n`;
+          minuta += ageAnalysis;
+        }
       }
 
       minuta += `═══════════════════════════════════════\n`;

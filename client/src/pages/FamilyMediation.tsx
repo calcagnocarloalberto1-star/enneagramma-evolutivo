@@ -150,6 +150,8 @@ export default function FamilyMediation() {
           figliCoinvolti,
           numFigli,
           etaFigli,
+          eta1: eta1 || undefined,
+          eta2: eta2 || undefined,
         }),
       });
       const data = await res.json();
@@ -162,35 +164,130 @@ export default function FamilyMediation() {
     }
   }
 
+  function sanitizeForPdf(text: string): string {
+    let t = text;
+    // Remove markdown bold/italic markers
+    t = t.replace(/\*\*\*/g, '');
+    t = t.replace(/\*\*/g, '');
+    t = t.replace(/\*/g, '');
+    // Remove markdown headers
+    t = t.replace(/^#{1,6}\s/gm, '');
+    // Clean special Unicode chars that jsPDF can't render
+    t = t.replace(/[═]/g, '=');
+    t = t.replace(/[—–]/g, '-');
+    t = t.replace(/[\u201C\u201D\u201E\u201F]/g, '"');
+    t = t.replace(/[\u2018\u2019\u201A\u201B]/g, "'");
+    t = t.replace(/\u2026/g, '...');
+    t = t.replace(/[\u2192\u2794\u279C]/g, '->');
+    t = t.replace(/[\u2022\u2023\u25CF\u25CB]/g, '-');
+    t = t.replace(/[\u00A0]/g, ' ');
+    // Replace accented chars that helvetica can't render
+    t = t.replace(/\u00E0/g, 'a\'');
+    t = t.replace(/\u00E8/g, 'e\'');
+    t = t.replace(/\u00E9/g, 'e\'');
+    t = t.replace(/\u00EC/g, 'i\'');
+    t = t.replace(/\u00ED/g, 'i\'');
+    t = t.replace(/\u00F2/g, 'o\'');
+    t = t.replace(/\u00F3/g, 'o\'');
+    t = t.replace(/\u00F9/g, 'u\'');
+    t = t.replace(/\u00FA/g, 'u\'');
+    t = t.replace(/\u00C0/g, 'A\'');
+    t = t.replace(/\u00C8/g, 'E\'');
+    t = t.replace(/\u00C9/g, 'E\'');
+    t = t.replace(/\u00CC/g, 'I\'');
+    t = t.replace(/\u00D2/g, 'O\'');
+    t = t.replace(/\u00D9/g, 'U\'');
+    return t;
+  }
+
   function generateMinutaPdf() {
     if (!minutaText) return;
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 20;
     const contentWidth = pageWidth - margin * 2;
     let y = 20;
 
+    const addFooter = () => {
+      doc.setFontSize(7);
+      doc.setFont("helvetica", "italic");
+      doc.text("Generato da Enneagramma Evolutivo", pageWidth / 2, pageHeight - 10, { align: "center" });
+    };
+
     const checkPage = (needed: number) => {
-      if (y + needed > doc.internal.pageSize.getHeight() - 25) {
+      if (y + needed > pageHeight - 25) {
+        addFooter();
         doc.addPage();
         y = 20;
       }
     };
 
+    // Header
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text("Minuta di Accordo - Mediazione Familiare", pageWidth / 2, y, { align: "center" });
+    doc.text(sanitizeForPdf("Minuta di Accordo - Mediazione Familiare"), pageWidth / 2, y, { align: "center" });
+    y += 7;
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text(sanitizeForPdf(`Data: ${new Date().toLocaleDateString("it-IT")}`), pageWidth / 2, y, { align: "center" });
     y += 10;
 
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    const lines = doc.splitTextToSize(minutaText, contentWidth);
-    for (const line of lines) {
-      checkPage(6);
-      doc.text(line, margin, y);
-      y += 5;
+    // Process text line by line with formatting
+    const sanitized = sanitizeForPdf(minutaText);
+    const rawLines = sanitized.split('\n');
+
+    for (const rawLine of rawLines) {
+      const trimmed = rawLine.trim();
+
+      // Empty line = spacing
+      if (!trimmed) {
+        y += 3;
+        continue;
+      }
+
+      // Section headers (lines with === or all caps section titles)
+      const isHeader = /^[=]+$/.test(trimmed);
+      if (isHeader) {
+        y += 2;
+        continue;
+      }
+
+      const isAllCaps = /^[A-Z\s']{5,}$/.test(trimmed) || /^[A-Z][A-Z\s']{3,}$/.test(trimmed.replace(/[^A-Za-z\s']/g, ''));
+      const isArticle = /^Art\.\s*\d+/i.test(trimmed);
+      const isSectionTitle = isAllCaps && trimmed.length > 4;
+
+      if (isSectionTitle) {
+        checkPage(14);
+        y += 4;
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "bold");
+        const wrapped = doc.splitTextToSize(trimmed, contentWidth);
+        doc.text(wrapped, margin, y);
+        y += wrapped.length * 5 + 3;
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+      } else if (isArticle) {
+        checkPage(12);
+        y += 2;
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        const wrapped = doc.splitTextToSize(trimmed, contentWidth);
+        doc.text(wrapped, margin, y);
+        y += wrapped.length * 5 + 2;
+        doc.setFont("helvetica", "normal");
+      } else {
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        const wrapped = doc.splitTextToSize(trimmed, contentWidth);
+        checkPage(wrapped.length * 5 + 2);
+        doc.text(wrapped, margin, y);
+        y += wrapped.length * 5 + 1;
+      }
     }
 
+    // Footer on last page
+    addFooter();
     doc.save(`minuta-mediazione-familiare-${t1}-${t2}.pdf`);
   }
 
