@@ -638,6 +638,12 @@ ${urls.map(u => `  <url>
     res.send(xml);
   });
 
+  // Google Search Console verification
+  app.get("/googleb2392e1f3564a1be.html", (_req, res) => {
+    res.set("Content-Type", "text/html");
+    res.send("google-site-verification: googleb2392e1f3564a1be.html");
+  });
+
   // GET robots.txt
   app.get("/robots.txt", (_req, res) => {
     res.set("Content-Type", "text/plain");
