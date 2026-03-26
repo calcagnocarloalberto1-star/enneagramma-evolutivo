@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Heart, Users, Briefcase, Sparkles } from "lucide-react";
+import { ArrowRight, Heart, Users, Briefcase, Sparkles, Scale, Home as HomeIcon } from "lucide-react";
 import ruotaLullo from "@assets/ruota-lullo.webp";
 import ruotaLulloClassica from "@assets/ruota-lullo-classica.png";
 import { usePageTitle } from "@/hooks/use-page-title";
@@ -38,6 +38,21 @@ const features = [
     href: "/compatibilita/lavoro",
     color: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
     borderColor: "border-blue-200 dark:border-blue-800",
+  },
+];
+
+const mediationFeatures = [
+  {
+    title: "Mediazione Civile e Commerciale",
+    desc: "Analisi enneagrammatica delle parti, strategie per il mediatore, simulazioni e minuta di accordo",
+    icon: Scale,
+    href: "/mediazione/civile",
+  },
+  {
+    title: "Mediazione Familiare",
+    desc: "Dinamiche familiari, piano genitoriale, gestione emotiva e bozza di accordo personalizzata",
+    icon: HomeIcon,
+    href: "/mediazione/familiare",
   },
 ];
 
@@ -104,6 +119,25 @@ export default function Home() {
                   </div>
                   <h3 className="font-semibold text-sm mb-1">{f.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+
+        {/* Mediation Cards — highlighted */}
+        <div className="grid sm:grid-cols-2 gap-4 mt-4">
+          {mediationFeatures.map((f) => (
+            <Link key={f.title} href={f.href}>
+              <Card className="bg-gradient-to-r from-[#1a1a2e] to-[#0f3460] border-[#c9a227]/30 hover:border-[#c9a227]/60 hover:shadow-xl hover:shadow-[#c9a227]/10 transition-all cursor-pointer h-full">
+                <CardContent className="p-5 flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-[#c9a227]/20 flex items-center justify-center shrink-0">
+                    <f.icon className="w-6 h-6 text-[#c9a227]" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif font-semibold text-[#f0e6d3] mb-1">{f.title}</h3>
+                    <p className="text-xs text-[#f0e6d3]/70 leading-relaxed">{f.desc}</p>
+                  </div>
                 </CardContent>
               </Card>
             </Link>
