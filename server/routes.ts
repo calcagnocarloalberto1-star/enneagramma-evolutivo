@@ -606,23 +606,23 @@ export async function registerRoutes(
     const baseUrl = "https://enneagrammaevolutivo.it";
     const urls = [
       { loc: "/", changefreq: "weekly", priority: "1.0" },
-      { loc: "/#/test", changefreq: "monthly", priority: "0.9" },
-      { loc: "/#/enneatipi", changefreq: "monthly", priority: "0.8" },
+      { loc: "/test", changefreq: "monthly", priority: "0.9" },
+      { loc: "/enneatipi", changefreq: "monthly", priority: "0.8" },
       ...Array.from({ length: 9 }, (_, i) => ({
-        loc: `/#/enneatipi/${i + 1}`, changefreq: "monthly", priority: "0.7",
+        loc: `/enneatipi/${i + 1}`, changefreq: "monthly", priority: "0.7",
       })),
-      { loc: "/#/compatibilita/coppia", changefreq: "monthly", priority: "0.8" },
-      { loc: "/#/compatibilita/famiglia", changefreq: "monthly", priority: "0.8" },
-      { loc: "/#/compatibilita/lavoro", changefreq: "monthly", priority: "0.7" },
-      { loc: "/#/percorsi", changefreq: "monthly", priority: "0.7" },
-      { loc: "/#/mediazione/civile", changefreq: "monthly", priority: "0.7" },
-      { loc: "/#/mediazione/familiare", changefreq: "monthly", priority: "0.7" },
-      { loc: "/#/about", changefreq: "monthly", priority: "0.6" },
-      { loc: "/#/blog", changefreq: "weekly", priority: "0.6" },
-      { loc: "/#/glossario", changefreq: "monthly", priority: "0.5" },
-      { loc: "/#/privacy", changefreq: "yearly", priority: "0.3" },
-      { loc: "/#/termini", changefreq: "yearly", priority: "0.3" },
-      { loc: "/#/cookies", changefreq: "yearly", priority: "0.3" },
+      { loc: "/compatibilita/coppia", changefreq: "monthly", priority: "0.8" },
+      { loc: "/compatibilita/famiglia", changefreq: "monthly", priority: "0.8" },
+      { loc: "/compatibilita/lavoro", changefreq: "monthly", priority: "0.7" },
+      { loc: "/percorsi", changefreq: "monthly", priority: "0.7" },
+      { loc: "/mediazione/civile", changefreq: "monthly", priority: "0.7" },
+      { loc: "/mediazione/familiare", changefreq: "monthly", priority: "0.7" },
+      { loc: "/about", changefreq: "monthly", priority: "0.6" },
+      { loc: "/blog", changefreq: "weekly", priority: "0.6" },
+      { loc: "/glossario", changefreq: "monthly", priority: "0.5" },
+      { loc: "/privacy", changefreq: "yearly", priority: "0.3" },
+      { loc: "/termini", changefreq: "yearly", priority: "0.3" },
+      { loc: "/cookies", changefreq: "yearly", priority: "0.3" },
     ];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
