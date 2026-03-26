@@ -180,6 +180,18 @@ export default function About() {
                 e la sensibilità verso l'armonia nelle relazioni.
               </p>
             </div>
+
+            {/* Nota sulle sezioni di mediazione */}
+            <div className="mt-4 p-4 rounded-lg border border-[#0f3460]/20 bg-[#0f3460]/5">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                <strong className="text-foreground">Nota importante:</strong> le sezioni 
+                <strong className="text-foreground"> "Al Tavolo della Mediazione Civile e Commerciale"</strong> e 
+                <strong className="text-foreground"> "Al Tavolo della Mediazione Familiare"</strong> sono 
+                strumenti riservati ai professionisti della relazione di aiuto: mediatori civili e commerciali, 
+                mediatori familiari, avvocati, counselor, psicologi e altri operatori qualificati 
+                nella gestione dei conflitti.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </section>
