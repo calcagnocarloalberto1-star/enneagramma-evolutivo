@@ -75,7 +75,7 @@ const faqs = [
   },
   {
     q: "Come funziona la Minuta di Accordo?",
-    a: "La Minuta di Accordo è una bozza formale di verbale di mediazione generata dall'intelligenza artificiale (o da un template strutturato). Il suo linguaggio viene adattato alla personalità di ciascuna parte in base all'enneatipo: ad esempio, per un Tipo 1 le clausole saranno precise e ben definite, per un Tipo 2 il linguaggio preserverà la relazione, per un Tipo 8 sarà diretto e orientato alla giustizia. La minuta include premesse, identificazione delle parti, accordi raggiunti, clausole di revisione e salvaguardia, e le righe per le firme. Per la mediazione familiare include anche il piano genitoriale."
+    a: "La Minuta di Accordo è una bozza formale di verbale di mediazione generata dall'intelligenza artificiale (o da un template strutturato). Il suo linguaggio viene adattato alla personalità di ciascuna parte in base all'enneatipo: ad esempio, per un Tipo 1 le clausole saranno precise e ben definite, per un Tipo 2 il linguaggio preserverà la relazione, per un Tipo 8 sarà diretto e orientato alla giustizia. La minuta include premesse, identificazione delle parti, accordi raggiunti, clausole di revisione e salvaguardia, e le righe per le firme. Per la mediazione familiare include anche il piano genitoriale. La minuta è solo un ausilio per le parti che ovviamente la utilizzeranno se lo desiderano per trovare la migliore intesa con le proprie forze e volontà."
   },
 ];
 
