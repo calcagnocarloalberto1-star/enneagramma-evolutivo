@@ -603,7 +603,7 @@ export async function registerRoutes(
 
   // GET sitemap.xml
   app.get("/sitemap.xml", (_req, res) => {
-    const baseUrl = "https://enneagramma-evolutivo.onrender.com";
+    const baseUrl = "https://enneagrammaevolutivo.it";
     const urls = [
       { loc: "/", changefreq: "weekly", priority: "1.0" },
       { loc: "/#/test", changefreq: "monthly", priority: "0.9" },
@@ -643,7 +643,7 @@ ${urls.map(u => `  <url>
     res.set("Content-Type", "text/plain");
     res.send(`User-agent: *
 Allow: /
-Sitemap: https://enneagramma-evolutivo.onrender.com/sitemap.xml
+Sitemap: https://enneagrammaevolutivo.it/sitemap.xml
 `);
   });
 
