@@ -252,7 +252,9 @@ function validateResults(scores: Record<number, number>, enneatipo: number) {
   const maxScore = Math.max(...Object.values(scores));
 
   // Rule 1: Two or more types tied for highest score
-  const maxTypes = Object.entries(scores).filter(([, v]) => v === maxScore);
+  const maxTypes = Object.entries(scores)
+    .filter(([, v]) => v === maxScore)
+    .map(([k]) => parseInt(k));
   const tiedMaxScores = maxTypes.length > 1;
 
   // Rule 3: Max score too low (< 10)
@@ -271,6 +273,10 @@ function validateResults(scores: Record<number, number>, enneatipo: number) {
       tiedMaxScores,
       tiedWingScores,
       maxScoreTooLow,
+      // Dati extra per messaggi precisi nel banner del frontend
+      tiedTypes: maxTypes,                                          // es. [8, 9] se T8 e T9 pareggiano
+      maxScore,                                                     // es. 13 (punteggio massimo numerico)
+      tiedWingTypes: tiedWingScores ? [leftWing, rightWing] : [],   // es. [7, 9] se ali in pareggio
     },
   };
 }
