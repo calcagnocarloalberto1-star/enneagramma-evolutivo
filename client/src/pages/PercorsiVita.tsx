@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSEO } from "@/hooks/use-page-title";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -141,7 +142,11 @@ function JourneyTimeline({ journey, age }: { journey: Journey; age: number | nul
 }
 
 export default function PercorsiVita() {
-  useEffect(() => { document.title = "Percorsi di Vita | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Percorsi di Vita | Enneagramma Evolutivo",
+    description: "I percorsi di vita dell'Enneagramma Evolutivo: come cambia il tuo enneatipo nelle diverse fasi della vita, dall'infanzia alla maturità.",
+    path: "/percorsi",
+  });
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedPercorso, setSelectedPercorso] = useState<string>("");
   const [ageInput, setAgeInput] = useState<string>("");

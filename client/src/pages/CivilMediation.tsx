@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSEO } from "@/hooks/use-page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +31,7 @@ import {
   buildConflictDynamics,
   buildMediatorStrategy,
   generateCivilSimulations,
+  getPortaDefault,
   type PartyProfile,
   type MediatorStrategy,
   type SimulationScenario,
@@ -46,7 +48,11 @@ const levelColors: Record<string, string> = {
 };
 
 export default function CivilMediation() {
-  useEffect(() => { document.title = "Mediazione Civile e Commerciale | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Mediazione Civile e Commerciale | Enneagramma Evolutivo",
+    description: "Strumento AI per mediatori civili e commerciali: analisi delle parti basata sull'Enneagramma, strategie di mediazione e bozza di accordo personalizzata.",
+    path: "/mediazione/civile",
+  });
   const [nome1, setNome1] = useState("");
   const [nome2, setNome2] = useState("");
   const [type1, setType1] = useState("");
@@ -91,7 +97,7 @@ export default function CivilMediation() {
     : null;
 
   const strategy: MediatorStrategy | null = showAnalysis && profile1 && profile2
-    ? buildMediatorStrategy(profile1, profile2, livelloConflitto)
+    ? buildMediatorStrategy(profile1, profile2, livelloConflitto, "civile")
     : null;
 
   const simulations: SimulationScenario[] = showAnalysis && type1 && type2
@@ -299,13 +305,13 @@ export default function CivilMediation() {
     addTitle("Profilo delle Parti");
     addText(`Parte 1: ${profile1.nome} - Tipo ${type1} ${profile1.nomeEnneatipo}${wing1 !== "nessuna" ? ` (Ala ${wing1})` : ""}${sottotipo1 ? `, Sottotipo: ${sottotipo1}` : ""}`);
     if (profile1.at) addText(`Adattamento AT: ${profile1.at.nome} (${profile1.at.tipo})`);
-    addText(`Porta aperta: ${profile1.at?.portaAperta || "N/D"} | Driver: ${profile1.at?.spinta || "N/D"}`);
+    addText(`Porta aperta: ${profile1.at?.portaAperta || getPortaDefault(t1)} | Driver: ${profile1.at?.spinta || profile1.levaMotivazionale.split(". ")[0]}`);
     addText(`Approccio consigliato: ${profile1.approccio}`);
     y += 4;
 
     addText(`Parte 2: ${profile2.nome} - Tipo ${type2} ${profile2.nomeEnneatipo}${wing2 !== "nessuna" ? ` (Ala ${wing2})` : ""}${sottotipo2 ? `, Sottotipo: ${sottotipo2}` : ""}`);
     if (profile2.at) addText(`Adattamento AT: ${profile2.at.nome} (${profile2.at.tipo})`);
-    addText(`Porta aperta: ${profile2.at?.portaAperta || "N/D"} | Driver: ${profile2.at?.spinta || "N/D"}`);
+    addText(`Porta aperta: ${profile2.at?.portaAperta || getPortaDefault(t2)} | Driver: ${profile2.at?.spinta || profile2.levaMotivazionale.split(". ")[0]}`);
     addText(`Approccio consigliato: ${profile2.approccio}`);
     y += 6;
 

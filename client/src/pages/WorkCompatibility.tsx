@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSEO } from "@/hooks/use-page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -148,7 +149,11 @@ function PairWorkComparison({ m1, m2 }: {
 }
 
 export default function WorkCompatibility() {
-  useEffect(() => { document.title = "Compatibilità Lavorativa | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Compatibilità Lavorativa | Enneagramma Evolutivo",
+    description: "Scopri la compatibilità lavorativa secondo l'Enneagramma Evolutivo: dinamiche di team, punti di forza e attriti tra colleghi.",
+    path: "/compatibilita/lavoro",
+  });
   const [members, setMembers] = useState<TeamMember[]>([
     { id: 1, nome: "Collega 1", enneatipo: "", ala: "nessuna", ruolo: "" },
     { id: 2, nome: "Collega 2", enneatipo: "", ala: "nessuna", ruolo: "" },

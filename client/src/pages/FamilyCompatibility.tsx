@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSEO } from "@/hooks/use-page-title";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -335,7 +336,11 @@ function generateFamilyPdf(
 }
 
 export default function FamilyCompatibility() {
-  useEffect(() => { document.title = "Compatibilità Familiare | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Compatibilità Familiare | Enneagramma Evolutivo",
+    description: "Scopri le dinamiche familiari secondo l'Enneagramma Evolutivo: compatibilità tra genitori e figli e strategie per relazioni più armoniose.",
+    path: "/compatibilita/famiglia",
+  });
   const [members, setMembers] = useState<FamilyMember[]>([
     { id: 1, nome: "Genitore 1", enneatipo: "", ala: "nessuna", percorso: "1", eta: "" },
     { id: 2, nome: "Genitore 2", enneatipo: "", ala: "nessuna", percorso: "1", eta: "" },

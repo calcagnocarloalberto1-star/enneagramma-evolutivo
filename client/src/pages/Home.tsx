@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Heart, Users, Briefcase, Sparkles, Scale, Home as HomeIcon } from "lucide-react";
 import ruotaLullo from "@assets/ruota-lullo.webp";
 import ruotaLulloClassica from "@assets/ruota-lullo-classica.png";
-import { usePageTitle } from "@/hooks/use-page-title";
+import { useSEO } from "@/hooks/use-page-title";
 
 const features = [
   {
@@ -57,7 +57,11 @@ const mediationFeatures = [
 ];
 
 export default function Home() {
-  usePageTitle("Enneagramma Evolutivo — I 9 Frutti del Tuo Cammino Interiore");
+  useSEO({
+    title: "Enneagramma Evolutivo — I 9 Frutti del Tuo Cammino Interiore",
+    description: "Scopri il tuo enneatipo con il test gratuito dei 9 Frutti dell'Albero della Vita: compatibilità di coppia, percorsi di vita e mediazione familiare.",
+    path: "/",
+  });
   return (
     <div>
       {/* Hero */}
@@ -200,7 +204,7 @@ export default function Home() {
               { name: "Mela", type: 1, emoji: "🍎" },
               { name: "Pera", type: 2, emoji: "🍐" },
               { name: "Ciliegia", type: 3, emoji: "🍒" },
-              { name: "Nespola", type: 4, emoji: "🫐" },
+              { name: "Nespola", type: 4, emoji: "🍊" },
               { name: "Uva", type: 5, emoji: "🍇" },
               { name: "Mirtillo", type: 6, emoji: "🫐" },
               { name: "Ananas", type: 7, emoji: "🍍" },

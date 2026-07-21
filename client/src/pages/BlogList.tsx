@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
+import { useSEO } from "@/hooks/use-page-title";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, BookOpen } from "lucide-react";
@@ -14,7 +15,11 @@ interface BlogArticle {
 }
 
 export default function BlogList() {
-  useEffect(() => { document.title = "Blog | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Blog | Enneagramma Evolutivo",
+    description: "Approfondimenti, guide e articoli sull'Enneagramma Evolutivo, i 9 enneatipi, la compatibilità di coppia e la mediazione dei conflitti.",
+    path: "/blog",
+  });
   const { data: articles, isLoading } = useQuery<BlogArticle[]>({
     queryKey: ["/api/blog"],
   });

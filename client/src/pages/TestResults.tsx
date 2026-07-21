@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useRoute, Link } from "wouter";
+import { useNoIndex } from "@/hooks/use-page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,7 @@ const fruitNames: Record<number, string> = {
 };
 
 const fruitEmoji: Record<number, string> = {
-  1: "🍎", 2: "🍐", 3: "🍒", 4: "🫐",
+  1: "🍎", 2: "🍐", 3: "🍒", 4: "🍊",
   5: "🍇", 6: "🫐", 7: "🍍", 8: "🍑", 9: "🍓"
 };
 
@@ -42,7 +43,7 @@ const typeColors: Record<number, string> = {
 const typeNames: Record<number, string> = {
   1: "Il Perfezionista", 2: "L'Altruista", 3: "Il Realizzatore",
   4: "L'Individualista", 5: "L'Investigatore", 6: "Il Leale",
-  7: "L'Entusiasta", 8: "Il Challenger", 9: "Il Pacificatore",
+  7: "L'Entusiasta", 8: "Il Leader", 9: "Il Pacificatore",
 };
 
 // Wing descriptions for each enneatipo + wing combination
@@ -61,8 +62,8 @@ const wingDescriptions: Record<string, string> = {
   "6w7": "L'Enneatipo 6 con ala 7 (Il Leale Entusiasta) è più ottimista e socievole. Combina la prudenza con l'energia positiva, risultando più avventuroso e giocoso, pur mantenendo un occhio attento ai potenziali rischi.",
   "7w6": "L'Enneatipo 7 con ala 6 (L'Entusiasta Leale) è più responsabile e orientato alle relazioni. Combina la ricerca del piacere con la lealtà, risultando più affidabile e attento agli altri rispetto al 7w8.",
   "7w8": "L'Enneatipo 7 con ala 8 (L'Entusiasta Assertivo) è più determinato e orientato al potere. Combina l'entusiasmo con la forza, risultando più audace, diretto e capace di realizzare i propri progetti.",
-  "8w7": "L'Enneatipo 8 con ala 7 (Il Challenger Entusiasta) è più energico e orientato al piacere. Combina la forza con l'entusiasmo, risultando più estroverso, imprenditoriale e aperto a nuove esperienze.",
-  "8w9": "L'Enneatipo 8 con ala 9 (Il Challenger Pacificatore) è più calmo e contenuto. Combina la forza con la stabilità interiore, risultando più paziente, diplomatico e capace di esercitare il proprio potere in modo più misurato.",
+  "8w7": "L'Enneatipo 8 con ala 7 (Il Leader Entusiasta) è più energico e orientato al piacere. Combina la forza con l'entusiasmo, risultando più estroverso, imprenditoriale e aperto a nuove esperienze.",
+  "8w9": "L'Enneatipo 8 con ala 9 (Il Leader Pacificatore) è più calmo e contenuto. Combina la forza con la stabilità interiore, risultando più paziente, diplomatico e capace di esercitare il proprio potere in modo più misurato.",
   "9w8": "L'Enneatipo 9 con ala 8 (Il Pacificatore Assertivo) è più determinato e capace di agire. Combina la ricerca di pace con la forza interiore, risultando più deciso e capace di prendere posizione quando necessario.",
   "9w1": "L'Enneatipo 9 con ala 1 (Il Pacificatore Principiato) è più strutturato e orientato ai principi. Combina la serenità con il senso del dovere, risultando più metodico e impegnato nel miglioramento personale e sociale.",
 };
@@ -178,7 +179,8 @@ function GenogrammaExplanation() {
 }
 
 export default function TestResults() {
-  useEffect(() => { document.title = "Risultati del Test | Enneagramma Evolutivo"; }, []);
+  // Personal, per-visitor results — kept out of the search index.
+  useNoIndex("Risultati del Test | Enneagramma Evolutivo");
   const [, params] = useRoute("/test/results/:id");
   const id = params?.id;
 
@@ -810,7 +812,7 @@ export default function TestResults() {
                     <div><span className="text-muted-foreground">Copione:</span> <span className="font-medium">{at.copione}</span> — <span className="text-xs italic">{at.copioneMotto}</span></div>
                   </div>
                   <Link href={`/enneatipi/${enneatipo}#analisi-transazionale`}>
-                    <Button variant="link" className="text-xs px-0 mt-2 h-auto">
+                    <Button variant="ghost" className="text-xs px-0 mt-2 h-auto underline">
                       Vedi profilo AT completo <ArrowRight className="ml-1 w-3 h-3" />
                     </Button>
                   </Link>
@@ -1381,7 +1383,7 @@ function NarrativeProfileSection({ testResultId, enneatipo, attrs, eta, ala }: {
     const pdfTypeNames: Record<number, string> = {
       1: "Il Perfezionista", 2: "L'Altruista", 3: "Il Realizzatore",
       4: "L'Individualista", 5: "L'Investigatore", 6: "Il Leale",
-      7: "L'Entusiasta", 8: "Il Challenger", 9: "Il Pacificatore"
+      7: "L'Entusiasta", 8: "Il Leader", 9: "Il Pacificatore"
     };
 
     const htmlContent = narrative

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSEO } from "@/hooks/use-page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +26,7 @@ import {
 } from "@/data/percorsi-eta";
 
 const typeEmoji: Record<number, string> = {
-  1: "🍎", 2: "🍐", 3: "🍒", 4: "🫐",
+  1: "🍎", 2: "🍐", 3: "🍒", 4: "🍊",
   5: "🍇", 6: "🫐", 7: "🍍", 8: "🍑", 9: "🍓",
 };
 
@@ -407,7 +408,11 @@ function AgeCompatSection({ type1, type2, age1, age2, percorso1, percorso2 }: {
 }
 
 export default function CoupleCompatibility() {
-  useEffect(() => { document.title = "Compatibilità di Coppia | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Compatibilità di Coppia | Enneagramma Evolutivo",
+    description: "Scopri la compatibilità di coppia secondo l'Enneagramma Evolutivo: dinamiche, sfide comuni e consigli per ogni combinazione di enneatipi.",
+    path: "/compatibilita/coppia",
+  });
   const [type1, setType1] = useState<string>("");
   const [type2, setType2] = useState<string>("");
   const [wing1, setWing1] = useState<string>("nessuna");

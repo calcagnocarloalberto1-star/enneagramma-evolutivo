@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
+import { useSEO } from "@/hooks/use-page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ const fruitNames: Record<number, string> = {
   5: "Uva", 6: "Mirtillo", 7: "Ananas", 8: "Albicocca", 9: "Fragola"
 };
 const fruitEmoji: Record<number, string> = {
-  1: "🍎", 2: "🍐", 3: "🍒", 4: "🫐",
+  1: "🍎", 2: "🍐", 3: "🍒", 4: "🍊",
   5: "🍇", 6: "🫐", 7: "🍍", 8: "🍑", 9: "🍓"
 };
 
@@ -78,18 +78,24 @@ export default function EnneatipoDetail() {
     4: "L'Individualista", 5: "L'Osservatore", 6: "Il Leale",
     7: "L'Entusiasta", 8: "Il Leader", 9: "Il Pacificatore",
   };
-  useEffect(() => {
-    if (num >= 1 && num <= 9) {
-      document.title = `Enneatipo ${num} — ${typeNames[num]} | Enneagramma Evolutivo`;
-    }
-  }, [num]);
-
   const { data, isLoading, isError } = useQuery<any>({
     queryKey: ["/api/enneatipi", id],
     enabled: !!id,
   });
 
   const detailed: EnneatipoDetailed | undefined = enneatypesDetailed[num];
+
+  const seoTitle = num >= 1 && num <= 9
+    ? `Enneatipo ${num} — ${typeNames[num]} | Enneagramma Evolutivo`
+    : "Enneatipo | Enneagramma Evolutivo";
+  const seoDescription = detailed
+    ? `Enneatipo ${num}, ${typeNames[num]}: "${detailed.motto}". Scopri personalità, ali, sottotipi, relazioni e percorso evolutivo secondo l'Enneagramma Evolutivo.`
+    : "Scopri le caratteristiche di ogni enneatipo secondo l'Enneagramma Evolutivo.";
+  useSEO({
+    title: seoTitle,
+    description: seoDescription,
+    path: `/enneatipi/${id || ""}`,
+  });
 
   if (isLoading) {
     return (

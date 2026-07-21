@@ -1,11 +1,16 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSEO } from "@/hooks/use-page-title";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { BookOpen } from "lucide-react";
 
 export default function Glossario() {
-  useEffect(() => { document.title = "Glossario | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Glossario | Enneagramma Evolutivo",
+    description: "Il glossario dell'Enneagramma Evolutivo: il significato di ogni termine usato nei risultati del test, da Dignità a Idea Sacra.",
+    path: "/glossario",
+  });
   const { data: glossario, isLoading } = useQuery<any>({
     queryKey: ["/api/glossario"],
   });

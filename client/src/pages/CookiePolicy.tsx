@@ -1,8 +1,13 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
+import { useSEO } from "@/hooks/use-page-title";
 
 export default function CookiePolicy() {
-  useEffect(() => { document.title = "Cookie Policy | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Cookie Policy | Enneagramma Evolutivo",
+    description: "Cookie Policy di Enneagramma Evolutivo: quali cookie tecnici e di preferenza usa il sito, come sono gestiti e come disattivarli.",
+    path: "/cookies",
+  });
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
       <h1 className="text-3xl font-serif font-bold mb-6" data-testid="text-cookie-title">Cookie Policy</h1>

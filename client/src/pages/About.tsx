@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
+import { useSEO } from "@/hooks/use-page-title";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, BookOpen, Users, Compass, Star, Scale, GraduationCap, Pen, Globe, Heart, HandHeart, Sparkles, UserCheck } from "lucide-react";
@@ -8,7 +9,11 @@ import chakraSymbols from "@assets/chakra-symbols.webp";
 import carloPhoto from "@assets/carlo-alberto-calcagno.jpg";
 
 export default function About() {
-  useEffect(() => { document.title = "Chi Siamo — Carlo Alberto Calcagno | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Chi Siamo — Carlo Alberto Calcagno | Enneagramma Evolutivo",
+    description: "Chi è Carlo Alberto Calcagno: avvocato, mediatore e ideatore dell'Enneagramma Evolutivo. Scopri il metodo, la formazione e la filosofia del progetto.",
+    path: "/about",
+  });
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
       <div className="text-center mb-12">

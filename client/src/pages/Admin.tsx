@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNoIndex } from "@/hooks/use-page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -41,7 +41,8 @@ interface AdminStats {
 }
 
 export default function Admin() {
-  useEffect(() => { document.title = "Dashboard | Enneagramma Evolutivo"; }, []);
+  // Internal analytics dashboard — kept out of the search index.
+  useNoIndex("Dashboard | Enneagramma Evolutivo");
   const { data: stats, isLoading, error } = useQuery<AdminStats>({
     queryKey: ["/api/admin/stats"],
   });

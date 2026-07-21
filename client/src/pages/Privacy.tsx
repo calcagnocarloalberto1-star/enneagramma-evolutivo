@@ -1,8 +1,13 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
+import { useSEO } from "@/hooks/use-page-title";
 
 export default function Privacy() {
-  useEffect(() => { document.title = "Privacy Policy | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Privacy Policy | Enneagramma Evolutivo",
+    description: "Informativa Privacy di Enneagramma Evolutivo, ai sensi del Regolamento UE 2016/679: titolare del trattamento, dati raccolti e diritti dell'utente.",
+    path: "/privacy",
+  });
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
       <h1 className="text-3xl font-serif font-bold mb-6" data-testid="text-privacy-title">Informativa sulla Privacy</h1>

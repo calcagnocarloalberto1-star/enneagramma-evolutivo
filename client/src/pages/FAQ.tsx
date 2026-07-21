@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useSEO } from "@/hooks/use-page-title";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, HelpCircle } from "lucide-react";
@@ -80,7 +81,11 @@ const faqs = [
 ];
 
 export default function FAQ() {
-  useEffect(() => { document.title = "FAQ | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "FAQ | Enneagramma Evolutivo",
+    description: "Le domande più frequenti sull'Enneagramma Evolutivo: il test dei 9 Frutti, gli enneatipi, la compatibilità e gli strumenti di mediazione.",
+    path: "/faq",
+  });
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
       <div className="text-center mb-10">

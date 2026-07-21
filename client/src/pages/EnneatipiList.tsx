@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
-import { usePageTitle } from "@/hooks/use-page-title";
+import { useSEO } from "@/hooks/use-page-title";
 
 const typeEmoji: Record<number, string> = {
-  1: "🍎", 2: "🍐", 3: "🍒", 4: "🫐",
+  1: "🍎", 2: "🍐", 3: "🍒", 4: "🍊",
   5: "🍇", 6: "🫐", 7: "🍍", 8: "🍑", 9: "🍓",
 };
 
@@ -22,7 +22,11 @@ const typeColors: Record<number, string> = {
 };
 
 export default function EnneatipiList() {
-  usePageTitle("I 9 Enneatipi | Enneagramma Evolutivo");
+  useSEO({
+    title: "I 9 Enneatipi | Enneagramma Evolutivo",
+    description: "Scopri le caratteristiche uniche dei 9 enneatipi dell'Enneagramma Evolutivo: personalità, motivazioni, ali e percorsi di crescita.",
+    path: "/enneatipi",
+  });
   const { data: enneatipi, isLoading } = useQuery<any[]>({
     queryKey: ["/api/enneatipi"],
   });

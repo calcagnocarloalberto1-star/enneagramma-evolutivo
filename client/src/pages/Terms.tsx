@@ -1,8 +1,13 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
+import { useSEO } from "@/hooks/use-page-title";
 
 export default function Terms() {
-  useEffect(() => { document.title = "Termini d'Uso | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Termini d'Uso | Enneagramma Evolutivo",
+    description: "Termini d'Uso di Enneagramma Evolutivo: condizioni di utilizzo del sito, del test e degli strumenti di mediazione basati sull'Enneagramma.",
+    path: "/termini",
+  });
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
       <h1 className="text-3xl font-serif font-bold mb-6" data-testid="text-terms-title">Termini e Condizioni d'Uso</h1>

@@ -1,18 +1,23 @@
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { useSEO } from "@/hooks/use-page-title";
 
 export default function BlogArticle() {
   const [, params] = useRoute("/blog/:slug");
   const slug = params?.slug;
-  useEffect(() => { document.title = "Blog | Enneagramma Evolutivo"; }, []);
 
   const { data, isLoading, isError } = useQuery<any>({
     queryKey: ["/api/blog", slug],
     enabled: !!slug,
+  });
+
+  useSEO({
+    title: data?.title ? `${data.title} | Enneagramma Evolutivo` : "Blog | Enneagramma Evolutivo",
+    description: data?.description || "Approfondimenti, guide e articoli sull'Enneagramma Evolutivo e la crescita personale.",
+    path: `/blog/${slug || ""}`,
   });
 
   if (isLoading) {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSEO } from "@/hooks/use-page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +37,7 @@ import {
   buildChildImpact,
   buildEmotionalManagement,
   buildCommunicationRebuilding,
+  getPortaDefault,
   type PartyProfile,
   type MediatorStrategy,
   type SimulationScenario,
@@ -52,7 +54,11 @@ const levelColors: Record<string, string> = {
 };
 
 export default function FamilyMediation() {
-  useEffect(() => { document.title = "Mediazione Familiare | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Mediazione Familiare | Enneagramma Evolutivo",
+    description: "Strumento AI per mediatori familiari: analisi dei membri della famiglia basata sull'Enneagramma, strategie e bozza di accordo personalizzata.",
+    path: "/mediazione/familiare",
+  });
   const [nome1, setNome1] = useState("");
   const [nome2, setNome2] = useState("");
   const [ruolo1, setRuolo1] = useState("");
@@ -104,7 +110,7 @@ export default function FamilyMediation() {
     : null;
 
   const strategy: MediatorStrategy | null = showAnalysis && profile1 && profile2
-    ? buildMediatorStrategy(profile1, profile2, livelloConflitto)
+    ? buildMediatorStrategy(profile1, profile2, livelloConflitto, "familiare")
     : null;
 
   const simulations: SimulationScenario[] = showAnalysis && type1 && type2
@@ -332,12 +338,12 @@ export default function FamilyMediation() {
     addTitle("Profilo dei Membri");
     addText(`Membro 1: ${profile1.nome}${ruolo1 ? ` (${ruolo1})` : ""} - Tipo ${type1} ${profile1.nomeEnneatipo}${wing1 !== "nessuna" ? ` (Ala ${wing1})` : ""}${eta1 ? `, ${eta1} anni` : ""}`);
     if (profile1.at) addText(`Adattamento AT: ${profile1.at.nome} (${profile1.at.tipo})`);
-    addText(`Porta aperta: ${profile1.at?.portaAperta || "N/D"} | Driver: ${profile1.at?.spinta || "N/D"}`);
+    addText(`Porta aperta: ${profile1.at?.portaAperta || getPortaDefault(t1)} | Driver: ${profile1.at?.spinta || profile1.levaMotivazionale.split(". ")[0]}`);
     y += 2;
 
     addText(`Membro 2: ${profile2.nome}${ruolo2 ? ` (${ruolo2})` : ""} - Tipo ${type2} ${profile2.nomeEnneatipo}${wing2 !== "nessuna" ? ` (Ala ${wing2})` : ""}${eta2 ? `, ${eta2} anni` : ""}`);
     if (profile2.at) addText(`Adattamento AT: ${profile2.at.nome} (${profile2.at.tipo})`);
-    addText(`Porta aperta: ${profile2.at?.portaAperta || "N/D"} | Driver: ${profile2.at?.spinta || "N/D"}`);
+    addText(`Porta aperta: ${profile2.at?.portaAperta || getPortaDefault(t2)} | Driver: ${profile2.at?.spinta || profile2.levaMotivazionale.split(". ")[0]}`);
     y += 4;
 
     if (figliCoinvolti && numFigli) {

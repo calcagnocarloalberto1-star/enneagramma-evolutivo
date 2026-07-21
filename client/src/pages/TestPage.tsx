@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, ArrowLeft, CheckCircle2, TreePine } from "lucide-react";
+import { useSEO } from "@/hooks/use-page-title";
 
 interface FruitQuestions {
   nome: string;
@@ -21,7 +22,7 @@ interface TestData {
 }
 
 const fruitEmoji: Record<string, string> = {
-  Mela: "🍎", Pera: "🍐", Ciliegia: "🍒", Nespola: "🫐",
+  Mela: "🍎", Pera: "🍐", Ciliegia: "🍒", Nespola: "🍊",
   Uva: "🍇", Mirtillo: "🫐", Ananas: "🍍", Albicocca: "🍑", Fragola: "🍓",
 };
 
@@ -32,7 +33,11 @@ function generateVisitorId(): string {
 }
 
 export default function TestPage() {
-  useEffect(() => { document.title = "Fai il Test | Enneagramma Evolutivo"; }, []);
+  useSEO({
+    title: "Fai il Test | Enneagramma Evolutivo",
+    description: "Fai il test gratuito dei 9 Frutti dell'Albero della Vita: 180 domande per scoprire il tuo enneatipo secondo l'Enneagramma Evolutivo.",
+    path: "/test",
+  });
   const [, navigate] = useLocation();
   const [phase, setPhase] = useState<"welcome" | "test" | "age" | "submitting">("welcome");
   const [currentFruitIndex, setCurrentFruitIndex] = useState(0);
