@@ -33,7 +33,10 @@ export async function setupVite(server: Server, app: Express) {
 
   app.use(vite.middlewares);
 
-  app.use("/{*path}", async (req, res, next) => {
+  // app.get (non app.use): vedi il commento in server/static.ts — app.use con
+  // un mount-path wildcard riscrive req.path a "/" per ogni richiesta, il che
+  // rompeva renderHtmlForRoute anche in dev (stesso bug della produzione).
+  app.get("/{*path}", async (req, res, next) => {
     const url = req.originalUrl;
 
     try {

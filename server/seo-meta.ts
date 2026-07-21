@@ -179,7 +179,19 @@ export interface BlogArticleMeta {
   description: string;
 }
 
+/** Rimuove lo slash finale (es. "/faq/" -> "/faq", ma "/" resta "/"), così
+ * tutte le varianti di uno stesso URL risolvono alla stessa voce e allo
+ * stesso canonical, invece di essere trattate come pagine diverse. */
+function normalizePathname(pathname: string): string {
+  if (pathname.length > 1 && pathname.endsWith("/")) {
+    return pathname.slice(0, -1);
+  }
+  return pathname;
+}
+
 export function getRouteMeta(pathname: string, blogArticles: BlogArticleMeta[]): RouteMeta | null {
+  pathname = normalizePathname(pathname);
+
   if (STATIC_ROUTES[pathname]) return STATIC_ROUTES[pathname];
 
   if (pathname.startsWith("/test/results/")) {
@@ -280,7 +292,10 @@ export function renderHtmlForRoute(template: string, pathname: string, blogArtic
   const description = meta.description;
   const ogTitle = meta.ogTitle || title;
   const robots = meta.robots || "index, follow";
-  const canonicalUrl = `${SITE_URL}${pathname}`;
+  // Canonical sempre sulla variante normalizzata (senza slash finale), così
+  // "/faq" e "/faq/" puntano allo stesso canonical invece di essere trattati
+  // come due URL distinti.
+  const canonicalUrl = `${SITE_URL}${normalizePathname(pathname)}`;
 
   let html = template;
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeAttr(title)}</title>`);
