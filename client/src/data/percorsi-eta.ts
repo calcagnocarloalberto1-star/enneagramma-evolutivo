@@ -795,6 +795,6 @@ export const typeNames: Record<number, string> = {
 
 // Emoji dei frutti
 export const fruitEmoji: Record<number, string> = {
-  1: "🍎", 2: "🍐", 3: "🍒", 4: "🫐",
+  1: "🍎", 2: "🍐", 3: "🍒", 4: "🍊",
   5: "🍇", 6: "🫐", 7: "🍍", 8: "🍑", 9: "🍓",
 };

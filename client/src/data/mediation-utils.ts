@@ -194,11 +194,20 @@ const centriEnneagramma: Record<number, string> = {
   8: "istintivo", 9: "istintivo",
 };
 
-function getGestioneSessioneFallback(p1: PartyProfile, p2: PartyProfile, livello: string): string {
+function getGestioneSessioneFallback(
+  p1: PartyProfile,
+  p2: PartyProfile,
+  livello: string,
+  context: "civile" | "familiare" = "familiare",
+): string {
   const c1 = centriEnneagramma[p1.enneatipo] || "emotivo";
   const c2 = centriEnneagramma[p2.enneatipo] || "emotivo";
-  let text = "GESTIONE DELLA SESSIONE CONGIUNTA NELLA MEDIAZIONE FAMILIARE\n\n";
-  text += "La sessione congiunta nella mediazione familiare è un momento delicato che richiede una preparazione attenta e una conduzione consapevole.\n\n";
+  const etichettaContesto = context === "civile" ? "MEDIAZIONE CIVILE E COMMERCIALE" : "MEDIAZIONE FAMILIARE";
+  const descrizioneContesto = context === "civile"
+    ? "La sessione congiunta nella mediazione civile e commerciale è un momento delicato che richiede una preparazione attenta e una conduzione consapevole."
+    : "La sessione congiunta nella mediazione familiare è un momento delicato che richiede una preparazione attenta e una conduzione consapevole.";
+  let text = `GESTIONE DELLA SESSIONE CONGIUNTA NELLA ${etichettaContesto}\n\n`;
+  text += `${descrizioneContesto}\n\n`;
 
   text += "PRINCIPI GENERALI:\n";
   text += "• Impermanenza: ogni porta resta aperta al cambiamento. Le posizioni espresse oggi sono provvisorie.\n";
@@ -377,6 +386,7 @@ export function buildMediatorStrategy(
   profile1: PartyProfile,
   profile2: PartyProfile,
   livelloConflitto: string,
+  context: "civile" | "familiare" = "familiare",
 ): MediatorStrategy {
   const at1 = profile1.at;
   const at2 = profile2.at;
@@ -389,7 +399,7 @@ export function buildMediatorStrategy(
 
   const gestioneSessione = at1 && at2
     ? getGestioneSessione(at1, at2, livelloConflitto)
-    : getGestioneSessioneFallback(profile1, profile2, livelloConflitto);
+    : getGestioneSessioneFallback(profile1, profile2, livelloConflitto, context);
 
   const leveText = `Parte 1 (${profile1.nome} — ${profile1.nomeEnneatipo}):\n${profile1.levaMotivazionale}\n\nParte 2 (${profile2.nome} — ${profile2.nomeEnneatipo}):\n${profile2.levaMotivazionale}`;
 
@@ -441,6 +451,75 @@ const tipiControversiaCivile = [
   "Locazioni", "Risarcimento danni", "Rapporti commerciali", "Altro",
 ];
 
+// ── Safe AT display helpers: some enneatipi (attualmente 4 e 7) non hanno
+// ancora un adattamento AT mappato in percorsi-eta.ts. Invece di mostrare
+// segnaposto vuoti o fuorvianti («», "N/D"), queste funzioni degradano in
+// modo elegante usando i dati generici sempre completi per enneatipo
+// (leveMotivazionali, centriEnneagramma, typeNames). ──
+
+export function getPortaDefault(t: number): string {
+  const c = centriEnneagramma[t] || "emotivo";
+  if (c === "mentale") return "Pensiero";
+  if (c === "istintivo") return "Comportamento";
+  return "Emozioni";
+}
+
+function getReazioneDefault(t: number): string {
+  const c = centriEnneagramma[t] || "emotivo";
+  if (c === "mentale") return "si ritira nell'analisi, cercando distanza dal conflitto";
+  if (c === "istintivo") return "reagisce con fermezza, cercando di riprendere il controllo della situazione";
+  return "si irrigidisce, trattenendo l'emozione o lasciandola esplodere a seconda del momento";
+}
+
+// "(Tipo N, Nome Adattamento)" — nulla se l'adattamento non è mappato.
+function safeAdattamentoLabel(at: ATAdaptation | undefined): string {
+  return at ? `, ${at.nome}` : "";
+}
+
+// ", adattamento Nome" — nulla se l'adattamento non è mappato.
+function safeAdattamentoClause(at: ATAdaptation | undefined): string {
+  return at ? `, adattamento ${at.nome}` : "";
+}
+
+// Frase completa sulla spinta/driver AT, con fallback sulla leva motivazionale generica.
+function safeSpintaFrase(t: number, at: ATAdaptation | undefined): string {
+  if (at?.spinta) return `La spinta principale è «${at.spinta}»`;
+  const leva = (leveMotivazionali[t] || "").split(". ")[0];
+  return `È mosso/a soprattutto da ciò che più conta per ${typeNames[t] || `il Tipo ${t}`}: ${leva.toLowerCase()}`;
+}
+
+// Frase completa sul driver AT usata nel contesto "ha bisogno che l'accordo soddisfi...".
+function safeDriverClause(t: number, at: ATAdaptation | undefined): string {
+  if (at?.spinta) return `il suo driver «${at.spinta}»`;
+  return `i bisogni tipici del proprio profilo enneagrammatico (${typeNames[t] || `Tipo ${t}`})`;
+}
+
+// Frase completa sul gioco psicologico AT, con fallback non clinico.
+function safeGiocoFrase(at: ATAdaptation | undefined): string {
+  return at?.giocoPsicologico
+    ? `Il suo gioco psicologico preferito è «${at.giocoPsicologico}»`
+    : "Non è disponibile un profilo AT specifico per questo enneatipo: il mediatore dovrà osservare le dinamiche relazionali caso per caso";
+}
+
+// Frase completa sul copione di vita AT, con fallback non clinico.
+function safeCopioneFrase(at: ATAdaptation | undefined): string {
+  return at?.copione
+    ? `il copione «${at.copione}»${at.copioneMotto ? ` (${at.copioneMotto})` : ""}`
+    : "un pattern relazionale ricorrente non ancora mappato nel sistema AT";
+}
+
+// Variante "Il suo copione ... si attiva" per contesti che descrivono l'attivazione sotto stress.
+function safeCopioneAttivaFrase(at: ATAdaptation | undefined): string {
+  return at?.copione
+    ? `Il suo copione «${at.copione}»${at.copioneMotto ? ` (${at.copioneMotto})` : ""} si attiva`
+    : "Si attiva un pattern relazionale non ancora mappato nel sistema AT";
+}
+
+// Nome del gioco psicologico tra virgolette, con fallback non clinico.
+function safeGiocoNomeFrase(at: ATAdaptation | undefined): string {
+  return at?.giocoPsicologico ? `«${at.giocoPsicologico}»` : "un pattern relazionale non ancora mappato nel sistema AT";
+}
+
 function buildCivilSimulations(
   t1: number,
   t2: number,
@@ -452,14 +531,10 @@ function buildCivilSimulations(
   const name2 = nomiFemminili[t2] || "Laura";
   const tipo1 = typeNames[t1];
   const tipo2 = typeNames[t2];
-  const atNome1 = at1?.nome || "N/D";
-  const atNome2 = at2?.nome || "N/D";
-  const minaccia1 = at1?.diFronteAMinaccia || "si irrigidisce";
-  const minaccia2 = at2?.diFronteAMinaccia || "si irrigidisce";
-  const porta1 = at1?.portaAperta || "Pensiero";
-  const porta2 = at2?.portaAperta || "Pensiero";
-  const spinta1 = at1?.spinta || "";
-  const spinta2 = at2?.spinta || "";
+  const minaccia1 = at1?.diFronteAMinaccia || getReazioneDefault(t1);
+  const minaccia2 = at2?.diFronteAMinaccia || getReazioneDefault(t2);
+  const porta1 = at1?.portaAperta || getPortaDefault(t1);
+  const porta2 = at2?.portaAperta || getPortaDefault(t2);
 
   const controversia = tipoControversia || "Contratti";
 
@@ -468,8 +543,8 @@ function buildCivilSimulations(
   // Scenario 1: Opening phase
   scenarios.push({
     titolo: `La prima sessione: ${controversia.toLowerCase()} tra personalità opposte`,
-    contesto: `${name1} e ${name2} si trovano in una disputa riguardante ${controversia.toLowerCase()}. ${name1} (Tipo ${t1}, ${atNome1}) affronta la situazione con il suo stile caratteristico: ${minaccia1.toLowerCase()}. ${name2} (Tipo ${t2}, ${atNome2}) reagisce in modo opposto: ${minaccia2.toLowerCase()}.`,
-    parti: `${name1} (${tipo1}): La spinta principale è «${spinta1}». Si esprime attraverso la porta ${porta1.toLowerCase()} ed è ${at1?.stileSociale?.toLowerCase() || "riservato nelle interazioni"}.\n${name2} (${tipo2}): La spinta principale è «${spinta2}». Si esprime attraverso la porta ${porta2.toLowerCase()} ed è ${at2?.stileSociale?.toLowerCase() || "riservata nelle interazioni"}.`,
+    contesto: `${name1} e ${name2} si trovano in una disputa riguardante ${controversia.toLowerCase()}. ${name1} (Tipo ${t1}${safeAdattamentoLabel(at1)}) affronta la situazione con il suo stile caratteristico: ${minaccia1.toLowerCase()}. ${name2} (Tipo ${t2}${safeAdattamentoLabel(at2)}) reagisce in modo opposto: ${minaccia2.toLowerCase()}.`,
+    parti: `${name1} (${tipo1}): ${safeSpintaFrase(t1, at1)}. Si esprime attraverso la porta ${porta1.toLowerCase()} ed è ${at1?.stileSociale?.toLowerCase() || "riservato nelle interazioni"}.\n${name2} (${tipo2}): ${safeSpintaFrase(t2, at2)}. Si esprime attraverso la porta ${porta2.toLowerCase()} ed è ${at2?.stileSociale?.toLowerCase() || "riservata nelle interazioni"}.`,
     puntoCritico: `Il momento di massima tensione arriva quando ${name1} ${porta1.toLowerCase() === "pensiero" ? "presenta i fatti in modo freddo e distaccato" : porta1.toLowerCase() === "emozioni" ? "esprime le proprie emozioni con intensità" : "propone un'azione unilaterale"} e ${name2} ${porta2.toLowerCase() === "pensiero" ? "risponde con argomentazioni logiche che ignorano il piano emotivo" : porta2.toLowerCase() === "emozioni" ? "reagisce emotivamente amplificando il conflitto" : "si chiude in un silenzio ostile o propone soluzioni rigide"}.`,
     obiettivoFormativo: `Praticare l'approccio iniziale differenziato: entrare dalla porta aperta di ciascuna parte. Con ${name1} attraverso ${porta1.toLowerCase()}, con ${name2} attraverso ${porta2.toLowerCase()}.`,
     suggerimentiMediatore: `Aprire con ${name1} usando un approccio ${porta1.toLowerCase() === "pensiero" ? "esplorativo e razionale" : porta1.toLowerCase() === "emozioni" ? "affettivo ed empatico" : "direttivo e concreto"}. Con ${name2}, passare a uno stile ${porta2.toLowerCase() === "pensiero" ? "esplorativo e razionale" : porta2.toLowerCase() === "emozioni" ? "affettivo ed empatico" : "direttivo e concreto"}. Prestare attenzione alle reazioni di stress.`,
@@ -479,8 +554,8 @@ function buildCivilSimulations(
   scenarios.push({
     titolo: `L'escalation: quando il mediatore perde il controllo`,
     contesto: `La mediazione per ${controversia.toLowerCase()} è a un punto critico. Le posizioni si sono irrigidite e la comunicazione è deteriorata. ${name1} e ${name2} hanno smesso di ascoltarsi.`,
-    parti: `${name1} (${tipo1}, adattamento ${atNome1}): Di fronte alla minaccia, ${minaccia1.toLowerCase()}. Il suo gioco psicologico preferito è «${at1?.giocoPsicologico || "non specificato"}».\n${name2} (${tipo2}, adattamento ${atNome2}): Di fronte alla minaccia, ${minaccia2.toLowerCase()}. Il suo gioco psicologico preferito è «${at2?.giocoPsicologico || "non specificato"}».`,
-    puntoCritico: `${name1} attiva il suo copione «${at1?.copione || "Sempre"}» (${at1?.copioneMotto || ""}). ${name2} risponde con il proprio copione «${at2?.copione || "Sempre"}» (${at2?.copioneMotto || ""}). I due copioni si alimentano a vicenda creando un circolo vizioso.`,
+    parti: `${name1} (${tipo1}${safeAdattamentoClause(at1)}): Di fronte alla minaccia, ${minaccia1.toLowerCase()}. ${safeGiocoFrase(at1)}.\n${name2} (${tipo2}${safeAdattamentoClause(at2)}): Di fronte alla minaccia, ${minaccia2.toLowerCase()}. ${safeGiocoFrase(at2)}.`,
+    puntoCritico: `${name1} attiva ${safeCopioneFrase(at1)}. ${name2} risponde con ${safeCopioneFrase(at2)}. I due copioni si alimentano a vicenda creando un circolo vizioso.`,
     obiettivoFormativo: `Riconoscere i giochi psicologici in atto e interromperli senza far perdere la faccia alle parti. Praticare il passaggio dalla sessione congiunta al caucus.`,
     suggerimentiMediatore: `Interrompere il gioco psicologico riconoscendo l'emozione sottostante. Proporre un caucus. In separata sede, con ${name1}: ${at1?.rapport || "utilizzare un approccio empatico"}. Con ${name2}: ${at2?.rapport || "utilizzare un approccio empatico"}. Tornare in sessione congiunta solo quando entrambi sono nello Stato dell'Io Adulto.`,
   });
@@ -489,7 +564,7 @@ function buildCivilSimulations(
   scenarios.push({
     titolo: `Verso l'accordo: costruire il terreno comune`,
     contesto: `Dopo diverse sessioni, il mediatore ha stabilito una relazione con entrambe le parti. Ora deve guidarle verso un accordo su ${controversia.toLowerCase()} che soddisfi le motivazioni profonde di ciascuno.`,
-    parti: `${name1} (${tipo1}): Ha bisogno che l'accordo soddisfi il suo driver «${spinta1}». La sua dignità nel sistema enneagrammatico richiede il riconoscimento di ${at1?.nome === "Ossessivo-compulsivo" ? "correttezza e rigore" : at1?.nome === "Istrionico" ? "valore personale e relazione" : at1?.nome === "Paranoide" ? "sicurezza e prevedibilità" : at1?.nome === "Schizoide" ? "autonomia e spazio" : at1?.nome === "Passivo-aggressivo" ? "libertà e autonomia decisionale" : at1?.nome === "Antisociale" ? "potere e rispetto" : "bisogni specifici"}.\n${name2} (${tipo2}): Ha bisogno che l'accordo soddisfi il suo driver «${spinta2}». Richiede il riconoscimento di ${at2?.nome === "Ossessivo-compulsivo" ? "correttezza e rigore" : at2?.nome === "Istrionico" ? "valore personale e relazione" : at2?.nome === "Paranoide" ? "sicurezza e prevedibilità" : at2?.nome === "Schizoide" ? "autonomia e spazio" : at2?.nome === "Passivo-aggressivo" ? "libertà e autonomia decisionale" : at2?.nome === "Antisociale" ? "potere e rispetto" : "bisogni specifici"}.`,
+    parti: `${name1} (${tipo1}): Ha bisogno che l'accordo soddisfi ${safeDriverClause(t1, at1)}. La sua dignità nel sistema enneagrammatico richiede il riconoscimento di ${at1?.nome === "Ossessivo-compulsivo" ? "correttezza e rigore" : at1?.nome === "Istrionico" ? "valore personale e relazione" : at1?.nome === "Paranoide" ? "sicurezza e prevedibilità" : at1?.nome === "Schizoide" ? "autonomia e spazio" : at1?.nome === "Passivo-aggressivo" ? "libertà e autonomia decisionale" : at1?.nome === "Antisociale" ? "potere e rispetto" : "bisogni specifici"}.\n${name2} (${tipo2}): Ha bisogno che l'accordo soddisfi ${safeDriverClause(t2, at2)}. Richiede il riconoscimento di ${at2?.nome === "Ossessivo-compulsivo" ? "correttezza e rigore" : at2?.nome === "Istrionico" ? "valore personale e relazione" : at2?.nome === "Paranoide" ? "sicurezza e prevedibilità" : at2?.nome === "Schizoide" ? "autonomia e spazio" : at2?.nome === "Passivo-aggressivo" ? "libertà e autonomia decisionale" : at2?.nome === "Antisociale" ? "potere e rispetto" : "bisogni specifici"}.`,
     puntoCritico: `Il momento più delicato è quando si passa dalle posizioni agli interessi. ${name1} rischia di ${t1 <= 3 ? "irrigidirsi sulla forma" : t1 <= 6 ? "analizzare all'infinito" : "perdere pazienza o disimpegnarsi"}. ${name2} rischia di ${t2 <= 3 ? "irrigidirsi sulla forma" : t2 <= 6 ? "analizzare all'infinito" : "perdere pazienza o disimpegnarsi"}.`,
     obiettivoFormativo: `Praticare la costruzione dell'accordo partendo dai bisogni profondi di ciascun enneatipo. Strutturare proposte che parlino il linguaggio motivazionale di entrambe le parti.`,
     suggerimentiMediatore: `Formulare la proposta di accordo con un doppio linguaggio: per ${name1}, enfatizzare ${leveMotivazionali[t1].split(".")[0].toLowerCase().replace("fare appello ", "")}. Per ${name2}, enfatizzare ${leveMotivazionali[t2].split(".")[0].toLowerCase().replace("fare appello ", "")}. L'accordo scritto deve contenere elementi che soddisfino entrambi i driver.`,
@@ -514,14 +589,10 @@ function buildFamilySimulations(
   const name2 = nomiFemminili[t2] || "Laura";
   const tipo1 = typeNames[t1];
   const tipo2 = typeNames[t2];
-  const atNome1 = at1?.nome || "N/D";
-  const atNome2 = at2?.nome || "N/D";
-  const minaccia1 = at1?.diFronteAMinaccia || "si irrigidisce";
-  const minaccia2 = at2?.diFronteAMinaccia || "si irrigidisce";
-  const porta1 = at1?.portaAperta || "Pensiero";
-  const porta2 = at2?.portaAperta || "Pensiero";
-  const spinta1 = at1?.spinta || "";
-  const spinta2 = at2?.spinta || "";
+  const minaccia1 = at1?.diFronteAMinaccia || getReazioneDefault(t1);
+  const minaccia2 = at2?.diFronteAMinaccia || getReazioneDefault(t2);
+  const porta1 = at1?.portaAperta || getPortaDefault(t1);
+  const porta2 = at2?.portaAperta || getPortaDefault(t2);
 
   const tipo = tipoMediazione || "Separazione/Divorzio";
   const figliInfo = figliCoinvolti && numFigli
@@ -533,8 +604,8 @@ function buildFamilySimulations(
   // Scenario 1: Emotional flood
   scenarios.push({
     titolo: `La tempesta emotiva: ${tipo.toLowerCase()}`,
-    contesto: `${name1} (Tipo ${t1}, ${atNome1}) e ${name2} (Tipo ${t2}, ${atNome2}) sono in mediazione per ${tipo.toLowerCase()}.${figliInfo ? ` Hanno ${figliInfo} coinvolti nella situazione.` : ""} Le emozioni sono al massimo e la comunicazione è interrotta.`,
-    parti: `${name1} (${tipo1}): Sotto stress emotivo, ${minaccia1.toLowerCase()}. Il suo copione «${at1?.copione || "Sempre"}» si attiva: «${at1?.copioneMotto || ""}». ${at1?.tipo === "Adattamento di sopravvivenza" ? "Come adattamento di sopravvivenza, le sue difese sono particolarmente rigide." : "Come adattamento di performance, cerca di mantenere il controllo attraverso la prestazione."}\n${name2} (${tipo2}): Sotto stress emotivo, ${minaccia2.toLowerCase()}. Il suo copione «${at2?.copione || "Sempre"}» si attiva: «${at2?.copioneMotto || ""}». ${at2?.tipo === "Adattamento di sopravvivenza" ? "Come adattamento di sopravvivenza, le sue difese sono particolarmente rigide." : "Come adattamento di performance, cerca di mantenere il controllo attraverso la prestazione."}`,
+    contesto: `${name1} (Tipo ${t1}${safeAdattamentoLabel(at1)}) e ${name2} (Tipo ${t2}${safeAdattamentoLabel(at2)}) sono in mediazione per ${tipo.toLowerCase()}.${figliInfo ? ` Hanno ${figliInfo} coinvolti nella situazione.` : ""} Le emozioni sono al massimo e la comunicazione è interrotta.`,
+    parti: `${name1} (${tipo1}): Sotto stress emotivo, ${minaccia1.toLowerCase()}. ${safeCopioneAttivaFrase(at1)}. ${at1 ? (at1.tipo === "Adattamento di sopravvivenza" ? "Come adattamento di sopravvivenza, le sue difese sono particolarmente rigide." : "Come adattamento di performance, cerca di mantenere il controllo attraverso la prestazione.") : ""}\n${name2} (${tipo2}): Sotto stress emotivo, ${minaccia2.toLowerCase()}. ${safeCopioneAttivaFrase(at2)}. ${at2 ? (at2.tipo === "Adattamento di sopravvivenza" ? "Come adattamento di sopravvivenza, le sue difese sono particolarmente rigide." : "Come adattamento di performance, cerca di mantenere il controllo attraverso la prestazione.") : ""}`,
     puntoCritico: `Il momento critico arriva quando${figliInfo ? " si parla dei figli e" : ""} ${name1} ${porta1.toLowerCase() === "pensiero" ? "cerca di razionalizzare la situazione negando le emozioni in gioco" : porta1.toLowerCase() === "emozioni" ? "viene travolto/a dalle proprie emozioni e non riesce a contenere il dolore" : "si chiude in un'azione unilaterale rifiutando il dialogo"}. ${name2} risponde ${porta2.toLowerCase() === "pensiero" ? "con freddezza e distacco, che viene percepito come mancanza di empatia" : porta2.toLowerCase() === "emozioni" ? "amplificando l'emotività, trasformando la sessione in uno sfogo" : "con una reazione impulsiva che blocca la mediazione"}.`,
     obiettivoFormativo: `Gestire il flooding emotivo in mediazione familiare. Praticare tecniche di contenimento emotivo calibrate sull'adattamento AT di ciascuna parte.`,
     suggerimentiMediatore: `Riconoscere il flooding e proporre una pausa. Con ${name1}: ${at1?.rapport || "approccio empatico"}. Con ${name2}: ${at2?.rapport || "approccio empatico"}.${figliInfo ? " Riportare il focus sui bisogni dei figli come terreno neutro." : ""} Non forzare il contatto emotivo con chi ha la porta trappola sulle emozioni.`,
@@ -545,7 +616,7 @@ function buildFamilySimulations(
     scenarios.push({
       titolo: `I figli al centro: chi decide per ${figliInfo}?`,
       contesto: `La questione dell'affidamento e delle decisioni riguardanti i figli (${figliInfo}) è diventata il nodo principale della mediazione. ${name1} e ${name2} hanno visioni molto diverse su come gestire la genitorialità condivisa.`,
-      parti: `${name1} (${tipo1}, ${atNome1}): Il suo stile genitoriale riflette il driver «${spinta1}». Tende a ${t1 === 1 ? "imporre regole rigide e aspettative elevate" : t1 === 2 ? "essere iperprotettivo e dare attenzione costante" : t1 === 3 ? "spingere verso il successo e l'autonomia" : t1 === 4 ? "valorizzare l'espressione emotiva e la creatività" : t1 === 5 ? "dare spazio e autonomia, a volte troppa distanza" : t1 === 6 ? "proteggere e controllare, con ansia per la sicurezza" : t1 === 7 ? "proporre attività stimolanti ma evitare la disciplina" : t1 === 8 ? "proteggere con forza ma con disciplina molto dura" : "essere accogliente ma evitare le decisioni difficili"}.\n${name2} (${tipo2}, ${atNome2}): Il suo stile genitoriale riflette il driver «${spinta2}». Tende a ${t2 === 1 ? "imporre regole rigide e aspettative elevate" : t2 === 2 ? "essere iperprotettiva e dare attenzione costante" : t2 === 3 ? "spingere verso il successo e l'autonomia" : t2 === 4 ? "valorizzare l'espressione emotiva e la creatività" : t2 === 5 ? "dare spazio e autonomia, a volte troppa distanza" : t2 === 6 ? "proteggere e controllare, con ansia per la sicurezza" : t2 === 7 ? "proporre attività stimolanti ma evitare la disciplina" : t2 === 8 ? "proteggere con forza ma con disciplina molto dura" : "essere accogliente ma evitare le decisioni difficili"}.`,
+      parti: `${name1} (${tipo1}${safeAdattamentoLabel(at1)}): Il suo stile genitoriale riflette ${safeDriverClause(t1, at1)}. Tende a ${t1 === 1 ? "imporre regole rigide e aspettative elevate" : t1 === 2 ? "essere iperprotettivo e dare attenzione costante" : t1 === 3 ? "spingere verso il successo e l'autonomia" : t1 === 4 ? "valorizzare l'espressione emotiva e la creatività" : t1 === 5 ? "dare spazio e autonomia, a volte troppa distanza" : t1 === 6 ? "proteggere e controllare, con ansia per la sicurezza" : t1 === 7 ? "proporre attività stimolanti ma evitare la disciplina" : t1 === 8 ? "proteggere con forza ma con disciplina molto dura" : "essere accogliente ma evitare le decisioni difficili"}.\n${name2} (${tipo2}${safeAdattamentoLabel(at2)}): Il suo stile genitoriale riflette ${safeDriverClause(t2, at2)}. Tende a ${t2 === 1 ? "imporre regole rigide e aspettative elevate" : t2 === 2 ? "essere iperprotettiva e dare attenzione costante" : t2 === 3 ? "spingere verso il successo e l'autonomia" : t2 === 4 ? "valorizzare l'espressione emotiva e la creatività" : t2 === 5 ? "dare spazio e autonomia, a volte troppa distanza" : t2 === 6 ? "proteggere e controllare, con ansia per la sicurezza" : t2 === 7 ? "proporre attività stimolanti ma evitare la disciplina" : t2 === 8 ? "proteggere con forza ma con disciplina molto dura" : "essere accogliente ma evitare le decisioni difficili"}.`,
       puntoCritico: `Lo scontro si accende quando si discute di ${tipo.includes("Affidamento") ? "tempi e modalità dell'affidamento" : "decisioni importanti per i figli (scuola, salute, tempo libero)"}. Ciascun genitore proietta le proprie paure e i propri bisogni sui figli.`,
       obiettivoFormativo: `Spostare il focus dai bisogni dei genitori a quelli dei figli. Riconoscere come ciascun adattamento AT influenza lo stile genitoriale e trovare un equilibrio.`,
       suggerimentiMediatore: `Usare la tecnica del «figlio al centro»: chiedere a ciascun genitore di descrivere cosa vuole il figlio (non cosa vuole il genitore per il figlio). Aiutare ${name1} a ${t1 <= 3 ? "allentare il controllo e ascoltare i bisogni reali" : t1 <= 6 ? "uscire dalla propria testa e connettersi emotivamente" : "assumersi responsabilità concrete e durature"}. Aiutare ${name2} a ${t2 <= 3 ? "allentare il controllo e ascoltare i bisogni reali" : t2 <= 6 ? "uscire dalla propria testa e connettersi emotivamente" : "assumersi responsabilità concrete e durature"}.`,
@@ -554,7 +625,7 @@ function buildFamilySimulations(
     scenarios.push({
       titolo: `Il patrimonio e i sentimenti: ${tipo.toLowerCase()}`,
       contesto: `La questione patrimoniale ed economica è diventata il campo di battaglia emotivo per ${name1} e ${name2}. Il denaro è diventato il simbolo del conflitto relazionale sottostante.`,
-      parti: `${name1} (${tipo1}, ${atNome1}): Per questo tipo, il denaro rappresenta ${t1 === 1 ? "equità e giustizia" : t1 === 2 ? "cura e dedizione" : t1 === 3 ? "valore e successo personale" : t1 === 4 ? "riconoscimento della sofferenza" : t1 === 5 ? "sicurezza e autonomia" : t1 === 6 ? "stabilità e prevedibilità" : t1 === 7 ? "libertà e opportunità" : t1 === 8 ? "potere e rispetto" : "pace e stabilità"}. La spinta «${spinta1}» orienta le sue richieste.\n${name2} (${tipo2}, ${atNome2}): Per questo tipo, il denaro rappresenta ${t2 === 1 ? "equità e giustizia" : t2 === 2 ? "cura e dedizione" : t2 === 3 ? "valore e successo personale" : t2 === 4 ? "riconoscimento della sofferenza" : t2 === 5 ? "sicurezza e autonomia" : t2 === 6 ? "stabilità e prevedibilità" : t2 === 7 ? "libertà e opportunità" : t2 === 8 ? "potere e rispetto" : "pace e stabilità"}. La spinta «${spinta2}» orienta le sue richieste.`,
+      parti: `${name1} (${tipo1}${safeAdattamentoLabel(at1)}): Per questo tipo, il denaro rappresenta ${t1 === 1 ? "equità e giustizia" : t1 === 2 ? "cura e dedizione" : t1 === 3 ? "valore e successo personale" : t1 === 4 ? "riconoscimento della sofferenza" : t1 === 5 ? "sicurezza e autonomia" : t1 === 6 ? "stabilità e prevedibilità" : t1 === 7 ? "libertà e opportunità" : t1 === 8 ? "potere e rispetto" : "pace e stabilità"}. ${at1?.spinta ? `La spinta «${at1.spinta}» orienta le sue richieste.` : `Le sue richieste sono orientate dai bisogni tipici del proprio profilo (${typeNames[t1]}).`}\n${name2} (${tipo2}${safeAdattamentoLabel(at2)}): Per questo tipo, il denaro rappresenta ${t2 === 1 ? "equità e giustizia" : t2 === 2 ? "cura e dedizione" : t2 === 3 ? "valore e successo personale" : t2 === 4 ? "riconoscimento della sofferenza" : t2 === 5 ? "sicurezza e autonomia" : t2 === 6 ? "stabilità e prevedibilità" : t2 === 7 ? "libertà e opportunità" : t2 === 8 ? "potere e rispetto" : "pace e stabilità"}. ${at2?.spinta ? `La spinta «${at2.spinta}» orienta le sue richieste.` : `Le sue richieste sono orientate dai bisogni tipici del proprio profilo (${typeNames[t2]}).`}`,
       puntoCritico: `Il punto critico è quando le richieste economiche rivelano i bisogni emotivi non detti. ${name1} in realtà chiede ${at1?.nome === "Ossessivo-compulsivo" ? "riconoscimento del proprio impegno" : at1?.nome === "Istrionico" ? "prova d'amore" : at1?.nome === "Paranoide" ? "garanzie di sicurezza" : at1?.nome === "Schizoide" ? "indipendenza" : at1?.nome === "Passivo-aggressivo" ? "libertà di scelta" : at1?.nome === "Antisociale" ? "rispetto e potere" : "qualcosa di più profondo"}. ${name2} in realtà chiede ${at2?.nome === "Ossessivo-compulsivo" ? "riconoscimento del proprio impegno" : at2?.nome === "Istrionico" ? "prova d'amore" : at2?.nome === "Paranoide" ? "garanzie di sicurezza" : at2?.nome === "Schizoide" ? "indipendenza" : at2?.nome === "Passivo-aggressivo" ? "libertà di scelta" : at2?.nome === "Antisociale" ? "rispetto e potere" : "qualcosa di più profondo"}.`,
       obiettivoFormativo: `Separare le questioni materiali da quelle emotive. Praticare il passaggio dalle posizioni agli interessi profondi legati all'adattamento AT.`,
       suggerimentiMediatore: `Utilizzare la tecnica della «doppia lavagna»: su una scrivere le richieste materiali, sull'altra i bisogni emotivi sottostanti. Mostrare alle parti che le richieste economiche sono il sintomo, non la causa. Con ${name1}: ${at1?.rapport || "approccio empatico"}. Con ${name2}: ${at2?.rapport || "approccio empatico"}.`,
@@ -565,8 +636,8 @@ function buildFamilySimulations(
   scenarios.push({
     titolo: `Ricostruire il ponte: dal conflitto alla co-genitorialità`,
     contesto: `Dopo le sessioni iniziali, ${name1} e ${name2} hanno accettato la necessità di una comunicazione funzionale${figliInfo ? ` per il bene dei figli (${figliInfo})` : ""}. Ma le ferite emotive rendono ogni interazione un campo minato.`,
-    parti: `${name1} (${tipo1}, ${atNome1}): La porta aperta (${porta1}) è il canale migliore per ristabilire la comunicazione. Le ingiunzioni ricevute nell'infanzia (${at1?.ingiunzioni?.slice(0, 2).join(", ") || "non specificate"}) influenzano il suo modo di stare nella relazione.\n${name2} (${tipo2}, ${atNome2}): La porta aperta (${porta2}) è il canale migliore per ristabilire la comunicazione. Le ingiunzioni ricevute nell'infanzia (${at2?.ingiunzioni?.slice(0, 2).join(", ") || "non specificate"}) influenzano il suo modo di stare nella relazione.`,
-    puntoCritico: `Il punto critico è quando uno dei due ricade nei vecchi pattern relazionali. ${name1} attiva il gioco «${at1?.giocoPsicologico || "non specificato"}» e ${name2} risponde con «${at2?.giocoPsicologico || "non specificato"}». Il ciclo si ripete a meno che il mediatore non intervenga.`,
+    parti: `${name1} (${tipo1}${safeAdattamentoLabel(at1)}): La porta aperta (${porta1}) è il canale migliore per ristabilire la comunicazione. Le ingiunzioni ricevute nell'infanzia (${at1?.ingiunzioni?.slice(0, 2).join(", ") || "non specificate"}) influenzano il suo modo di stare nella relazione.\n${name2} (${tipo2}${safeAdattamentoLabel(at2)}): La porta aperta (${porta2}) è il canale migliore per ristabilire la comunicazione. Le ingiunzioni ricevute nell'infanzia (${at2?.ingiunzioni?.slice(0, 2).join(", ") || "non specificate"}) influenzano il suo modo di stare nella relazione.`,
+    puntoCritico: `Il punto critico è quando uno dei due ricade nei vecchi pattern relazionali. ${name1} attiva il gioco ${safeGiocoNomeFrase(at1)} e ${name2} risponde con ${safeGiocoNomeFrase(at2)}. Il ciclo si ripete a meno che il mediatore non intervenga.`,
     obiettivoFormativo: `Insegnare alle parti a riconoscere i propri giochi psicologici e a interromperli. Costruire un nuovo protocollo di comunicazione basato sulle porte aperte di ciascuno.`,
     suggerimentiMediatore: `Proporre un «contratto di comunicazione» personalizzato: ${name1} comunicherà attraverso ${porta1.toLowerCase()} e ${name2} attraverso ${porta2.toLowerCase()}. Insegnare la tecnica della riformulazione incrociata: ciascuno deve ripetere ciò che ha capito dell'altro prima di rispondere. Prevedere sessioni di follow-up per consolidare i nuovi pattern.`,
   });
