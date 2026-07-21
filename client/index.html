@@ -44,22 +44,10 @@
       "inLanguage": "it"
     }
     </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Test dei 9 Frutti dell'Albero della Vita",
-      "url": "https://enneagrammaevolutivo.it/test",
-      "applicationCategory": "LifestyleApplication",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR"
-      },
-      "description": "Test gratuito di 180 domande per scoprire il tuo enneatipo secondo l'Enneagramma Evolutivo.",
-      "inLanguage": "it"
-    }
-    </script>
+    <!-- Nota: lo schema WebApplication per /test viene iniettato lato server
+         (vedi server/seo-meta.ts + server/static.ts) solo su quella rotta,
+         insieme a title/description/canonical/OG e agli altri JSON-LD
+         specifici per pagina (FAQPage, Article, BreadcrumbList, ecc.). -->
 
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
