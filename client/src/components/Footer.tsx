@@ -1,5 +1,4 @@
 import { Link } from "wouter";
-import { PerplexityAttribution } from "./PerplexityAttribution";
 
 export default function Footer() {
   return (
@@ -53,11 +52,10 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">
+        <div className="border-t border-border mt-8 pt-6 flex items-center justify-center">
+          <p className="text-xs text-muted-foreground text-center">
             &copy; {new Date().getFullYear()} Enneagramma Evolutivo. Tutti i diritti riservati.
           </p>
-          <PerplexityAttribution />
         </div>
       </div>
     </footer>
