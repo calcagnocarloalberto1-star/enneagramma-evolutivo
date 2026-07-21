@@ -17,7 +17,7 @@ interface ProfileInput {
 const typeNames: Record<number, string> = {
   1: "Il Perfezionista", 2: "L'Altruista", 3: "Il Realizzatore",
   4: "L'Individualista", 5: "L'Investigatore", 6: "Il Leale",
-  7: "L'Entusiasta", 8: "Il Challenger", 9: "Il Pacificatore"
+  7: "L'Entusiasta", 8: "Il Leader", 9: "Il Pacificatore"
 };
 
 const fruitNames: Record<number, string> = {
