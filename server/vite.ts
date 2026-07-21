@@ -5,6 +5,8 @@ import viteConfig from "../vite.config";
 import fs from "fs";
 import path from "path";
 import { nanoid } from "nanoid";
+import { renderHtmlForRoute } from "./seo-meta";
+import { loadBlogArticles } from "./routes";
 
 const viteLogger = createLogger();
 
@@ -48,7 +50,10 @@ export async function setupVite(server: Server, app: Express) {
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
-      const page = await vite.transformIndexHtml(url, template);
+      let page = await vite.transformIndexHtml(url, template);
+      // Stessa iniezione di meta/JSON-LD per-rotta usata in produzione
+      // (server/static.ts), così il comportamento è identico in dev.
+      page = renderHtmlForRoute(page, req.path, loadBlogArticles());
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {
       vite.ssrFixStacktrace(e as Error);

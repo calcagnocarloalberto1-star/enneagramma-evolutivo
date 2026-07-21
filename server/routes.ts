@@ -282,7 +282,7 @@ function validateResults(scores: Record<number, number>, enneatipo: number) {
 }
 
 // Load blog articles
-function loadBlogArticles() {
+export function loadBlogArticles() {
   const files = fs.readdirSync(blogDir).filter(f => f.endsWith(".md")).sort();
   return files.map((filename, index) => {
     const content = fs.readFileSync(path.join(blogDir, filename), "utf-8");
@@ -674,24 +674,38 @@ ${urls.map(u => `  <url>
 # ─── Motori di ricerca tradizionali: ammessi ───
 User-agent: Googlebot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: DuckDuckBot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: Slurp
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: Baiduspider
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: YandexBot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: Applebot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -705,9 +719,13 @@ Disallow: /
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 # Anthropic / Claude
 User-agent: ClaudeBot
@@ -718,9 +736,13 @@ Disallow: /
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: Claude-SearchBot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 # Google AI training (separato da Googlebot)
 User-agent: Google-Extended
@@ -759,13 +781,19 @@ Disallow: /
 # Perplexity AI
 User-agent: PerplexityBot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 User-agent: Perplexity-User
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 # You.com
 User-agent: YouBot
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 # Cohere AI
 User-agent: cohere-ai
@@ -781,6 +809,8 @@ Disallow: /
 # Mistral AI
 User-agent: MistralAI-User
 Allow: /
+Disallow: /admin
+Disallow: /test/results/
 
 # AI2 (Allen Institute)
 User-agent: AI2Bot
@@ -839,6 +869,47 @@ Disallow: /admin
 
 # ─── Sitemap ───
 Sitemap: https://enneagrammaevolutivo.it/sitemap.xml
+`);
+  });
+
+  // GET llms.txt — indice in linguaggio naturale per assistenti/motori
+  // generativi (formato emergente, cfr. llmstxt.org). Non è un dump del
+  // contenuto: è una mappa del sito coerente con la riserva TDM espressa
+  // in /robots.txt, pensata per i bot di citazione già ammessi lì.
+  app.get("/llms.txt", (_req, res) => {
+    const baseUrl = "https://enneagrammaevolutivo.it";
+    const articles = loadBlogArticles();
+    res.set("Content-Type", "text/plain");
+    res.send(`# Enneagramma Evolutivo
+
+> Test gratuito dell'Enneagramma Evolutivo, un sistema di crescita personale ideato da Carlo Alberto Calcagno che integra l'Enneagramma classico (Naranjo, Gurdjieff) con le dignità di Raimondo Lullo, le gerarchie angeliche, i chakra, le correlazioni vediche e i 9 Frutti dell'Albero della Vita. Il sito offre anche strumenti professionali di analisi enneagrammatica e Analisi Transazionale per mediatori civili, commerciali e familiari.
+
+Autore: Carlo Alberto Calcagno — mediatore civile, commerciale e familiare, formatore accreditato dal Ministero della Giustizia, rappresentante dell'Italia nel Consiglio Internazionale di Mediazione (CIM-ICM). Dettagli: ${baseUrl}/about
+
+Nota sui diritti: i contenuti di questo sito sono protetti da copyright; l'autore esercita la riserva ex art. 70-quater L. 633/1941 (TDMRep) sull'uso per addestramento di modelli AI. Citazione e rimando all'URL originale sono benvenuti (vedi /robots.txt per i bot ammessi).
+
+## Sezioni principali
+
+- Test: ${baseUrl}/test — test gratuito dei 9 Frutti (180 domande) per determinare l'enneatipo
+- I 9 Enneatipi: ${baseUrl}/enneatipi
+${Array.from({ length: 9 }, (_, i) => `  - Enneatipo ${i + 1}: ${baseUrl}/enneatipi/${i + 1}`).join("\n")}
+- Compatibilità di coppia: ${baseUrl}/compatibilita/coppia
+- Compatibilità familiare: ${baseUrl}/compatibilita/famiglia
+- Compatibilità lavorativa: ${baseUrl}/compatibilita/lavoro
+- Percorsi di Vita (evoluzione dell'enneatipo per fasce d'età): ${baseUrl}/percorsi
+- Mediazione Civile e Commerciale (strumento professionale, AT + Enneagramma): ${baseUrl}/mediazione/civile
+- Mediazione Familiare (strumento professionale, AT + Enneagramma): ${baseUrl}/mediazione/familiare
+- Glossario dei termini: ${baseUrl}/glossario
+- FAQ: ${baseUrl}/faq
+- Chi Siamo / biografia dell'autore: ${baseUrl}/about
+
+## Blog
+
+${articles.map(a => `- ${a.title}: ${baseUrl}/blog/${a.slug}`).join("\n")}
+
+## Mappa completa
+
+Sitemap XML: ${baseUrl}/sitemap.xml
 `);
   });
 
