@@ -1,38 +1,39 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
 import { insertTestResultSchema } from "@shared/schema";
-import fs from "fs";
-import path from "path";
+import type { App } from "./compat";
+import { blogFiles } from "./blog";
+import { generateText } from "./gemini";
 
-// Load data files
-const dataDir = path.join(process.cwd(), "server", "data");
-const blogDir = path.join(process.cwd(), "server", "blog-articles");
+// Data files are bundled at build time
+import testQuestions from "./data/test-questions.json";
+import attributiEnneatipi from "./data/attributi-enneatipi.json";
+import compatibilitaCoppia from "./data/compatibilita-coppia.json";
+import percorsi from "./data/percorsi.json";
+import sistemaEta from "./data/sistema-eta-completo.json";
+import percorsiEnneatipi from "./data/percorsi-enneatipi.json";
+import educationalContent from "./data/educational-content.json";
+import attributiDescrizioni from "./data/attributi-descrizioni.json";
+import percorsiEvolutiviCompleti from "./data/percorsi-evolutivi-completi.json";
+import glossario from "./data/glossario.json";
 
-function loadJSON(filename: string) {
-  return JSON.parse(fs.readFileSync(path.join(dataDir, filename), "utf-8"));
-}
-
-const testQuestions = loadJSON("test-questions.json");
-const attributiEnneatipi = loadJSON("attributi-enneatipi.json");
-const compatibilitaCoppia = loadJSON("compatibilita-coppia.json");
-const percorsi = loadJSON("percorsi.json");
-const sistemaEta = loadJSON("sistema-eta-completo.json");
-const percorsiEnneatipi = loadJSON("percorsi-enneatipi.json");
-const educationalContent = loadJSON("educational-content.json");
-const attributiDescrizioni = loadJSON("attributi-descrizioni.json");
-const percorsiEvolutiviCompleti = loadJSON("percorsi-evolutivi-completi.json");
-const glossario = loadJSON("glossario.json");
+// The JSON files are loosely typed on purpose (same behaviour as the former JSON.parse).
+const D = {
+  attributiEnneatipi: attributiEnneatipi as any,
+  compatibilitaCoppia: compatibilitaCoppia as any,
+  percorsi: percorsi as any,
+  percorsiEnneatipi: percorsiEnneatipi as any,
+  educationalContent: educationalContent as any,
+  percorsiEvolutiviCompleti: percorsiEvolutiviCompleti as any,
+};
 
 // Get the user's current life phase and evolutionary path details
 function getPercorsoPersonalizzato(enneatipo: number, eta: number) {
-  const tipoData = percorsiEvolutiviCompleti.percorsiCompleti[String(enneatipo)];
+  const tipoData = D.percorsiEvolutiviCompleti.percorsiCompleti[String(enneatipo)];
   if (!tipoData) return null;
   
   const isCicloBreve = tipoData.cicloBrève === true;
   const integrazione = tipoData.integrazione;
   const disintegrazione = tipoData.disintegrazione;
-  const puntiAttr = percorsiEvolutiviCompleti.puntiAttributi;
+  const puntiAttr = D.percorsiEvolutiviCompleti.puntiAttributi;
   
   // Determine current phase based on age
   let faseCorrente = "";
@@ -60,7 +61,7 @@ function getPercorsoPersonalizzato(enneatipo: number, eta: number) {
   const attrDisintegrazione = puntiAttr[String(puntoDisintegrazione)] || null;
   
   // Get crossing table data relevant to this type
-  const tabellaIncroci = percorsiEvolutiviCompleti.tabellaIncroci;
+  const tabellaIncroci = D.percorsiEvolutiviCompleti.tabellaIncroci;
   const puntiCaldi = tabellaIncroci?.incrociMisti?.puntiCaldi?.filter((pc: any) => {
     const puntiPercorso = [...integrazione.sequenza, ...disintegrazione.sequenza];
     return puntiPercorso.includes(pc.punto);
@@ -96,12 +97,12 @@ function getPercorsoPersonalizzato(enneatipo: number, eta: number) {
 
 // Age-based attribute analysis for parenting plan
 function getAgePhaseAttributes(enneatipo: number, age: number) {
-  const tipoData = percorsiEvolutiviCompleti.percorsiCompleti[String(enneatipo)];
+  const tipoData = D.percorsiEvolutiviCompleti.percorsiCompleti[String(enneatipo)];
   if (!tipoData) return null;
 
   const isCicloBreve = tipoData.cicloBrève === true;
   const integrazione = tipoData.integrazione;
-  const puntiAttr = percorsiEvolutiviCompleti.puntiAttributi;
+  const puntiAttr = D.percorsiEvolutiviCompleti.puntiAttributi;
 
   // Determine current phase
   let faseCorrente = "";
@@ -283,29 +284,26 @@ function validateResults(scores: Record<number, number>, enneatipo: number) {
 
 // Load blog articles
 function loadBlogArticles() {
-  const files = fs.readdirSync(blogDir).filter(f => f.endsWith(".md")).sort();
-  return files.map((filename, index) => {
-    const content = fs.readFileSync(path.join(blogDir, filename), "utf-8");
+  const files = Object.keys(blogFiles).sort();
+  return files.map((slug, index) => {
+    const content = blogFiles[slug];
     const lines = content.split("\n");
-    const title = lines[0]?.replace(/^#\s*/, "") || filename;
-    const slug = filename.replace(".md", "");
-    
+    const title = lines[0]?.replace(/^#\s*/, "") || slug;
+    const filename = `${slug}.md`;
+
     // Extract meta description
     const metaLine = lines.find(l => l.startsWith("**Meta Description**:"));
     const description = metaLine?.replace("**Meta Description**:", "").trim() || "";
-    
+
     // Extract category
     const catLine = lines.find(l => l.startsWith("**Categoria**:") || l.startsWith("**Keywords**:"));
     const category = catLine?.replace(/^\*\*(Categoria|Keywords)\*\*:\s*/, "").trim() || "Enneagramma";
-    
+
     return { id: index + 1, slug, title, description, category, filename };
   });
 }
 
-export async function registerRoutes(
-  httpServer: Server,
-  app: Express
-): Promise<Server> {
+export function registerRoutes(app: App): void {
   
   // GET test questions
   app.get("/api/test/questions", (_req, res) => {
@@ -313,7 +311,7 @@ export async function registerRoutes(
   });
 
   // POST submit test
-  app.post("/api/test/submit", (req, res) => {
+  app.post("/api/test/submit", async (req, res) => {
     try {
       const { risposte, eta, visitorId, intro } = req.body;
       
@@ -327,7 +325,7 @@ export async function registerRoutes(
       const needsGenogram = ngFromType || ngFromWing;
       const validation = validateResults(scores, enneatipo);
 
-      const result = storage.createTestResult({
+      const result = await req.storage.createTestResult({
         visitorId,
         enneatipo,
         ala,
@@ -339,10 +337,10 @@ export async function registerRoutes(
       });
 
       // Get attributes for the determined enneatipo
-      const attrs = attributiEnneatipi.enneatipi[String(enneatipo)];
-      const percorso = percorsi.percorsi[String(enneatipo)];
-      const etaInfo = percorsi.etaEnneatipi;
-      const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === enneatipo || String(e.numero) === String(enneatipo));
+      const attrs = D.attributiEnneatipi.enneatipi[String(enneatipo)];
+      const percorso = D.percorsi.percorsi[String(enneatipo)];
+      const etaInfo = D.percorsi.etaEnneatipi;
+      const eduInfo = D.educationalContent.enneatipi?.find((e: any) => e.numero === enneatipo || String(e.numero) === String(enneatipo));
       const percorsoPersonalizzato = getPercorsoPersonalizzato(enneatipo, parseInt(eta));
 
       res.json({
@@ -364,19 +362,19 @@ export async function registerRoutes(
   });
 
   // GET test result by ID
-  app.get("/api/test/result/:id", (req, res) => {
+  app.get("/api/test/result/:id", async (req, res) => {
     const id = parseInt(req.params.id);
-    const result = storage.getTestResult(id);
+    const result = await req.storage.getTestResult(id);
     if (!result) {
       return res.status(404).json({ error: "Risultato non trovato" });
     }
     
     const scores = JSON.parse(result.punteggiFrutti);
     const validation = validateResults(scores, result.enneatipo);
-    const attrs = attributiEnneatipi.enneatipi[String(result.enneatipo)];
-    const percorso = percorsi.percorsi[String(result.enneatipo)];
-    const etaInfo = percorsi.etaEnneatipi;
-    const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === result.enneatipo || String(e.numero) === String(result.enneatipo));
+    const attrs = D.attributiEnneatipi.enneatipi[String(result.enneatipo)];
+    const percorso = D.percorsi.percorsi[String(result.enneatipo)];
+    const etaInfo = D.percorsi.etaEnneatipi;
+    const eduInfo = D.educationalContent.enneatipi?.find((e: any) => e.numero === result.enneatipo || String(e.numero) === String(result.enneatipo));
     const percorsoPersonalizzato = getPercorsoPersonalizzato(result.enneatipo, result.eta);
 
     res.json({
@@ -396,14 +394,14 @@ export async function registerRoutes(
   app.post("/api/profile/generate", async (req, res) => {
     try {
       const { testResultId } = req.body;
-      const result = storage.getTestResult(testResultId);
+      const result = await req.storage.getTestResult(Number(testResultId));
       if (!result) {
         return res.status(404).json({ error: "Risultato non trovato" });
       }
       
-      const attrs = attributiEnneatipi.enneatipi[String(result.enneatipo)];
+      const attrs = D.attributiEnneatipi.enneatipi[String(result.enneatipo)];
       const percorsoPersonalizzato = getPercorsoPersonalizzato(result.enneatipo, result.eta);
-      const eduInfo = educationalContent.enneatipi?.find((e: any) => e.numero === result.enneatipo || String(e.numero) === String(result.enneatipo));
+      const eduInfo = D.educationalContent.enneatipi?.find((e: any) => e.numero === result.enneatipo || String(e.numero) === String(result.enneatipo));
       
       const { generateNarrativeProfile } = await import('./profile-generator');
       const narrative = await generateNarrativeProfile({
@@ -416,7 +414,7 @@ export async function registerRoutes(
         educativo: eduInfo,
         descrizioni: attributiDescrizioni,
         personalNotes: result.personalNotes || null,
-      });
+      }, req.env);
       
       res.json({ narrative, testResultId });
     } catch (err: any) {
@@ -434,7 +432,7 @@ export async function registerRoutes(
     const key1 = `${Math.min(t1, t2)}-${Math.max(t1, t2)}`;
     const key2 = `${t1}-${t2}`;
     
-    const compat = compatibilitaCoppia.compatibilita[key2] || compatibilitaCoppia.compatibilita[key1];
+    const compat = D.compatibilitaCoppia.compatibilita[key2] || D.compatibilitaCoppia.compatibilita[key1];
     
     if (!compat) {
       return res.status(404).json({ error: "Compatibilità non trovata" });
@@ -442,14 +440,14 @@ export async function registerRoutes(
 
     res.json({
       ...compat,
-      tipo1: { numero: t1, ...attributiEnneatipi.enneatipi[String(t1)] },
-      tipo2: { numero: t2, ...attributiEnneatipi.enneatipi[String(t2)] },
+      tipo1: { numero: t1, ...D.attributiEnneatipi.enneatipi[String(t1)] },
+      tipo2: { numero: t2, ...D.attributiEnneatipi.enneatipi[String(t2)] },
     });
   });
 
   // GET all enneatypes
   app.get("/api/enneatipi", (_req, res) => {
-    const list = Object.entries(attributiEnneatipi.enneatipi).map(([num, attrs]: [string, any]) => ({
+    const list = Object.entries(D.attributiEnneatipi.enneatipi).map(([num, attrs]: [string, any]) => ({
       numero: parseInt(num),
       nome: attrs.nome,
       motto: attrs.motto,
@@ -460,15 +458,15 @@ export async function registerRoutes(
   // GET single enneatype
   app.get("/api/enneatipi/:id", (req, res) => {
     const id = req.params.id;
-    const attrs = attributiEnneatipi.enneatipi[id];
+    const attrs = D.attributiEnneatipi.enneatipi[id];
     if (!attrs) {
       return res.status(404).json({ error: "Enneatipo non trovato" });
     }
     
-    const percorso = percorsi.percorsi[id];
+    const percorso = D.percorsi.percorsi[id];
     let detailedPaths = null;
-    if (percorsiEnneatipi && percorsiEnneatipi[id]) {
-      detailedPaths = percorsiEnneatipi[id];
+    if (D.percorsiEnneatipi && D.percorsiEnneatipi[id]) {
+      detailedPaths = D.percorsiEnneatipi[id];
     }
     
     res.json({
@@ -488,13 +486,12 @@ export async function registerRoutes(
   // GET single blog article
   app.get("/api/blog/:slug", (req, res) => {
     const { slug } = req.params;
-    const filepath = path.join(blogDir, `${slug}.md`);
-    
-    if (!fs.existsSync(filepath)) {
+    const content = Object.prototype.hasOwnProperty.call(blogFiles, slug) ? blogFiles[slug] : undefined;
+
+    if (content === undefined) {
       return res.status(404).json({ error: "Articolo non trovato" });
     }
-    
-    const content = fs.readFileSync(filepath, "utf-8");
+
     const lines = content.split("\n");
     const title = lines[0]?.replace(/^#\s*/, "") || slug;
     
@@ -503,17 +500,17 @@ export async function registerRoutes(
 
   // GET educational content
   app.get("/api/educational", (_req, res) => {
-    res.json(educationalContent);
+    res.json(D.educationalContent);
   });
 
   // GET percorsi data (age paths)
   app.get("/api/percorsi", (_req, res) => {
-    res.json({ percorsi, sistemaEta });
+    res.json({ percorsi: D.percorsi, sistemaEta });
   });
 
   // GET all compatibility data
   app.get("/api/compatibility-data", (_req, res) => {
-    res.json(compatibilitaCoppia);
+    res.json(D.compatibilitaCoppia);
   });
 
   // GET glossario
@@ -522,9 +519,9 @@ export async function registerRoutes(
   });
 
   // GET admin stats
-  app.get("/api/admin/stats", (_req, res) => {
+  app.get("/api/admin/stats", async (req, res) => {
     try {
-      const allResults = storage.getAllTestResults();
+      const allResults = await req.storage.getAllTestResults();
       const totalTests = allResults.length;
 
       if (totalTests === 0) {
@@ -697,14 +694,10 @@ Sitemap: https://enneagrammaevolutivo.it/sitemap.xml
         ? buildAttributeAnalysis(nome1, e1, parseInt(eta1), nome2, e2, parseInt(eta2))
         : "";
 
-      const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+      const GEMINI_API_KEY = req.env.GEMINI_API_KEY || "";
 
       if (GEMINI_API_KEY) {
         try {
-          const { GoogleGenerativeAI } = await import("@google/generative-ai");
-          const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-          const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
           const prompt = `Sei un mediatore professionista esperto. Genera una MINUTA DI ACCORDO DI MEDIAZIONE ${tipoLabel} in italiano formale.
 
 DATI DEL CASO:
@@ -730,8 +723,7 @@ ${figliCoinvolti ? "5. Includi una sezione dedicata al piano genitoriale con dis
 7. Termina con le righe per le firme delle parti e del mediatore
 8. Scrivi SOLO il testo dell'accordo, senza commenti o spiegazioni aggiuntive`;
 
-          const result = await model.generateContent(prompt);
-          const text = result.response.text();
+          const text = await generateText(req.env, prompt);
           if (text) {
             return res.json({ minuta: text, generatedBy: "ai" });
           }
@@ -861,5 +853,4 @@ ${figliCoinvolti ? "5. Includi una sezione dedicata al piano genitoriale con dis
     }
   });
 
-  return httpServer;
 }

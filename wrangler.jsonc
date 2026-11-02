@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "enneagramma-evolutivo",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Frontend (Vite build). Only the routes listed in run_worker_first go through the Worker;
+  // everything else is served as a static file, with index.html as SPA fallback.
+  "assets": {
+    "directory": "./dist/public",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/sitemap.xml", "/robots.txt", "/googleb2392e1f3564a1be.html"]
+  },
+
+  // Markdown blog articles are bundled as text
+  "rules": [{ "type": "Text", "globs": ["**/*.md"], "fallthrough": true }],
+
+  // Database: create it once with `npx wrangler d1 create enneagramma-evolutivo-db`
+  // and paste the printed database_id below.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "enneagramma-evolutivo-db",
+      "database_id": "REPLACE_WITH_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "vars": {
+    "GEMINI_MODEL": "gemini-3.8-flash"
+  },
+
+  // Secret (never commit it): npx wrangler secret put GEMINI_API_KEY
+  "observability": { "enabled": true }
+}

@@ -1,6 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateText, type GeminiEnv } from "./gemini";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
 interface ProfileInput {
   enneatipo: number;
@@ -44,15 +43,12 @@ const atAdaptations: Record<number, {
   9: { nome: "Passivo-aggressivo", nomeAlternativo: "Scherzoso-oppositivo", tipo: "Performance", portaAperta: "Comportamento", portaBersaglio: "Emozioni", portaTrappola: "Pensiero", spinta: "Sforzati", copione: "Sempre", copioneMotto: "L'hai voluta la bicicletta e ora pedala", dilemma: "Se faccio quel che voglio perdo il tuo amore", ingiunzioni: "Non crescere, non sentire, non farlo, non essere intimo", obiettiviCrescita: "Non si deve sempre combattere; imparare a chiedere; sentirsi liberi e OK", statoIo: "Doppia contaminazione dell'Adulto" },
 };
 
-export async function generateNarrativeProfile(input: ProfileInput): Promise<string> {
-  if (!GEMINI_API_KEY) {
+export async function generateNarrativeProfile(input: ProfileInput, env: GeminiEnv): Promise<string> {
+  if (!env.GEMINI_API_KEY) {
     return generateStaticProfile(input);
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const { enneatipo, ala, eta, punteggiFrutti, attrs, percorsoPersonalizzato, educativo, personalNotes } = input;
 
     // Build scores summary
@@ -147,8 +143,7 @@ Scrivi un profilo narrativo completo di circa 2000-3000 parole, organizzato cos√
 
 TONO: Diretto, empatico, profondo. Usa "tu" per rivolgerti alla persona. Evita genericit√†. Ogni frase deve sembrare scritta per questa persona specifica. Usa metafore tratte dal mondo della persona (il frutto dell'albero della vita, gli angeli, le muse). NON usare elenchi puntati: scrivi in paragrafi narrativi fluidi.`;
 
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+    const text = await generateText(env, prompt);
     return text || generateStaticProfile(input);
   } catch (error) {
     console.error("[Profile Generator] Gemini API error:", error);
